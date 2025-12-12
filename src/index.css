@@ -1,0 +1,81 @@
+@import "tailwindcss";
+
+/* 1. Plugins - Required for Shadcn UI Animations */
+@plugin "tailwindcss-animate";
+
+/* 2. Theme Configuration (The "New" tailwind.config.js) */
+@theme {
+  /* Branding Colors - Edit these HSL values later to change your app's look */
+  --color-background: hsl(0 0% 100%);
+  --color-foreground: hsl(222.2 84% 4.9%);
+
+  --color-card: hsl(0 0% 100%);
+  --color-card-foreground: hsl(222.2 84% 4.9%);
+
+  --color-popover: hsl(0 0% 100%);
+  --color-popover-foreground: hsl(222.2 84% 4.9%);
+
+  /* Primary is usually your main Brand color (e.g., School Blue) */
+  --color-primary: hsl(222.2 47.4% 11.2%);
+  --color-primary-foreground: hsl(210 40% 98%);
+
+  --color-secondary: hsl(210 40% 96.1%);
+  --color-secondary-foreground: hsl(222.2 47.4% 11.2%);
+
+  --color-muted: hsl(210 40% 96.1%);
+  --color-muted-foreground: hsl(215.4 16.3% 46.9%);
+
+  --color-accent: hsl(210 40% 96.1%);
+  --color-accent-foreground: hsl(222.2 47.4% 11.2%);
+
+  --color-destructive: hsl(0 84.2% 60.2%);
+  --color-destructive-foreground: hsl(210 40% 98%);
+
+  --color-border: hsl(214.3 31.8% 91.4%);
+  --color-input: hsl(214.3 31.8% 91.4%);
+  --color-ring: hsl(222.2 84% 4.9%);
+
+  /* Border Radius - Increase for a "softer" look, decrease for "professional/sharp" */
+  --radius-lg: 0.5rem;
+  --radius-md: calc(0.5rem - 2px);
+  --radius-sm: calc(0.5rem - 4px);
+
+  /* Animations - Required for Shadcn Modals/Dropdowns */
+  --keyframes-accordion-down: {
+    from { height: 0; }
+    to { height: var(--radix-accordion-content-height); }
+  };
+  --keyframes-accordion-up: {
+    from { height: var(--radix-accordion-content-height); }
+    to { height: 0; }
+  };
+  
+  --animation-accordion-down: accordion-down 0.2s ease-out;
+  --animation-accordion-up: accordion-up 0.2s ease-out;
+}
+
+/* 3. Base Styles & Global Resets */
+@layer base {
+  /* This ensures every component uses your border color by default */
+  * {
+    @apply border-border outline-ring/50;
+  }
+  
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+
+  /* Optional: Smooth scrolling for long admin tables */
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+/* 4. Custom Utility Classes (Editable later) */
+@layer utilities {
+  /* Use this for containers that should look like Admin Panels */
+  .admin-card {
+    @apply rounded-lg border bg-card text-card-foreground shadow-sm;
+  }
+}
