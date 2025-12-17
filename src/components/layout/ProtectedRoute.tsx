@@ -15,7 +15,7 @@ export default function ProtectedRoute({ allowedRoles = [] }: ProtectedRouteProp
   
   // Check role if specified
   if (allowedRoles.length > 0 && user?.role) {
-    if (!allowedRoles.includes(user.role)) {
+    if (!allowedRoles.includes(user.role.role)) {
       return <Navigate to="/dashboard" replace />;
     }
   }

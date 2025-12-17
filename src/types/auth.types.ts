@@ -8,15 +8,16 @@ export interface User {
   id: string;
   email: string;
   name: string;
+  phone_number: string;
   role: Role;
+  is_active: boolean;
   hospitalId?: string;
-  createdAt: string;
-  updatedAt: string;
 }
 
 export interface AuthState {
   user: User | null;
-  token: string | null;
+  accessToken: string | null;
+  refreshToken: string | null;
   isAuthenticated: boolean;
 }
 
@@ -26,6 +27,12 @@ export interface LoginData {
 }
 
 export interface LoginResponse {
-  user: User;
-  token: string;
+  message: string;
+  data:LoginResponseData;
 }
+export interface LoginResponseData{
+    access_token: string;
+    refresh_token: string;
+    user: User;
+}
+

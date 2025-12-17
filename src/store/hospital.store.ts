@@ -1,5 +1,5 @@
+import { Hospital } from '@/types/hospital.type';
 import { create } from 'zustand';
-import { Hospital } from '../types/hospital.types';
 
 interface HospitalStore {
   currentHospital: Hospital | null;

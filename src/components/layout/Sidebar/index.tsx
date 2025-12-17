@@ -27,7 +27,7 @@ const Sidebar = () => {
     { path: '/settings', label: 'Settings', icon: Settings },
   ];
   
-  const menuItems = user?.role === 'SUPER_ADMIN' ? superAdminMenu : hospitalAdminMenu;
+  const menuItems = user?.role.role === 'SUPER_ADMIN' ? superAdminMenu : hospitalAdminMenu;
   
   return (
     <div className="w-64 bg-white border-r min-h-screen">
@@ -74,7 +74,7 @@ const Sidebar = () => {
           </div>
           <div className="ml-3">
             <p className="text-sm font-medium">{user?.name}</p>
-            <p className="text-xs text-gray-500">{user?.role?.replace('_', ' ')}</p>
+            <p className="text-xs text-gray-500">{user?.role.role?.replace('_', ' ')}</p>
           </div>
         </div>
       </div>

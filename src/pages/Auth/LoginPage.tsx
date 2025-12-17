@@ -18,10 +18,36 @@ export default function LoginPage() {
 
     try {
       const response = await authApi.login(data);
-      login(response.data.user, response.data.token);
-      navigate('/dashboard');
+      console.log('Login response:', response);
+      
+      // axios interceptor returns response.data, so response structure is:
+      // { message: "...", data: { access_token, refresh_token, user } }
+      if (!response || !response.data) {
+      throw new Error('Invalid response structure from server');
+      }
+      
+      const { access_token, refresh_token, user } = response.data;
+      
+      if (!access_token || !refresh_token || !user) {
+        throw new Error('Missing required fields in response');
+      }
+      
+      login(user, access_token, refresh_token);
+      
+      // Redirect based on user role
+      const userRole = user.role.role;
+      if (userRole === 'SUPER_ADMIN') {
+        navigate('/super-admin/dashboard');
+      } else if (userRole === 'HOSPITAL_ADMIN') {
+        navigate('/hospital-admin/dashboard');
+      } else {
+        navigate('/dashboard');
+      }
     } catch (err: any) {
-      setError(err.message || 'Login failed. Please check your credentials.');
+      // axios interceptor returns custom error object: { message, status, data }
+      const errorMessage = err.message || err.data?.message || 'Login failed. Please check your credentials.';
+      setError(errorMessage);
+      console.error('Login error:', err);
     } finally {
       setLoading(false);
     }
