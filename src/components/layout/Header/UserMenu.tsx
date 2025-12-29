@@ -42,7 +42,7 @@ export default function UserMenu({ user }: UserMenuProps) {
         <div className="hidden lg:block text-left">
           <p className="text-sm font-medium">{user?.name || 'User'}</p>
           <p className="text-xs text-gray-500">
-            {user?.role?.replace('_', ' ')}
+            {user?.role?.role?.replace('_', ' ')}
           </p>
         </div>
         <ChevronDown className={`h-4 w-4 transition-transform ${isOpen ? 'rotate-180' : ''}`} />

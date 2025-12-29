@@ -3,6 +3,7 @@ export const API_ENDPOINTS = {
   LOGIN: '/auth/login',
   LOGOUT: '/auth/logout',
   PROFILE: '/auth/profile',
+  UPDATE_PROFILE: '/auth/profile',
   REFRESH_TOKEN: '/auth/refresh-token',
   FORGOT_PASSWORD: '/auth/forgot-password',
   RESET_PASSWORD: '/auth/reset-password',
@@ -18,6 +19,11 @@ export const API_ENDPOINTS = {
   
   // Shared
   USERS: '/users',
+  
+  // File Upload
+  FILE_UPLOAD: '/fileupload',
+  FILE_UPDATE: '/fileupload',
+  FILE_DELETE: (id: string) => `/fileupload/${id}`,
 };
 
 // Base URL configuration

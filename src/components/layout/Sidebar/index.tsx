@@ -32,8 +32,17 @@ const Sidebar = () => {
   return (
     <div className="w-64 bg-white border-r min-h-screen">
       <div className="p-6">
-        <h1 className="text-2xl font-bold text-blue-600">ArogyaSewa</h1>
-        <p className="text-gray-500 text-sm mt-1">Hospital Management</p>
+        <div className="flex items-center gap-3">
+          <img 
+            src="/logo.png" 
+            alt="ArogyaSewa Logo" 
+            className="h-12 w-auto"
+          />
+          <div>
+            <h1 className="text-xl font-bold text-blue-600">ArogyaSewa</h1>
+            <p className="text-gray-500 text-xs">Hospital Management</p>
+          </div>
+        </div>
       </div>
       
       <nav className="mt-6">

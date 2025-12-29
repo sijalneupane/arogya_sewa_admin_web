@@ -26,7 +26,7 @@ export default function LoginPage() {
       throw new Error('Invalid response structure from server');
       }
       
-      const { access_token, refresh_token, user } = response.data;
+      const { access_token, refresh_token, user, } = response.data; // Adjusted to match interceptor response
       
       if (!access_token || !refresh_token || !user) {
         throw new Error('Missing required fields in response');
@@ -68,7 +68,7 @@ export default function LoginPage() {
               onSubmit={handleLogin}
               loading={loading}
               error={error}
-              showDemoCredentials={true}
+              showDemoCredentials={false}
             />
           </div>
           
@@ -104,12 +104,13 @@ export default function LoginPage() {
               </li>
             </ul>
             
-            <div className="mt-8 p-4 bg-white rounded-lg">
+            {/*<div className="mt-8 p-4 bg-white rounded-lg">
               <p className="text-sm text-gray-600">
                 <strong>Note:</strong> This is a demo system. Use the demo credentials 
                 to explore different roles and features.
               </p>
             </div>
+            */}
           </div>
         </div>
       </div>

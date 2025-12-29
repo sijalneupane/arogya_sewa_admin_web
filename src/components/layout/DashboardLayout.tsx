@@ -18,7 +18,7 @@ export default function DashboardLayout() {
         </div>
         
         {/* Main Content */}
-        <div className="flex-1 min-h-screen">
+        <div className="flex-1 h-screen overflow-y-auto">
           {/* Header */}
           <Header 
             onMenuToggle={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
