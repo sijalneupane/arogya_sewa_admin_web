@@ -322,5 +322,5 @@ export default function HospitalForm({ hospital, onSuccess }: HospitalFormProps)
         </div>
       )}
     </form>
-  );
+  );//dahboard created
 }
