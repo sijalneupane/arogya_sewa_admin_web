@@ -2,6 +2,7 @@ import { useForm, useFieldArray, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { hospitalApi } from '@/api/hospital.api';
+import { FileTypeEnum } from '@/api/fileupload.api';
 import { createHospitalSchema, updateHospitalSchema } from '../schemas/hospital.schema';
 import type { CreateHospitalData, UpdateHospitalData } from '@/types/hospital.type.ts';
 import { Button } from '@/components/ui/button';
@@ -33,6 +34,10 @@ export default function HospitalForm({ hospital, onSuccess }: HospitalFormProps)
         phone_number: '',
         password: '',
       },
+      // Ensure we have empty strings if these are null/undefined from hospital prop
+      logo_img_id: (hospital as any).logo?.file_id || (hospital.logo_img_id as string) || '',
+      hospital_license_id: (hospital as any).license?.file_id || (hospital.hospital_license_id as string) || '',
+      banner_img_id: (hospital as any).banner?.file_id || (hospital.banner_img_id as string) || '',
     } : {
       name: '',
       location: '',
@@ -65,6 +70,8 @@ export default function HospitalForm({ hospital, onSuccess }: HospitalFormProps)
         const { admin_details, ...updateData } = data as any;
         return hospitalApi.update(hospital.id, updateData as UpdateHospitalData);
       }
+      console.log('Creating hospital with data:', data);
+      // throw new Error();
       // For create, ensure we have admin_details
       return hospitalApi.create(data as CreateHospitalData);
     },
@@ -87,11 +94,21 @@ export default function HospitalForm({ hospital, onSuccess }: HospitalFormProps)
       return;
     }
     
+    console.log('Submitting hospital data:', data);
+    console.log('Image IDs:', {
+      logo_img_id: data.logo_img_id,
+      hospital_license_id: data.hospital_license_id,
+      banner_img_id: data.banner_img_id
+    });
     mutation.mutate(data);
   };
   
+  const onError = (errors: any) => {
+    console.error('Form validation errors:', errors);
+  };
+  
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
+    <form onSubmit={handleSubmit(onSubmit, onError)} className="space-y-8">
       {/* Image Uploads Section */}
       <div className="bg-white p-6 rounded-lg shadow">
         <h3 className="text-lg font-semibold mb-4">Hospital Images</h3>
@@ -104,6 +121,7 @@ export default function HospitalForm({ hospital, onSuccess }: HospitalFormProps)
                 label="Hospital Logo *"
                 value={field.value}
                 onChange={field.onChange}
+                fileType={FileTypeEnum.HOSPITAL_LOGO}
                 error={errors.logo_img_id?.message}
               />
             )}
@@ -117,6 +135,7 @@ export default function HospitalForm({ hospital, onSuccess }: HospitalFormProps)
                 label="Hospital License *"
                 value={field.value}
                 onChange={field.onChange}
+                fileType={FileTypeEnum.LICENSE}
                 error={errors.hospital_license_id?.message}
               />
             )}
@@ -130,6 +149,7 @@ export default function HospitalForm({ hospital, onSuccess }: HospitalFormProps)
                 label="Hospital Banner *"
                 value={field.value}
                 onChange={field.onChange}
+                fileType={FileTypeEnum.HOSPITAL_BANNER}
                 error={errors.banner_img_id?.message}
               />
             )}
@@ -194,21 +214,26 @@ export default function HospitalForm({ hospital, onSuccess }: HospitalFormProps)
           </div>
           <div className="space-y-3">
             {fields.map((field, index) => (
-              <div key={field.id} className="flex gap-2">
-                <input
-                  {...register(`contact_number.${index}` as const)}
-                  className="flex-1 px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                  placeholder="Enter contact number"
-                />
-                {fields.length > 1 && (
-                  <Button
-                    type="button"
-                    size="sm"
-                    variant="destructive"
-                    onClick={() => remove(index)}
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </Button>
+              <div key={field.id} className="flex flex-col gap-1">
+                <div className="flex gap-2">
+                  <input
+                    {...register(`contact_number.${index}` as const)}
+                    className="flex-1 px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                    placeholder="Enter contact number"
+                  />
+                  {fields.length > 1 && (
+                    <Button
+                      type="button"
+                      size="sm"
+                      variant="destructive"
+                      onClick={() => remove(index)}
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </Button>
+                  )}
+                </div>
+                {(errors.contact_number as any)?.[index] && (
+                   <p className="text-red-500 text-sm">{(errors.contact_number as any)[index]?.message}</p>
                 )}
               </div>
             ))}

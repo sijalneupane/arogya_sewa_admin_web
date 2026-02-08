@@ -12,8 +12,8 @@ export default function DashboardLayout() {
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="flex">
-        {/* Sidebar - Hidden on mobile when menu is closed */}
-        <div className={`${isMobileMenuOpen ? 'block' : 'hidden'} lg:block`}>
+        {/* Sidebar - Desktop */}
+        <div className="hidden lg:block">
           <Sidebar />
         </div>
         
@@ -32,12 +32,20 @@ export default function DashboardLayout() {
         </div>
       </div>
       
-      {/* Mobile overlay */}
+      {/* Mobile Drawer & Overlay */}
       {isMobileMenuOpen && (
-        <div 
-          className="lg:hidden fixed inset-0 bg-black bg-opacity-50 z-30"
-          onClick={() => setIsMobileMenuOpen(false)}
-        />
+        <div className="lg:hidden relative z-50">
+          {/* Overlay */}
+          <div 
+            className="fixed inset-0 bg-black/50 transition-opacity"
+            onClick={() => setIsMobileMenuOpen(false)}
+          />
+          
+          {/* Sidebar Drawer */}
+          <div className="fixed inset-y-0 left-0 shadow-xl">
+             <Sidebar />
+          </div>
+        </div>
       )}
     </div>
   );

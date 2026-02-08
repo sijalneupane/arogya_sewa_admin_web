@@ -1,33 +1,48 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Plus, Search } from 'lucide-react';
+import { Plus, Search, Edit, Trash2, Eye } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-
-const hospitals = [
-  { id: 1, name: 'City Hospital', location: 'Kathmandu', beds: 200, status: 'Active', admin: 'John Doe' },
-  { id: 2, name: 'General Hospital', location: 'Pokhara', beds: 150, status: 'Active', admin: 'Jane Smith' },
-  { id: 3, name: 'Medicare Center', location: 'Lalitpur', beds: 100, status: 'Pending', admin: 'Robert Johnson' },
-  { id: 4, name: 'Sunrise Hospital', location: 'Biratnagar', beds: 80, status: 'Active', admin: 'Sarah Williams' },
-  { id: 5, name: 'Life Care Hospital', location: 'Birgunj', beds: 120, status: 'Inactive', admin: 'Michael Brown' },
-];
+import { useHospital } from '@/features/super-admin/hospitals/hooks/useHospital';
 
 export default function HospitalsPage() {
   const [search, setSearch] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const { hospitals, loading, error, pagination, fetchHospitals } = useHospital();
 
-  const filteredHospitals = hospitals.filter((hospital) =>
+  const filteredHospitals = (hospitals || []).filter((hospital) =>
     hospital.name.toLowerCase().includes(search.toLowerCase()) ||
     hospital.location.toLowerCase().includes(search.toLowerCase())
   );
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'Active': return 'bg-green-100 text-green-800';
-      case 'Pending': return 'bg-yellow-100 text-yellow-800';
-      case 'Inactive': return 'bg-red-100 text-red-800';
-      default: return 'bg-gray-100 text-gray-800';
-    }
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    fetchHospitals(page, pagination?.pageSize || 10);
   };
+
+  if (error) {
+    return (
+      <div className="space-y-6">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900">Hospitals</h1>
+            <p className="text-gray-600 mt-2">Manage all hospitals in the system</p>
+          </div>
+          <Link to="/hospitals/create">
+            <Button>
+              <Plus className="h-4 w-4 mr-2" />
+              Add Hospital
+            </Button>
+          </Link>
+        </div>
+        <Card>
+          <CardContent className="pt-6">
+            <div className="text-red-600 p-4 bg-red-50 rounded-lg">Error: {error}</div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -62,42 +77,124 @@ export default function HospitalsPage() {
             </div>
           </div>
 
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead>
-                <tr className="border-b">
-                  <th className="text-left py-3 px-4 font-medium">Hospital Name</th>
-                  <th className="text-left py-3 px-4 font-medium">Location</th>
-                  <th className="text-left py-3 px-4 font-medium">Total Beds</th>
-                  <th className="text-left py-3 px-4 font-medium">Status</th>
-                  <th className="text-left py-3 px-4 font-medium">Admin</th>
-                  <th className="text-left py-3 px-4 font-medium">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredHospitals.map((hospital) => (
-                  <tr key={hospital.id} className="border-b hover:bg-gray-50">
-                    <td className="py-3 px-4">{hospital.name}</td>
-                    <td className="py-3 px-4">{hospital.location}</td>
-                    <td className="py-3 px-4">{hospital.beds}</td>
-                    <td className="py-3 px-4">
-                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(hospital.status)}`}>
-                        {hospital.status}
-                      </span>
-                    </td>
-                    <td className="py-3 px-4">{hospital.admin}</td>
-                    <td className="py-3 px-4">
-                      <div className="flex space-x-2">
-                        <button className="text-blue-600 hover:text-blue-800 text-sm">View</button>
-                        <button className="text-green-600 hover:text-green-800 text-sm">Edit</button>
-                        <button className="text-red-600 hover:text-red-800 text-sm">Delete</button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          {loading ? (
+            <div className="text-center py-8">
+              <div className="inline-block animate-spin">
+                <div className="h-8 w-8 border-4 border-gray-300 border-t-blue-600 rounded-full"></div>
+              </div>
+              <p className="text-gray-600 mt-2">Loading hospitals...</p>
+            </div>
+          ) : filteredHospitals.length === 0 ? (
+            <div className="text-center py-8">
+              <p className="text-gray-600">No hospitals found</p>
+            </div>
+          ) : (
+            <>
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead>
+                    <tr className="border-b">
+                      <th className="text-left py-3 px-4 font-medium">Logo</th>
+                      <th className="text-left py-3 px-4 font-medium">Hospital Name</th>
+                      <th className="text-left py-3 px-4 font-medium">Location</th>
+                      <th className="text-left py-3 px-4 font-medium">Contact</th>
+                      <th className="text-left py-3 px-4 font-medium">Opened Date</th>
+                      <th className="text-left py-3 px-4 font-medium">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {filteredHospitals.map((hospital) => (
+                      <tr key={hospital.hospital_id} className="border-b hover:bg-gray-50">
+                        <td className="py-3 px-4">
+                          {hospital.logo?.file_url ? (
+                            <img
+                              src={hospital.logo.file_url}
+                              alt={hospital.name}
+                              className="h-10 w-10 object-cover rounded"
+                            />
+                          ) : (
+                            <div className="h-10 w-10 bg-gray-200 rounded flex items-center justify-center text-xs text-gray-600">
+                              N/A
+                            </div>
+                          )}
+                        </td>
+                        <td className="py-3 px-4 font-medium">{hospital.name}</td>
+                        <td className="py-3 px-4">{hospital.location}</td>
+                        <td className="py-3 px-4">
+                          {hospital.contact_number && hospital.contact_number.length > 0
+                            ? hospital.contact_number[0]
+                            : 'N/A'}
+                        </td>
+                        <td className="py-3 px-4">
+                          {new Date(hospital.opened_date).toLocaleDateString()}
+                        </td>
+                        <td className="py-3 px-4">
+                          <div className="flex space-x-2">
+                            <Link
+                              to={`/hospitals/${hospital.hospital_id}`}
+                              className="text-blue-600 hover:text-blue-800 text-sm inline-flex items-center gap-1"
+                            >
+                              <Eye className="h-4 w-4" />
+                              View
+                            </Link>
+                            <Link
+                              to={`/hospitals/edit/${hospital.hospital_id}`}
+                              className="text-green-600 hover:text-green-800 text-sm inline-flex items-center gap-1"
+                            >
+                              <Edit className="h-4 w-4" />
+                              Edit
+                            </Link>
+                            <button className="text-red-600 hover:text-red-800 text-sm inline-flex items-center gap-1">
+                              <Trash2 className="h-4 w-4" />
+                              Delete
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              {/* Pagination */}
+              {pagination && pagination.totalPage > 1 && (
+                <div className="mt-6 flex items-center justify-between">
+                  <div className="text-sm text-gray-600">
+                    Showing page {pagination.currentPage} of {pagination.totalPage} ({pagination.totalRecords} total records)
+                  </div>
+                  <div className="flex space-x-2">
+                    <button
+                      onClick={() => handlePageChange(currentPage - 1)}
+                      disabled={currentPage === 1}
+                      className="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
+                    >
+                      Previous
+                    </button>
+                    {Array.from({ length: pagination.totalPage }, (_, i) => i + 1).map((page) => (
+                      <button
+                        key={page}
+                        onClick={() => handlePageChange(page)}
+                        className={`px-3 py-2 rounded-lg text-sm font-medium ${
+                          currentPage === page
+                            ? 'bg-blue-600 text-white'
+                            : 'border border-gray-300 hover:bg-gray-50'
+                        }`}
+                      >
+                        {page}
+                      </button>
+                    ))}
+                    <button
+                      onClick={() => handlePageChange(currentPage + 1)}
+                      disabled={currentPage === pagination.totalPage}
+                      className="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
+                    >
+                      Next
+                    </button>
+                  </div>
+                </div>
+              )}
+            </>
+          )}
         </CardContent>
       </Card>
     </div>

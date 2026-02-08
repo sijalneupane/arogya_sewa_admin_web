@@ -9,7 +9,7 @@ export const API_ENDPOINTS = {
   RESET_PASSWORD: '/auth/reset-password',
   
   // Super Admin
-  HOSPITALS: '/hospitals',
+  HOSPITALS: '/hospital',
   HOSPITAL_STATS: '/hospitals/stats',
   
   // Hospital Admin
@@ -21,8 +21,8 @@ export const API_ENDPOINTS = {
   USERS: '/users',
   
   // File Upload
-  FILE_UPLOAD: '/fileupload',
-  FILE_UPDATE: '/fileupload',
+  FILE_UPLOAD: '/file/upload',
+  FILE_UPDATE: '/file/update',
   FILE_DELETE: (id: string) => `/fileupload/${id}`,
 };
 

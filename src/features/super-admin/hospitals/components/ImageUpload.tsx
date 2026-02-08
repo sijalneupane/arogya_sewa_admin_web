@@ -1,6 +1,6 @@
 import { useState, useRef } from 'react';
 import { useMutation } from '@tanstack/react-query';
-import { fileApi } from '@/api/fileupload.api';
+import { fileApi, FileTypeEnum } from '@/api/fileupload.api';
 import { Button } from '@/components/ui/button';
 import { Upload, X, Image as ImageIcon } from 'lucide-react';
 
@@ -8,6 +8,7 @@ interface ImageUploadProps {
   label: string;
   value?: string; // Image ID
   onChange: (imageId: string) => void;
+  fileType?: FileTypeEnum;
   error?: string;
   accept?: string;
   className?: string;
@@ -17,6 +18,7 @@ export default function ImageUpload({
   label,
   value,
   onChange,
+  fileType = FileTypeEnum.OTHER,
   error,
   accept = 'image/*',
   className = '',
@@ -29,13 +31,17 @@ export default function ImageUpload({
     mutationFn: (file: File) => {
       // If there's an existing image ID, update it, otherwise upload new
       if (value) {
-        return fileApi.update(value, file);
+        return fileApi.update(value, file, fileType);
       }
-      return fileApi.upload(file);
+      return fileApi.upload(file, fileType);
     },
     onSuccess: (response) => {
-      onChange(response.data.id);
-      setFileName(response.data.filename);
+      console.log('Image upload successful:', response);
+      console.log('Setting file_id:', response.file_id);
+      onChange(response.file_id);
+      // Extract filename from URL since it's not in the response
+      const name = response.file_url.split('/').pop() || 'uploaded-image';
+      setFileName(name);
     },
   });
 

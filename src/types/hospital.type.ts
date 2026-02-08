@@ -1,20 +1,37 @@
+export interface FileObject {
+  file_id: string;
+  file_url: string;
+  meta_type: string;
+  file_type: string;
+}
+
 export interface Hospital {
-  id: string;
+  hospital_id: string;
   name: string;
   location: string;
   latitude: number;
   longitude: number;
   contact_number: string[];
   opened_date: string;
-  hospital_license_id: string;
-  logo_img_id: string;
-  banner_img_id: string;
-  totalDoctors?: number;
-  activeAppointments?: number;
-  status?: 'ACTIVE' | 'INACTIVE' | 'PENDING';
-  adminId?: string;
-  createdAt?: string;
-  updatedAt?: string;
+  created_at: string;
+  updated_at: string;
+  admin_id: string;
+  logo?: FileObject;
+  license?: FileObject;
+  banner?: FileObject;
+}
+
+export interface PaginationMeta {
+  totalPage: number;
+  currentPage: number;
+  pageSize: number;
+  totalRecords: number;
+}
+
+export interface HospitalListResponse {
+  message: string;
+  data: Hospital[];
+  paginationMeta: PaginationMeta;
 }
 
 export interface CreateHospitalData {
