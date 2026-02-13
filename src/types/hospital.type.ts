@@ -5,6 +5,21 @@ export interface FileObject {
   file_type: string;
 }
 
+export interface HospitalAdmin {
+  id: string;
+  email: string;
+  name: string;
+  phone_number: string;
+  role: {
+    role: string;
+    description: string;
+  };
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+  profile_img?: FileObject;
+}
+
 export interface Hospital {
   hospital_id: string;
   name: string;
@@ -16,6 +31,7 @@ export interface Hospital {
   created_at: string;
   updated_at: string;
   admin_id: string;
+  admin?: HospitalAdmin;
   logo?: FileObject;
   license?: FileObject;
   banner?: FileObject;
