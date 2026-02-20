@@ -1,6 +1,8 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
-import { hospitalApi } from '@/api/hospital.api';
-import { Hospital, PaginationMeta } from '@/types/hospital.type';
+import { useState, useEffect, useRef } from 'react';
+import { hospitalApi, HospitalSearchParams } from '@/api/hospital.api';
+import { Hospital, PaginationMeta, HospitalListResponse } from '@/types/hospital.type';
+
+const DEBOUNCE_MS = 400;
 
 interface UseHospitalReturn {
   hospitals: Hospital[];
@@ -10,19 +12,36 @@ interface UseHospitalReturn {
   fetchHospitals: (page?: number, pageSize?: number) => Promise<void>;
 }
 
-export const useHospital = (): UseHospitalReturn => {
+export const useHospital = (filters: Omit<HospitalSearchParams, 'page' | 'size'> = {}): UseHospitalReturn => {
   const [hospitals, setHospitals] = useState<Hospital[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [pagination, setPagination] = useState<PaginationMeta | null>(null);
-  const initialFetchDone = useRef(false);
+  const [page, setPage] = useState(1);
+  const [pageSize] = useState(10);
 
-  const fetchHospitals = useCallback(async (page = 1, pageSize = 10) => {
+  // Debounced filters
+  const [debouncedFilters, setDebouncedFilters] = useState(filters);
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    if (timerRef.current) clearTimeout(timerRef.current);
+    timerRef.current = setTimeout(() => {
+      setDebouncedFilters(filters);
+      setPage(1); // reset to first page on filter change
+    }, DEBOUNCE_MS);
+    return () => {
+      if (timerRef.current) clearTimeout(timerRef.current);
+    };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filters.name, filters.address, filters.opened_date_from, filters.opened_date_to]);
+
+  const fetchHospitals = async (pg = page, ps = pageSize) => {
     setLoading(true);
     setError(null);
     try {
-      const response = await hospitalApi.getAll(page, pageSize);
-      // Axios interceptor already unwraps response.data, so response is the actual data
+      // Axios interceptor unwraps response.data, so response is HospitalListResponse directly
+      const response = (await hospitalApi.getAll({ ...debouncedFilters, page: pg, size: ps })) as unknown as HospitalListResponse;
       setHospitals(response.data);
       setPagination(response.paginationMeta);
     } catch (err) {
@@ -33,14 +52,17 @@ export const useHospital = (): UseHospitalReturn => {
     } finally {
       setLoading(false);
     }
-  }, []);
+  };
 
+  // Re-fetch whenever debounced filters or page change
   useEffect(() => {
-    if (!initialFetchDone.current) {
-      initialFetchDone.current = true;
-      fetchHospitals();
-    }
-  }, [fetchHospitals]);
+    fetchHospitals(page, pageSize);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [debouncedFilters, page]);
 
-  return { hospitals, loading, error, pagination, fetchHospitals };
+  const handlePageChange = async (pg?: number, _ps?: number) => {
+    setPage(pg ?? 1);
+  };
+
+  return { hospitals, loading, error, pagination, fetchHospitals: handlePageChange };
 };

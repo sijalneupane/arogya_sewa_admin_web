@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Plus, Search, Edit, Trash2, Eye } from 'lucide-react';
+import { Plus, Search, Edit, Trash2, Eye, X } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -9,21 +9,34 @@ import { useHospital } from '@/features/super-admin/hospitals/hooks/useHospital'
 import { hospitalApi } from '@/api/hospital.api';
 
 export default function HospitalsPage() {
-  const [search, setSearch] = useState('');
+  const [nameFilter, setNameFilter] = useState('');
+  const [addressFilter, setAddressFilter] = useState('');
+  const [dateFrom, setDateFrom] = useState('');
+  const [dateTo, setDateTo] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [hospitalToDelete, setHospitalToDelete] = useState<{ id: string; name: string } | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
-  const { hospitals, loading, error, pagination, fetchHospitals } = useHospital();
 
-  const filteredHospitals = (hospitals || []).filter((hospital) =>
-    hospital.name.toLowerCase().includes(search.toLowerCase()) ||
-    hospital.location.toLowerCase().includes(search.toLowerCase())
-  );
+  const { hospitals, loading, error, pagination, fetchHospitals } = useHospital({
+    name: nameFilter,
+    address: addressFilter,
+    opened_date_from: dateFrom,
+    opened_date_to: dateTo,
+  });
+
+  const hasActiveFilters = nameFilter || addressFilter || dateFrom || dateTo;
+
+  const clearFilters = () => {
+    setNameFilter('');
+    setAddressFilter('');
+    setDateFrom('');
+    setDateTo('');
+  };
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
-    fetchHospitals(page, pagination?.pageSize || 10);
+    fetchHospitals(page);
   };
 
   const handleDeleteClick = (hospital: { hospital_id: string; name: string }) => {
@@ -39,7 +52,7 @@ export default function HospitalsPage() {
       await hospitalApi.delete(hospitalToDelete.id);
       toast.success('Hospital deleted successfully');
       // Refresh the hospitals list
-      fetchHospitals(currentPage, pagination?.pageSize || 10);
+      fetchHospitals(currentPage);
     } catch (err: any) {
       toast.error(err.response?.data?.message || 'Failed to delete hospital');
     } finally {
@@ -74,7 +87,7 @@ export default function HospitalsPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-3">
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold text-gray-900">Hospitals</h1>
@@ -88,21 +101,74 @@ export default function HospitalsPage() {
         </Link>
       </div>
 
-      <Card>
+      <Card className='gap-1'>
         <CardHeader>
-          <CardTitle>All Hospitals</CardTitle>
+          <div className="flex items-center justify-between">
+            <CardTitle>All Hospitals</CardTitle>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={clearFilters}
+              className={hasActiveFilters ? 'visible' : 'invisible'}
+            >
+              <X className="h-3 w-3 mr-1" />
+              Clear Filters
+            </Button>
+          </div>
         </CardHeader>
         <CardContent>
+          {/* Filters - single row on desktop, 2 cols on mobile */}
           <div className="mb-6">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-              <input
-                type="text"
-                placeholder="Search hospitals..."
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              />
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 items-end">
+              {/* Name search */}
+              <div className="flex flex-col gap-1">
+                <label className="text-xs text-gray-500">Hospital Name</label>
+                <div className="relative flex items-center">
+                  <Search className="absolute left-3 h-4 w-4 text-gray-400 pointer-events-none" />
+                  <input
+                    type="text"
+                    placeholder="Search by name..."
+                    value={nameFilter}
+                    onChange={(e) => setNameFilter(e.target.value)}
+                    className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                </div>
+              </div>
+              {/* Address search */}
+              <div className="flex flex-col gap-1">
+                <label className="text-xs text-gray-500">Address</label>
+                <div className="relative flex items-center">
+                  <Search className="absolute left-3 h-4 w-4 text-gray-400 pointer-events-none" />
+                  <input
+                    type="text"
+                    placeholder="Search by address..."
+                    value={addressFilter}
+                    onChange={(e) => setAddressFilter(e.target.value)}
+                    className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                </div>
+              </div>
+              {/* Opened date from */}
+              <div className="flex flex-col gap-1">
+                <label className="text-xs text-gray-500">Opened from</label>
+                <input
+                  type="date"
+                  value={dateFrom}
+                  onChange={(e) => setDateFrom(e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-600"
+                />
+              </div>
+              {/* Opened date to */}
+              <div className="flex flex-col gap-1">
+                <label className="text-xs text-gray-500">Opened to</label>
+                <input
+                  type="date"
+                  value={dateTo}
+                  onChange={(e) => setDateTo(e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-600"
+                />
+              </div>
             </div>
           </div>
 
@@ -113,7 +179,7 @@ export default function HospitalsPage() {
               </div>
               <p className="text-gray-600 mt-2">Loading hospitals...</p>
             </div>
-          ) : filteredHospitals.length === 0 ? (
+          ) : hospitals.length === 0 ? (
             <div className="text-center py-8">
               <p className="text-gray-600">No hospitals found</p>
             </div>
@@ -132,7 +198,7 @@ export default function HospitalsPage() {
                     </tr>
                   </thead>
                   <tbody>
-                    {filteredHospitals.map((hospital) => (
+                    {hospitals.map((hospital) => (
                       <tr key={hospital.hospital_id} className="border-b hover:bg-gray-50">
                         <td className="py-3 px-4">
                           {hospital.logo?.file_url ? (
