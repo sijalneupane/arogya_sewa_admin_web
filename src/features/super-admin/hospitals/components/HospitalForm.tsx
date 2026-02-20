@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { useForm, useFieldArray, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -9,7 +10,7 @@ import type { CreateHospitalData, UpdateHospitalData, FileObject } from '@/types
 import { Button } from '@/components/ui/button';
 import ImageUpload from './ImageUpload';
 import MapSelector from './MapSelector';
-import { Plus, Trash2 } from 'lucide-react';
+import { Plus, Trash2, Eye, EyeOff } from 'lucide-react';
 import { useAuthStore } from '@/store/auth.store';
 
 interface HospitalFormProps {
@@ -28,10 +29,12 @@ export default function HospitalForm({ hospital, onSuccess }: HospitalFormProps)
   const isEditMode = !!hospital?.id;
   const isSuperAdmin = user?.role.role === 'SUPER_ADMIN';
   const isHospitalAdmin = user?.role.role === 'HOSPITAL_ADMIN';
+  const [showPassword, setShowPassword] = useState(false);
   
   // Use different schema based on mode
   const { register, handleSubmit, control, formState: { errors } } = useForm<CreateHospitalData | UpdateHospitalData>({
     resolver: zodResolver(isEditMode ? updateHospitalSchema : createHospitalSchema),
+    shouldUnregister: false,
     defaultValues: hospital ? {
       ...hospital,
       // Ensure contact_number always has at least one field
@@ -72,6 +75,13 @@ export default function HospitalForm({ hospital, onSuccess }: HospitalFormProps)
     control,
     name: 'contact_number',
   });
+
+  // Ensure at least one contact field is always visible
+  useEffect(() => {
+    if (fields.length === 0) {
+      append('', { shouldFocus: false });
+    }
+  }, [fields.length]);
 
   const mutation = useMutation({
     mutationFn: (data: CreateHospitalData | UpdateHospitalData) => {
@@ -123,6 +133,7 @@ export default function HospitalForm({ hospital, onSuccess }: HospitalFormProps)
   
   return (
     <form onSubmit={handleSubmit(onSubmit, onError)} className="space-y-8">
+    {/* // <form onSubmit={handleSubmit(onSubmit, onError)} className="space-y-8" noValidate> */}
       {/* Image Uploads Section */}
       <div className="bg-white p-6 rounded-lg shadow">
         <h3 className="text-lg font-semibold mb-4">Hospital Images</h3>
@@ -232,11 +243,12 @@ export default function HospitalForm({ hospital, onSuccess }: HospitalFormProps)
           <div className="space-y-3">
             {fields.map((field, index) => (
               <div key={field.id} className="flex flex-col gap-1">
+                <label className="text-xs text-gray-500">Contact Number {index + 1}</label>
                 <div className="flex gap-2">
                   <input
                     {...register(`contact_number.${index}` as const)}
                     className="flex-1 px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                    placeholder="Enter contact number"
+                    placeholder="e.g. +977-9800000000"
                   />
                   {fields.length > 1 && (
                     <Button
@@ -311,7 +323,7 @@ export default function HospitalForm({ hospital, onSuccess }: HospitalFormProps)
               <label className="block text-sm font-medium mb-1">Admin Email *</label>
               <input
                 {...register('admin_details.email')}
-                type="email"
+                type="text"
                 className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
                 placeholder="Enter admin email"
               />
@@ -334,12 +346,22 @@ export default function HospitalForm({ hospital, onSuccess }: HospitalFormProps)
             
             <div>
               <label className="block text-sm font-medium mb-1">Password *</label>
-              <input
-                {...register('admin_details.password')}
-                type="password"
-                className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                placeholder="Enter password (min 8 characters)"
-              />
+              <div className="relative">
+                <input
+                  {...register('admin_details.password')}
+                  type={showPassword ? 'text' : 'password'}
+                  className="w-full px-3 py-2 pr-10 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                  placeholder="Enter password (min 8 characters)"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((v) => !v)}
+                  className="absolute inset-y-0 right-0 flex items-center px-3 text-gray-400 hover:text-gray-600"
+                  tabIndex={-1}
+                >
+                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                </button>
+              </div>
               {(errors as any).admin_details?.password && (
                 <p className="text-red-500 text-sm mt-1">{(errors as any).admin_details.password.message}</p>
               )}
