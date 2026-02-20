@@ -2,7 +2,8 @@ import { useState, useRef } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { fileApi, FileTypeEnum } from '@/api/fileupload.api';
 import { Button } from '@/components/ui/button';
-import { Upload, X, Image as ImageIcon } from 'lucide-react';
+import { ImagePreview } from '@/components/ui/ImagePreview';
+import { Upload, X, Image as ImageIcon, Eye } from 'lucide-react';
 
 interface ImageUploadProps {
   label: string;
@@ -12,6 +13,7 @@ interface ImageUploadProps {
   error?: string;
   accept?: string;
   className?: string;
+  initialImageUrl?: string; // URL to display for existing image
 }
 
 export default function ImageUpload({
@@ -22,10 +24,26 @@ export default function ImageUpload({
   error,
   accept = 'image/*',
   className = '',
+  initialImageUrl,
 }: ImageUploadProps) {
   const [preview, setPreview] = useState<string>('');
+  
+  // Determine the image to display: new preview takes priority, then initial URL
+  const displayImageUrl = preview || initialImageUrl;
   const [fileName, setFileName] = useState<string>('');
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const deleteMutation = useMutation({
+    mutationFn: (imageId: string) => fileApi.delete(imageId),
+    onSuccess: () => {
+      setPreview('');
+      setFileName('');
+      onChange('');
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+    },
+  });
 
   const uploadMutation = useMutation({
     mutationFn: (file: File) => {
@@ -61,11 +79,17 @@ export default function ImageUpload({
   };
 
   const handleRemove = () => {
-    setPreview('');
-    setFileName('');
-    onChange('');
-    if (fileInputRef.current) {
-      fileInputRef.current.value = '';
+    if (value) {
+      // Call delete API; cleanup happens in onSuccess
+      deleteMutation.mutate(value);
+    } else {
+      // No server file yet (local preview only), just clear local state
+      setPreview('');
+      setFileName('');
+      onChange('');
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
     }
   };
 
@@ -79,13 +103,13 @@ export default function ImageUpload({
       
       <div className="space-y-3">
         {/* Preview or Upload Area */}
-        {preview || value ? (
+        {displayImageUrl || value ? (
           <div className="relative group">
-            {preview ? (
+            {displayImageUrl ? (
               <img
-                src={preview}
+                src={displayImageUrl}
                 alt="Preview"
-                className="w-full h-48 object-cover rounded-lg border"
+                className="w-full h-48 object-contain rounded-lg border bg-gray-50"
               />
             ) : (
               <div className="w-full h-48 bg-gray-100 rounded-lg border flex items-center justify-center">
@@ -99,7 +123,7 @@ export default function ImageUpload({
                 type="button"
                 size="sm"
                 onClick={handleClick}
-                disabled={uploadMutation.isPending}
+                disabled={uploadMutation.isPending || deleteMutation.isPending}
               >
                 <Upload className="w-4 h-4 mr-1" />
                 Replace
@@ -109,10 +133,10 @@ export default function ImageUpload({
                 size="sm"
                 variant="destructive"
                 onClick={handleRemove}
-                disabled={uploadMutation.isPending}
+                disabled={uploadMutation.isPending || deleteMutation.isPending}
               >
                 <X className="w-4 h-4 mr-1" />
-                Remove
+                {deleteMutation.isPending ? 'Removing...' : 'Remove'}
               </Button>
             </div>
           </div>
@@ -136,6 +160,16 @@ export default function ImageUpload({
           className="hidden"
         />
 
+        {/* View Image button */}
+        {displayImageUrl && (
+          <ImagePreview src={displayImageUrl} alt={label} title={label}>
+            <Button type="button" variant="outline" size="sm" className="w-full">
+              <Eye className="w-4 h-4 mr-1" />
+              View Image
+            </Button>
+          </ImagePreview>
+        )}
+
         {/* File name and status */}
         {fileName && (
           <p className="text-sm text-gray-600">
@@ -150,6 +184,12 @@ export default function ImageUpload({
         {uploadMutation.isError && (
           <p className="text-sm text-red-600">
             Upload failed. Please try again.
+          </p>
+        )}
+
+        {deleteMutation.isError && (
+          <p className="text-sm text-red-600">
+            Delete failed. Please try again.
           </p>
         )}
 
