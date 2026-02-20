@@ -1,7 +1,8 @@
 import { useState } from 'react';
-import { Bell, Search, Menu, X } from 'lucide-react';
+import { Bell, Menu, X } from 'lucide-react';
 import { useAuthStore } from '@/store/auth.store';
 import UserMenu from './UserMenu';
+import GlobalSearch from './GlobalSearch';
 
 interface HeaderProps {
   onMenuToggle?: () => void;
@@ -10,7 +11,6 @@ interface HeaderProps {
 
 export default function Header({ onMenuToggle, isMobileMenuOpen }: HeaderProps) {
   const { user } = useAuthStore();
-  const [searchQuery, setSearchQuery] = useState('');
   const [notifications, setNotifications] = useState([
     { id: 1, message: 'New appointment booked', time: '10 min ago', read: false },
     { id: 2, message: 'Doctor added successfully', time: '1 hour ago', read: true },
@@ -19,21 +19,13 @@ export default function Header({ onMenuToggle, isMobileMenuOpen }: HeaderProps) 
 
   const unreadCount = notifications.filter(n => !n.read).length;
 
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (searchQuery.trim()) {
-      console.log('Searching for:', searchQuery);
-      // Implement search logic here
-    }
-  };
-
   const markAllAsRead = () => {
     setNotifications(notifications.map(n => ({ ...n, read: true })));
   };
 
   return (
     <header className="sticky top-0 z-40 bg-white border-b">
-      <div className="flex items-center justify-between px-6 py-4">
+      <div className="flex items-center justify-between px-3 py-2">
         {/* Left Section */}
         <div className="flex items-center space-x-4">
           {/* Mobile Menu Toggle */}
@@ -49,18 +41,7 @@ export default function Header({ onMenuToggle, isMobileMenuOpen }: HeaderProps) 
           </button>
 
           {/* Search Bar */}
-          <form onSubmit={handleSearch} className="relative hidden md:block">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-              <input
-                type="text"
-                placeholder="Search..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10 pr-4 py-2 w-64 lg:w-80 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              />
-            </div>
-          </form>
+          <GlobalSearch />
         </div>
 
         {/* Right Section */}

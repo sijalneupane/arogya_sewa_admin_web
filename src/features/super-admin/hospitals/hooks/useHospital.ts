@@ -1,8 +1,9 @@
 import { useState, useEffect, useRef } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { hospitalApi, HospitalSearchParams } from '@/api/hospital.api';
 import { Hospital, PaginationMeta, HospitalListResponse } from '@/types/hospital.type';
 
-const DEBOUNCE_MS = 400;
+const DEBOUNCE_MS = 500;
 
 interface UseHospitalReturn {
   hospitals: Hospital[];
@@ -13,22 +14,24 @@ interface UseHospitalReturn {
 }
 
 export const useHospital = (filters: Omit<HospitalSearchParams, 'page' | 'size'> = {}): UseHospitalReturn => {
-  const [hospitals, setHospitals] = useState<Hospital[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [pagination, setPagination] = useState<PaginationMeta | null>(null);
   const [page, setPage] = useState(1);
-  const [pageSize] = useState(10);
+  const PAGE_SIZE = 10;
 
-  // Debounced filters
+  // Stable debounced filters — only updates after the user stops typing
   const [debouncedFilters, setDebouncedFilters] = useState(filters);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  // Skip debounce on initial mount so we don't fire an extra update
+  const isFirstRender = useRef(true);
 
   useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
     if (timerRef.current) clearTimeout(timerRef.current);
     timerRef.current = setTimeout(() => {
       setDebouncedFilters(filters);
-      setPage(1); // reset to first page on filter change
+      setPage(1);
     }, DEBOUNCE_MS);
     return () => {
       if (timerRef.current) clearTimeout(timerRef.current);
@@ -36,33 +39,27 @@ export const useHospital = (filters: Omit<HospitalSearchParams, 'page' | 'size'>
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filters.name, filters.address, filters.opened_date_from, filters.opened_date_to]);
 
-  const fetchHospitals = async (pg = page, ps = pageSize) => {
-    setLoading(true);
-    setError(null);
-    try {
-      // Axios interceptor unwraps response.data, so response is HospitalListResponse directly
-      const response = (await hospitalApi.getAll({ ...debouncedFilters, page: pg, size: ps })) as unknown as HospitalListResponse;
-      setHospitals(response.data);
-      setPagination(response.paginationMeta);
-    } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Failed to fetch hospitals';
-      setError(errorMessage);
-      setHospitals([]);
-      setPagination(null);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const { data, isFetching, error: queryError } = useQuery<HospitalListResponse>({
+    queryKey: ['hospitals', debouncedFilters, page, PAGE_SIZE],
+    queryFn: async () =>
+      (await hospitalApi.getAll({
+        ...debouncedFilters,
+        page,
+        size: PAGE_SIZE,
+      })) as unknown as HospitalListResponse,
+    staleTime: 30_000,
+    placeholderData: (prev) => prev, // keep old data visible while re-fetching
+  });
 
-  // Re-fetch whenever debounced filters or page change
-  useEffect(() => {
-    fetchHospitals(page, pageSize);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [debouncedFilters, page]);
-
-  const handlePageChange = async (pg?: number, _ps?: number) => {
+  const handlePageChange = async (pg?: number) => {
     setPage(pg ?? 1);
   };
 
-  return { hospitals, loading, error, pagination, fetchHospitals: handlePageChange };
+  return {
+    hospitals: data?.data ?? [],
+    loading: isFetching,
+    error: queryError ? (queryError instanceof Error ? queryError.message : 'Failed to fetch hospitals') : null,
+    pagination: data?.paginationMeta ?? null,
+    fetchHospitals: handlePageChange,
+  };
 };
