@@ -1,10 +1,11 @@
 import { useForm, useFieldArray, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import toast from 'react-hot-toast';
 import { hospitalApi } from '@/api/hospital.api';
 import { FileTypeEnum } from '@/api/fileupload.api';
 import { createHospitalSchema, updateHospitalSchema } from '../schemas/hospital.schema';
-import type { CreateHospitalData, UpdateHospitalData } from '@/types/hospital.type.ts';
+import type { CreateHospitalData, UpdateHospitalData, FileObject } from '@/types/hospital.type.ts';
 import { Button } from '@/components/ui/button';
 import ImageUpload from './ImageUpload';
 import MapSelector from './MapSelector';
@@ -12,7 +13,12 @@ import { Plus, Trash2 } from 'lucide-react';
 import { useAuthStore } from '@/store/auth.store';
 
 interface HospitalFormProps {
-  hospital?: Partial<CreateHospitalData> & { id?: string };
+  hospital?: Partial<CreateHospitalData> & { 
+    id?: string;
+    logo?: FileObject;
+    license?: FileObject;
+    banner?: FileObject;
+  };
   onSuccess?: () => void;
 }
 
@@ -28,6 +34,10 @@ export default function HospitalForm({ hospital, onSuccess }: HospitalFormProps)
     resolver: zodResolver(isEditMode ? updateHospitalSchema : createHospitalSchema),
     defaultValues: hospital ? {
       ...hospital,
+      // Ensure contact_number always has at least one field
+      contact_number: (hospital.contact_number && hospital.contact_number.length > 0) 
+        ? hospital.contact_number 
+        : [''],
       admin_details: hospital.admin_details || {
         email: '',
         name: '',
@@ -78,7 +88,11 @@ export default function HospitalForm({ hospital, onSuccess }: HospitalFormProps)
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['hospitals'] });
       queryClient.invalidateQueries({ queryKey: ['hospital-stats'] });
+      toast.success(isEditMode ? 'Hospital updated successfully!' : 'Hospital created successfully!');
       onSuccess?.();
+    },
+    onError: () => {
+      toast.error(isEditMode ? 'Failed to update hospital. Please try again.' : 'Failed to create hospital. Please try again.');
     },
   });
   
@@ -123,6 +137,7 @@ export default function HospitalForm({ hospital, onSuccess }: HospitalFormProps)
                 onChange={field.onChange}
                 fileType={FileTypeEnum.HOSPITAL_LOGO}
                 error={errors.logo_img_id?.message}
+                initialImageUrl={hospital?.logo?.file_url}
               />
             )}
           />
@@ -137,6 +152,7 @@ export default function HospitalForm({ hospital, onSuccess }: HospitalFormProps)
                 onChange={field.onChange}
                 fileType={FileTypeEnum.LICENSE}
                 error={errors.hospital_license_id?.message}
+                initialImageUrl={hospital?.license?.file_url}
               />
             )}
           />
@@ -151,6 +167,7 @@ export default function HospitalForm({ hospital, onSuccess }: HospitalFormProps)
                 onChange={field.onChange}
                 fileType={FileTypeEnum.HOSPITAL_BANNER}
                 error={errors.banner_img_id?.message}
+                initialImageUrl={hospital?.banner?.file_url}
               />
             )}
           />

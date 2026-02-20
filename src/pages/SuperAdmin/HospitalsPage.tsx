@@ -1,13 +1,19 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Plus, Search, Edit, Trash2, Eye } from 'lucide-react';
+import toast from 'react-hot-toast';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { ConfirmationDialog } from '@/components/ui/ConfirmationDialog';
 import { useHospital } from '@/features/super-admin/hospitals/hooks/useHospital';
+import { hospitalApi } from '@/api/hospital.api';
 
 export default function HospitalsPage() {
   const [search, setSearch] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [hospitalToDelete, setHospitalToDelete] = useState<{ id: string; name: string } | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
   const { hospitals, loading, error, pagination, fetchHospitals } = useHospital();
 
   const filteredHospitals = (hospitals || []).filter((hospital) =>
@@ -18,6 +24,29 @@ export default function HospitalsPage() {
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
     fetchHospitals(page, pagination?.pageSize || 10);
+  };
+
+  const handleDeleteClick = (hospital: { hospital_id: string; name: string }) => {
+    setHospitalToDelete({ id: hospital.hospital_id, name: hospital.name });
+    setDeleteDialogOpen(true);
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!hospitalToDelete) return;
+    
+    setIsDeleting(true);
+    try {
+      await hospitalApi.delete(hospitalToDelete.id);
+      toast.success('Hospital deleted successfully');
+      // Refresh the hospitals list
+      fetchHospitals(currentPage, pagination?.pageSize || 10);
+    } catch (err: any) {
+      toast.error(err.response?.data?.message || 'Failed to delete hospital');
+    } finally {
+      setIsDeleting(false);
+      setDeleteDialogOpen(false);
+      setHospitalToDelete(null);
+    }
   };
 
   if (error) {
@@ -144,7 +173,10 @@ export default function HospitalsPage() {
                               <Edit className="h-4 w-4" />
                               Edit
                             </Link>
-                            <button className="text-red-600 hover:text-red-800 text-sm inline-flex items-center gap-1">
+                            <button 
+                              onClick={() => handleDeleteClick(hospital)}
+                              className="text-red-600 hover:text-red-800 text-sm inline-flex items-center gap-1"
+                            >
                               <Trash2 className="h-4 w-4" />
                               Delete
                             </button>
@@ -197,6 +229,23 @@ export default function HospitalsPage() {
           )}
         </CardContent>
       </Card>
+
+      {/* Delete Confirmation Dialog */}
+      <ConfirmationDialog
+        open={deleteDialogOpen}
+        onOpenChange={setDeleteDialogOpen}
+        title="Delete Hospital"
+        description={
+          <>
+            Are you sure you want to delete <strong>{hospitalToDelete?.name}</strong>? 
+            This action cannot be undone and will remove all associated data.
+          </>
+        }
+        confirmText="Delete"
+        variant="danger"
+        isLoading={isDeleting}
+        onConfirm={handleDeleteConfirm}
+      />
     </div>
   );
 }

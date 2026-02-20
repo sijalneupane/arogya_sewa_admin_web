@@ -1,14 +1,36 @@
+import { useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Edit, Trash2 } from 'lucide-react';
+import toast from 'react-hot-toast';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import { ConfirmationDialog } from '@/components/ui/ConfirmationDialog';
 import { useHospitalById } from '@/features/super-admin/hospitals/hooks/useHospitalById';
 import HospitalDetailView from '@/features/super-admin/hospitals/components/HospitalDetailView';
+import { hospitalApi } from '@/api/hospital.api';
 
 export default function HospitalDetailPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { hospital, loading, error } = useHospitalById(id);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  const handleDelete = async () => {
+    if (!hospital) return;
+    
+    setIsDeleting(true);
+    try {
+      await hospitalApi.delete(hospital.hospital_id);
+      toast.success('Hospital deleted successfully');
+      navigate('/hospitals');
+    } catch (err: any) {
+      toast.error(err.response?.data?.message || 'Failed to delete hospital');
+    } finally {
+      setIsDeleting(false);
+      setIsDeleteDialogOpen(false);
+    }
+  };
 
   if (loading) {
     return (
@@ -107,6 +129,7 @@ export default function HospitalDetailPage() {
           </Link>
           <Button
             variant="outline"
+            onClick={() => setIsDeleteDialogOpen(true)}
             className="flex items-center gap-2 text-red-600 hover:text-red-700 hover:bg-red-50"
           >
             <Trash2 className="h-4 w-4" />
@@ -117,6 +140,20 @@ export default function HospitalDetailPage() {
 
       {/* Hospital Details */}
       <HospitalDetailView hospital={hospital} />
+
+      {/* Delete Confirmation Dialog */}
+      <ConfirmationDialog
+        open={isDeleteDialogOpen}
+        onOpenChange={setIsDeleteDialogOpen}
+        title="Delete Hospital"
+        description={
+          <>Are you sure you want to delete <strong>{hospital.name}</strong>? This action cannot be undone and will remove all associated data.</>
+        }
+        confirmText="Delete"
+        variant="danger"
+        isLoading={isDeleting}
+        onConfirm={handleDelete}
+      />
     </div>
   );
 }
