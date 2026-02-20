@@ -8,6 +8,7 @@ import ForgotPasswordPage from '@/pages/Auth/ForgotPasswordPage';
 import SuperAdminDashboard from '@/pages/SuperAdmin/DashboardPage';
 import HospitalsPage from '@/pages/SuperAdmin/HospitalsPage';
 import CreateHospitalPage from '@/pages/SuperAdmin/CreateHospitalPage';
+import EditHospitalPage from '@/pages/SuperAdmin/EditHospitalPage';
 import HospitalDetailPage from '@/pages/SuperAdmin/HospitalDetailPage';
 import HospitalAdminDashboard from '@/pages/HospitalAdmin/DashboardPage';
 import DoctorsPage from '@/pages/HospitalAdmin/DoctorsPage';
@@ -36,6 +37,7 @@ export default function AppRoutes() {
             <Route path="/dashboard" element={<SuperAdminDashboard />} />
             <Route path="/hospitals" element={<HospitalsPage />} />
             <Route path="/hospitals/create" element={<CreateHospitalPage />} />
+            <Route path="/hospitals/edit/:id" element={<EditHospitalPage />} />
             <Route path="/hospitals/:id" element={<HospitalDetailPage />} />
           </Route>
           
@@ -45,6 +47,7 @@ export default function AppRoutes() {
             <Route path="/doctors" element={<DoctorsPage />} />
             <Route path="/doctors/create" element={<CreateDoctorPage />} />
             <Route path="/appointments" element={<AppointmentsPage />} />
+            <Route path="/hospitals/edit/:id" element={<EditHospitalPage />} />
           </Route>
           
          
