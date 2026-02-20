@@ -98,6 +98,9 @@ export default function HospitalForm({ hospital, onSuccess }: HospitalFormProps)
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['hospitals'] });
       queryClient.invalidateQueries({ queryKey: ['hospital-stats'] });
+      if (isEditMode && hospital?.id) {
+        queryClient.invalidateQueries({ queryKey: ['hospital', hospital.id] });
+      }
       toast.success(isEditMode ? 'Hospital updated successfully!' : 'Hospital created successfully!');
       onSuccess?.();
     },

@@ -1,6 +1,6 @@
 // src/components/layout/DashboardLayout.tsx
-import { useState } from 'react';
-import { Outlet } from 'react-router-dom';
+import { useState, useRef, useEffect } from 'react';
+import { Outlet, useLocation } from 'react-router-dom';
 import Sidebar from './Sidebar';
 import Header from './Header';
 import { useAuthStore } from '@/store/auth.store';
@@ -8,6 +8,13 @@ import { useAuthStore } from '@/store/auth.store';
 export default function DashboardLayout() {
   // const { user } = useAuthStore();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const mainContentRef = useRef<HTMLDivElement>(null);
+  const { pathname } = useLocation();
+
+  // Scroll main content area to top on every route change
+  useEffect(() => {
+    mainContentRef.current?.scrollTo({ top: 0, behavior: 'instant' });
+  }, [pathname]);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -18,7 +25,7 @@ export default function DashboardLayout() {
         </div>
         
         {/* Main Content */}
-        <div className="flex-1 h-screen overflow-y-auto">
+        <div ref={mainContentRef} className="flex-1 h-screen overflow-y-auto">
           {/* Header */}
           <Header 
             onMenuToggle={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
