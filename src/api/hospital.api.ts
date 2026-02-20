@@ -19,7 +19,7 @@ export const hospitalApi = {
   
   // Update hospital
   update: (id: string, data: UpdateHospitalData) => 
-    api.put<Hospital>(`${API_ENDPOINTS.HOSPITALS}/${id}`, data),
+    api.patch<Hospital>(`${API_ENDPOINTS.HOSPITALS}/${id}`, data),
   
   // Delete hospital
   delete: (id: string) => api.delete(`${API_ENDPOINTS.HOSPITALS}/${id}`),
