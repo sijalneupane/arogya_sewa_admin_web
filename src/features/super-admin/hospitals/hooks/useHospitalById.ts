@@ -48,8 +48,8 @@ export const useHospitalById = (id: string | undefined): UseHospitalByIdReturn =
     }
 
     currentIdRef.current = undefined; // Reset to allow refetch
-    setLoading(true);
     setError(null);
+    setLoading(true);
 
     try {
       const response = await hospitalApi.getById(id);
