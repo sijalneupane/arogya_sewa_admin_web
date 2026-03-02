@@ -24,6 +24,7 @@ const Sidebar = ({ isCollapsed, onToggle }: SidebarProps) => {
   const superAdminMenu = [
     { path: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
     { path: '/hospitals', label: 'Hospitals', icon: Building },
+    { path: '/users', label: 'Users', icon: Users },
   ];
 
   const hospitalAdminMenu = [
