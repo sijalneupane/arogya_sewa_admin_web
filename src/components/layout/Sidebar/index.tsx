@@ -1,6 +1,7 @@
 import { Link, useLocation } from 'react-router-dom';
 import { useAuthStore } from '@/store/auth.store';
 import { UserRole } from '@/types/auth.types';
+import { AvatarPlaceholder } from '@/components/ui/AvatarPlaceholder';
 import {
   LayoutDashboard,
   Building,
@@ -114,11 +115,12 @@ const Sidebar = ({ isCollapsed, onToggle }: SidebarProps) => {
 
       <div className="p-4 border-t border-white/10">
         <div className={`flex items-center ${isCollapsed ? 'justify-center' : ''}`}>
-          <div className="h-8 w-8 rounded-full bg-white/20 flex items-center justify-center flex-shrink-0">
-            <span className="font-semibold text-white">
-              {user?.name?.charAt(0).toUpperCase()}
-            </span>
-          </div>
+          <AvatarPlaceholder
+            name={user?.name || 'User'}
+            imageUrl={user?.profile_img}
+            size="sm"
+            shape="circle"
+          />
           {!isCollapsed && (
             <div className="ml-3 overflow-hidden">
               <p className="text-sm font-medium truncate text-white">{user?.name}</p>

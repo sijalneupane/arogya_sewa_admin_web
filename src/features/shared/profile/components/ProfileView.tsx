@@ -1,7 +1,8 @@
 import { User } from '@/types/auth.types';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Edit, Mail, Phone, User as UserIcon, Building, Calendar } from 'lucide-react';
+import { AvatarPlaceholder } from '@/components/ui/AvatarPlaceholder';
+import { Edit, Mail, Phone, Building, Calendar } from 'lucide-react';
 
 interface ProfileViewProps {
   user: User;
@@ -54,9 +55,12 @@ export default function ProfileView({ user, onEditClick }: ProfileViewProps) {
         <CardContent>
           <div className="space-y-4">
             <div className="flex items-center space-x-3">
-              <div className="h-12 w-12 rounded-full bg-blue-100 flex items-center justify-center">
-                <UserIcon className="h-6 w-6 text-blue-600" />
-              </div>
+              <AvatarPlaceholder
+                name={user.name}
+                imageUrl={user.profile_img}
+                size="lg"
+                shape="circle"
+              />
               <div>
                 <p className="font-medium">{user.name}</p>
                 <p className="text-sm text-gray-500">{user.role?.role.replace('_', ' ')}</p>

@@ -1,14 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { 
-  User, 
-  Settings, 
-  HelpCircle, 
+import {
+  User,
+  Settings,
+  HelpCircle,
   LogOut,
   ChevronDown
 } from 'lucide-react';
 import { useAuthStore } from '@/store/auth.store';
+import { AvatarPlaceholder } from '@/components/ui/AvatarPlaceholder';
 import { ConfirmationDialog } from '@/components/ui/ConfirmationDialog';
 
 interface UserMenuProps {
@@ -20,27 +21,18 @@ export default function UserMenu({ user }: UserMenuProps) {
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
   const { logout } = useAuthStore();
 
-  const getUserInitials = () => {
-    if (!user?.name) return 'U';
-    return user.name
-      .split(' ')
-      .map((n: string) => n[0])
-      .join('')
-      .toUpperCase()
-      .slice(0, 2);
-  };
-
   return (
     <div className="relative">
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-100"
       >
-        <div className="h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center">
-          <span className="text-blue-600 font-semibold text-sm">
-            {getUserInitials()}
-          </span>
-        </div>
+        <AvatarPlaceholder
+          name={user?.name || 'User'}
+          imageUrl={user?.profile_image}
+          size="sm"
+          shape="circle"
+        />
         <div className="hidden lg:block text-left">
           <p className="text-sm font-medium">{user?.name || 'User'}</p>
           <p className="text-xs text-gray-500">

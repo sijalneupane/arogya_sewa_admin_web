@@ -17,6 +17,7 @@ export interface User {
   role: Role;
   is_active: boolean;
   hospitalId?: string;
+  profile_img?: string | null;
   created_at: string;
   updated_at: string;
 }
