@@ -33,7 +33,7 @@ export default function DashboardLayout() {
           />
           
           {/* Page Content */}
-          <main className="p-2 md:p-6">
+          <main className="p-2 md:p-4">
             <Outlet />
           </main>
         </div>

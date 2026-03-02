@@ -10,21 +10,21 @@ export default function HospitalAdminDashboard() {
   ];
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       <div>
-        <h1 className="text-3xl font-bold text-gray-900">Hospital Dashboard</h1>
+        <h1 className="text-2xl font-bold text-gray-900">Hospital Dashboard</h1>
         <p className="text-gray-600 mt-2">Welcome back! Here's what's happening today.</p>
       </div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {stats.map((stat) => (
           <Card key={stat.label}>
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-gray-500">{stat.label}</p>
-                  <p className="text-2xl font-bold mt-1">{stat.value}</p>
+                  <p className="text-xl font-bold mt-1">{stat.value}</p>
                   <p className={`text-sm ${stat.change.startsWith('+') ? 'text-green-600' : 'text-red-600'} mt-1`}>
                     {stat.change}
                   </p>
@@ -39,7 +39,7 @@ export default function HospitalAdminDashboard() {
       </div>
 
       {/* Today's Appointments */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         <Card className="lg:col-span-2">
           <CardHeader>
             <CardTitle>Today's Appointments</CardTitle>
