@@ -10,7 +10,7 @@ interface ProfileViewProps {
 
 export default function ProfileView({ user, onEditClick }: ProfileViewProps) {
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
       {/* Profile Info */}
       <Card className="lg:col-span-2">
         <CardHeader className="flex flex-row items-center justify-between">
@@ -21,7 +21,7 @@ export default function ProfileView({ user, onEditClick }: ProfileViewProps) {
           </Button>
         </CardHeader>
         <CardContent>
-          <div className="space-y-6">
+          <div className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <label className="block text-sm font-medium text-gray-500 mb-1">Full Name</label>
