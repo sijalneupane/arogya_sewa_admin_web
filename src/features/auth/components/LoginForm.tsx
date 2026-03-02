@@ -52,14 +52,14 @@ export function LoginForm({
             className="h-20 w-auto"
           />
         </div>
-        <CardTitle className="text-2xl text-center">Welcome Back</CardTitle>
+        <CardTitle className="text-xl text-center">Welcome Back</CardTitle>
         <CardDescription className="text-center">
           Sign in to your account
         </CardDescription>
       </CardHeader>
 
       <CardContent>
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           {/* Error Alert */}
           {error && (
             <Alert variant="destructive">
