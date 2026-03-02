@@ -10,6 +10,7 @@ import {
   Stethoscope,
   CalendarDays,
   UserPlus,
+  Users,
 } from 'lucide-react';
 import { useAuthStore } from '@/store/auth.store';
 
@@ -40,6 +41,14 @@ const NAV_ITEMS: NavItem[] = [
     icon: <Hospital className="h-4 w-4" />,
     roles: ['SUPER_ADMIN'],
     keywords: ['hospitals', 'hospital', 'list', 'manage'],
+  },
+  {
+    label: 'Users',
+    description: 'View and manage all users',
+    path: '/users',
+    icon: <Users className="h-4 w-4" />,
+    roles: ['SUPER_ADMIN'],
+    keywords: ['users', 'user', 'list', 'manage', 'people'],
   },
   {
     label: 'Add Hospital',
