@@ -12,6 +12,8 @@ export interface User {
   role: Role;
   is_active: boolean;
   hospitalId?: string;
+  created_at: string;
+  updated_at: string;
 }
 
 export interface AuthState {

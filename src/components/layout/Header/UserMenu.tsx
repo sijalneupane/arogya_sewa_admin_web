@@ -9,6 +9,7 @@ import {
   ChevronDown
 } from 'lucide-react';
 import { useAuthStore } from '@/store/auth.store';
+import { ConfirmationDialog } from '@/components/ui/ConfirmationDialog';
 
 interface UserMenuProps {
   user: any;
@@ -16,6 +17,7 @@ interface UserMenuProps {
 
 export default function UserMenu({ user }: UserMenuProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
   const { logout } = useAuthStore();
 
   const getUserInitials = () => {
@@ -42,7 +44,7 @@ export default function UserMenu({ user }: UserMenuProps) {
         <div className="hidden lg:block text-left">
           <p className="text-sm font-medium">{user?.name || 'User'}</p>
           <p className="text-xs text-gray-500">
-            {user?.role?.replace('_', ' ')}
+            {user?.role?.role?.replace('_', ' ')}
           </p>
         </div>
         <ChevronDown className={`h-4 w-4 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
@@ -86,8 +88,8 @@ export default function UserMenu({ user }: UserMenuProps) {
           <div className="border-t mt-2 pt-2">
             <button
               onClick={() => {
-                logout();
                 setIsOpen(false);
+                setShowLogoutConfirm(true);
               }}
               className="flex items-center w-full px-4 py-2 text-sm text-red-600 hover:bg-red-50"
             >
@@ -97,6 +99,20 @@ export default function UserMenu({ user }: UserMenuProps) {
           </div>
         </div>
       )}
+
+      <ConfirmationDialog
+        open={showLogoutConfirm}
+        onOpenChange={setShowLogoutConfirm}
+        title="Logout"
+        description="Are you sure you want to logout?"
+        confirmText="Logout"
+        cancelText="Cancel"
+        variant="danger"
+        onConfirm={() => {
+          logout();
+          setShowLogoutConfirm(false);
+        }}
+      />
     </div>
   );
 }

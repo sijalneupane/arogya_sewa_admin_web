@@ -26,7 +26,7 @@ export default function LoginPage() {
       throw new Error('Invalid response structure from server');
       }
       
-      const { access_token, refresh_token, user } = response.data;
+      const { access_token, refresh_token, user, } = response.data; // Adjusted to match interceptor response
       
       if (!access_token || !refresh_token || !user) {
         throw new Error('Missing required fields in response');
@@ -57,24 +57,24 @@ export default function LoginPage() {
     <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
       <div className="w-full max-w-4xl">
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-blue-600">ArogyaSewa</h1>
+          <h1 className="text-3xl font-bold text-blue-600">ArogyaSewa</h1>
           <p className="text-gray-600 mt-2 text-lg">Hospital Management System</p>
         </div>
         
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-center">
           {/* Login Form */}
           <div>
             <LoginForm 
               onSubmit={handleLogin}
               loading={loading}
               error={error}
-              showDemoCredentials={true}
+              showDemoCredentials={false}
             />
           </div>
           
           {/* Welcome Section */}
-          <div className="bg-blue-50 p-8 rounded-lg">
-            <h2 className="text-2xl font-bold text-gray-800 mb-4">
+          <div className="bg-blue-50 p-6 rounded-lg">
+            <h2 className="text-xl font-bold text-gray-800 mb-3">
               Streamline Your Hospital Management
             </h2>
             <ul className="space-y-4">
@@ -104,12 +104,13 @@ export default function LoginPage() {
               </li>
             </ul>
             
-            <div className="mt-8 p-4 bg-white rounded-lg">
+            {/*<div className="mt-8 p-4 bg-white rounded-lg">
               <p className="text-sm text-gray-600">
                 <strong>Note:</strong> This is a demo system. Use the demo credentials 
                 to explore different roles and features.
               </p>
             </div>
+            */}
           </div>
         </div>
       </div>

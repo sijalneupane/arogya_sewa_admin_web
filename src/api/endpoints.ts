@@ -3,12 +3,13 @@ export const API_ENDPOINTS = {
   LOGIN: '/auth/login',
   LOGOUT: '/auth/logout',
   PROFILE: '/auth/profile',
+  UPDATE_PROFILE: '/auth/profile',
   REFRESH_TOKEN: '/auth/refresh-token',
   FORGOT_PASSWORD: '/auth/forgot-password',
   RESET_PASSWORD: '/auth/reset-password',
   
   // Super Admin
-  HOSPITALS: '/hospitals',
+  HOSPITALS: '/hospital',
   HOSPITAL_STATS: '/hospitals/stats',
   
   // Hospital Admin
@@ -18,6 +19,11 @@ export const API_ENDPOINTS = {
   
   // Shared
   USERS: '/users',
+  
+  // File Upload
+  FILE_UPLOAD: '/file/upload',
+  FILE_UPDATE: '/file/update',
+  FILE_DELETE: (id: string) => `/fileupload/${id}`,
 };
 
 // Base URL configuration

@@ -1,6 +1,6 @@
 // src/components/layout/DashboardLayout.tsx
-import { useState } from 'react';
-import { Outlet } from 'react-router-dom';
+import { useState, useRef, useEffect } from 'react';
+import { Outlet, useLocation } from 'react-router-dom';
 import Sidebar from './Sidebar';
 import Header from './Header';
 import { useAuthStore } from '@/store/auth.store';
@@ -8,17 +8,24 @@ import { useAuthStore } from '@/store/auth.store';
 export default function DashboardLayout() {
   // const { user } = useAuthStore();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const mainContentRef = useRef<HTMLDivElement>(null);
+  const { pathname } = useLocation();
+
+  // Scroll main content area to top on every route change
+  useEffect(() => {
+    mainContentRef.current?.scrollTo({ top: 0, behavior: 'instant' });
+  }, [pathname]);
 
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="flex">
-        {/* Sidebar - Hidden on mobile when menu is closed */}
-        <div className={`${isMobileMenuOpen ? 'block' : 'hidden'} lg:block`}>
+        {/* Sidebar - Desktop */}
+        <div className="hidden lg:block">
           <Sidebar />
         </div>
         
         {/* Main Content */}
-        <div className="flex-1 min-h-screen">
+        <div ref={mainContentRef} className="flex-1 h-screen overflow-y-auto">
           {/* Header */}
           <Header 
             onMenuToggle={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -26,18 +33,26 @@ export default function DashboardLayout() {
           />
           
           {/* Page Content */}
-          <main className="p-4 md:p-6">
+          <main className="p-2 md:p-4">
             <Outlet />
           </main>
         </div>
       </div>
       
-      {/* Mobile overlay */}
+      {/* Mobile Drawer & Overlay */}
       {isMobileMenuOpen && (
-        <div 
-          className="lg:hidden fixed inset-0 bg-black bg-opacity-50 z-30"
-          onClick={() => setIsMobileMenuOpen(false)}
-        />
+        <div className="lg:hidden relative z-50">
+          {/* Overlay */}
+          <div 
+            className="fixed inset-0 bg-black/50 transition-opacity"
+            onClick={() => setIsMobileMenuOpen(false)}
+          />
+          
+          {/* Sidebar Drawer */}
+          <div className="fixed inset-y-0 left-0 shadow-xl">
+             <Sidebar />
+          </div>
+        </div>
       )}
     </div>
   );

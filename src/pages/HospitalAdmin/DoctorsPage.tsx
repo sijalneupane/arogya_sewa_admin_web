@@ -25,10 +25,10 @@ export default function DoctorsPage() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Doctors</h1>
+          <h1 className="text-2xl font-bold text-gray-900">Doctors</h1>
           <p className="text-gray-600 mt-2">Manage doctors in your hospital</p>
         </div>
         <Link to="/doctors/create">
@@ -57,7 +57,7 @@ export default function DoctorsPage() {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {filteredDoctors.map((doctor) => (
               <Card key={doctor.id} className="hover:shadow-lg transition-shadow">
                 <CardContent className="pt-6">

@@ -20,7 +20,7 @@ export default function CreateDoctorPage() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       <div className="flex items-center space-x-4">
         <button
           onClick={() => navigate('/doctors')}
@@ -29,7 +29,7 @@ export default function CreateDoctorPage() {
           <ArrowLeft className="h-5 w-5" />
         </button>
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Add New Doctor</h1>
+          <h1 className="text-2xl font-bold text-gray-900">Add New Doctor</h1>
           <p className="text-gray-600 mt-2">Register a new doctor in your hospital</p>
         </div>
       </div>
@@ -39,8 +39,8 @@ export default function CreateDoctorPage() {
           <CardTitle>Doctor Information</CardTitle>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-4">
                 <div>
                   <label className="block text-sm font-medium mb-1">Full Name</label>

@@ -165,6 +165,9 @@ export const authApi = {
   getProfile: () => 
     api.get<User>(API_ENDPOINTS.PROFILE),
   
+  updateProfile: (data: { name: string; email: string; phone_number: string }) =>
+    api.patch<User>(API_ENDPOINTS.UPDATE_PROFILE, data),
+  
   refreshToken: (refreshToken: string) => 
     api.post<{ token: string }>(API_ENDPOINTS.REFRESH_TOKEN, { refreshToken }),
   
