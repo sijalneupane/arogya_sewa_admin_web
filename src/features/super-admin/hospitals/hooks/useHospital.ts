@@ -4,7 +4,7 @@ import { hospitalApi, HospitalSearchParams } from '@/api/hospital.api';
 import { Hospital, PaginationMeta, HospitalListResponse } from '@/types/hospital.type';
 
 const DEBOUNCE_MS = 500;
-const PAGE_SIZE = 3;
+const PAGE_SIZE = 10;
 
 interface UseHospitalReturn {
   hospitals: Hospital[];
