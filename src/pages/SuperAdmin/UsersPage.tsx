@@ -221,7 +221,7 @@ export default function UsersPage() {
                         <td className="py-3 px-4">
                           <ActionMenu
                             viewUrl={`/users/${user.id}`}
-                            editUrl={`/users/${user.id}/edit`}
+                            // editUrl={`/users/${user.id}/edit`}
                           />
                         </td>
                       </tr>

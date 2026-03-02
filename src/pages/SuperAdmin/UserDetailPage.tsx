@@ -97,14 +97,14 @@ export default function UserDetailPage() {
           <ArrowLeft className="h-4 w-4" />
           Back to Users
         </Button>
-        <div className="flex gap-3">
+        {/* <div className="flex gap-3">
           <Link to={`/users/${user.id}/edit`}>
             <Button variant="outline" className="flex items-center gap-2">
               <Edit className="h-4 w-4" />
               Edit User
             </Button>
           </Link>
-        </div>
+        </div> */}
       </div>
 
       {/* Profile Card */}
