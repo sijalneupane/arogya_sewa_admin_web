@@ -43,10 +43,10 @@ const Sidebar = ({ isCollapsed, onToggle }: SidebarProps) => {
           <img
             src="/logo.png"
             alt="ArogyaSewa Logo"
-            className="h-9 w-auto"
+            className="h-9 w-auto flex-shrink-0"
           />
           {!isCollapsed && (
-            <div>
+            <div className="overflow-hidden whitespace-nowrap">
               <h1 className="text-base font-bold text-blue-600">ArogyaSewa</h1>
               <p className="text-gray-500 text-xs">Hospital Management</p>
             </div>
@@ -57,7 +57,7 @@ const Sidebar = ({ isCollapsed, onToggle }: SidebarProps) => {
       {/* Toggle Button - Desktop Only */}
       <button
         onClick={onToggle}
-        className="hidden lg:block absolute -right-3 top-14 h-6 w-6 rounded-full bg-white border shadow-md flex items-center justify-center hover:bg-gray-50 transition-colors z-50 p-0 leading-none"
+        className="hidden lg:block absolute -right-3 top-14 h-6 w-6 rounded-full bg-white border shadow-md flex items-center justify-center hover:bg-gray-50 transition-colors z-[60] p-0"
         aria-label={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
       >
         {isCollapsed ? (
@@ -82,8 +82,12 @@ const Sidebar = ({ isCollapsed, onToggle }: SidebarProps) => {
               } ${isCollapsed ? 'justify-center' : ''}`}
               title={isCollapsed ? item.label : undefined}
             >
-              <item.icon className="h-4 w-4" />
-              {!isCollapsed && <span className="ml-2.5">{item.label}</span>}
+              <item.icon className="h-4 w-4 flex-shrink-0" />
+              {!isCollapsed && (
+                <span className="ml-2.5 whitespace-nowrap">
+                  {item.label}
+                </span>
+              )}
             </Link>
           );
         })}
@@ -95,8 +99,12 @@ const Sidebar = ({ isCollapsed, onToggle }: SidebarProps) => {
           }`}
           title={isCollapsed ? 'Logout' : undefined}
         >
-          <LogOut className="h-4 w-4" />
-          {!isCollapsed && <span className="ml-2.5">Logout</span>}
+          <LogOut className="h-4 w-4 flex-shrink-0" />
+          {!isCollapsed && (
+            <span className="ml-2.5 whitespace-nowrap">
+              Logout
+            </span>
+          )}
         </button>
       </nav>
 

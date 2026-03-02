@@ -27,9 +27,9 @@ export default function DashboardLayout() {
       <div className="flex">
         {/* Sidebar - Desktop */}
         <div className="hidden lg:block relative">
-          <Sidebar 
-            isCollapsed={isSidebarCollapsed} 
-            onToggle={() => setIsSidebarCollapsed(!isSidebarCollapsed)} 
+          <Sidebar
+            isCollapsed={isSidebarCollapsed}
+            onToggle={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
           />
         </div>
 
