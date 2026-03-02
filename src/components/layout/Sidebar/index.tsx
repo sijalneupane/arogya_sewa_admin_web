@@ -63,9 +63,9 @@ const Sidebar = ({ isCollapsed, onToggle }: SidebarProps) => {
         aria-label={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
       >
         {isCollapsed ? (
-          <ChevronRight className="h-4 w-4 text-gray-600 m-auto" />
+          <ChevronRight className="h-4 w-4 text-gray-600 relative left-0.5" />
         ) : (
-          <ChevronLeft className="h-4 w-4 text-gray-600 m-auto" />
+          <ChevronLeft className="h-4 w-4 text-gray-600 relative left-0.5" />
         )}
       </button>
 
