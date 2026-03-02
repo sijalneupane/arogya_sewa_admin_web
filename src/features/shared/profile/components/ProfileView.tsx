@@ -57,7 +57,7 @@ export default function ProfileView({ user, onEditClick }: ProfileViewProps) {
             <div className="flex items-center space-x-3">
               <AvatarPlaceholder
                 name={user.name}
-                imageUrl={user.profile_img}
+                imageUrl={user.profile_img?.file_url}
                 size="lg"
                 shape="circle"
               />

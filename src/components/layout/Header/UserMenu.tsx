@@ -29,7 +29,7 @@ export default function UserMenu({ user }: UserMenuProps) {
       >
         <AvatarPlaceholder
           name={user?.name || 'User'}
-          imageUrl={user?.profile_image}
+          imageUrl={user?.profile_img?.file_url}
           size="sm"
           shape="circle"
         />

@@ -117,7 +117,7 @@ const Sidebar = ({ isCollapsed, onToggle }: SidebarProps) => {
         <div className={`flex items-center ${isCollapsed ? 'justify-center' : ''}`}>
           <AvatarPlaceholder
             name={user?.name || 'User'}
-            imageUrl={user?.profile_img}
+            imageUrl={user?.profile_img?.file_url}
             size="sm"
             shape="circle"
           />
