@@ -2,6 +2,8 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Mail, Phone, Calendar, User as UserIcon, Shield, CheckCircle, XCircle, Edit } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { ImagePreview } from '@/components/ui/ImagePreview';
+import { AvatarPlaceholder } from '@/components/ui/AvatarPlaceholder';
 import { useUserById } from '@/features/super-admin/users/hooks/useUserById';
 
 export default function UserDetailPage() {
@@ -28,18 +30,22 @@ export default function UserDetailPage() {
     return (
       <div className="space-y-4">
         <div className="flex items-center gap-4">
-          <Button variant="ghost" onClick={() => navigate(-1)}>
-            <ArrowLeft className="h-4 w-4 mr-2" />
-            Back
+          <Button
+            variant="outline"
+            onClick={() => navigate('/users')}
+            className="flex items-center gap-2"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            Back to Users
           </Button>
         </div>
         <Card>
           <CardContent className="pt-6">
-            <div className="text-center py-8">
+            <div className="text-center py-12">
               <div className="inline-block animate-spin">
-                <div className="h-8 w-8 border-4 border-gray-300 border-t-primary rounded-full"></div>
+                <div className="h-12 w-12 border-4 border-gray-300 border-t-primary rounded-full"></div>
               </div>
-              <p className="text-gray-600 mt-2">Loading user details...</p>
+              <p className="text-gray-600 mt-4">Loading user details...</p>
             </div>
           </CardContent>
         </Card>
@@ -51,9 +57,13 @@ export default function UserDetailPage() {
     return (
       <div className="space-y-4">
         <div className="flex items-center gap-4">
-          <Button variant="ghost" onClick={() => navigate(-1)}>
-            <ArrowLeft className="h-4 w-4 mr-2" />
-            Back
+          <Button
+            variant="outline"
+            onClick={() => navigate('/users')}
+            className="flex items-center gap-2"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            Back to Users
           </Button>
         </div>
         <Card>
@@ -79,20 +89,18 @@ export default function UserDetailPage() {
     <div className="space-y-4">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <Button variant="ghost" size="sm" onClick={() => navigate('/users')}>
-            <ArrowLeft className="h-4 w-4 mr-1" />
-            Back
-          </Button>
-          <div>
-            <h1 className="text-xl font-bold text-gray-900">User Details</h1>
-            <p className="text-gray-500 text-sm">View and manage user information</p>
-          </div>
-        </div>
-        <div className="flex gap-2">
+        <Button
+          variant="outline"
+          onClick={() => navigate('/users')}
+          className="flex items-center gap-2"
+        >
+          <ArrowLeft className="h-4 w-4" />
+          Back to Users
+        </Button>
+        <div className="flex gap-3">
           <Link to={`/users/${user.id}/edit`}>
-            <Button size="sm" className="bg-primary hover:bg-primary/90">
-              <Edit className="h-4 w-4 mr-1" />
+            <Button variant="outline" className="flex items-center gap-2">
+              <Edit className="h-4 w-4" />
               Edit User
             </Button>
           </Link>
@@ -106,15 +114,26 @@ export default function UserDetailPage() {
             {/* Profile Image */}
             <div className="flex-shrink-0">
               {user.profile_img?.file_url ? (
-                <img
+                <ImagePreview
                   src={user.profile_img.file_url}
                   alt={user.name}
-                  className="h-20 w-20 object-cover rounded-full border-2 border-primary/20"
-                />
+                  title={user.name}
+                >
+                  <AvatarPlaceholder
+                    name={user.name}
+                    imageUrl={user.profile_img.file_url}
+                    size="lg"
+                    shape="circle"
+                    className="cursor-pointer hover:opacity-80 transition-opacity border-2 border-primary/20"
+                  />
+                </ImagePreview>
               ) : (
-                <div className="h-20 w-20 bg-primary/10 rounded-full flex items-center justify-center border-2 border-primary/20">
-                  <UserIcon className="h-10 w-10 text-primary" />
-                </div>
+                <AvatarPlaceholder
+                  name={user.name}
+                  size="lg"
+                  shape="circle"
+                  className="border-2 border-primary/20"
+                />
               )}
             </div>
 

@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ActionMenu } from '@/components/ui/ActionMenu';
 import { Pagination } from '@/components/ui/Pagination';
+import { AvatarPlaceholder } from '@/components/ui/AvatarPlaceholder';
 import { useUser } from '@/features/super-admin/users/hooks/useUser';
 
 interface RoleTab {
@@ -190,17 +191,12 @@ export default function UsersPage() {
                     {users.map((user) => (
                       <tr key={user.id} className="border-b hover:bg-gray-50">
                         <td className="py-3 px-4">
-                          {user.profile_img?.file_url ? (
-                            <img
-                              src={user.profile_img.file_url}
-                              alt={user.name}
-                              className="h-10 w-10 object-cover rounded-full"
-                            />
-                          ) : (
-                            <div className="h-10 w-10 bg-gray-200 rounded-full flex items-center justify-center text-sm font-semibold text-gray-600">
-                              {user.name.charAt(0).toUpperCase()}
-                            </div>
-                          )}
+                          <AvatarPlaceholder
+                            name={user.name}
+                            imageUrl={user.profile_img?.file_url}
+                            size="md"
+                            shape="circle"
+                          />
                         </td>
                         <td className="py-3 px-4 font-medium truncate">{user.name}</td>
                         <td className="py-3 px-4 truncate">{user.email}</td>

@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ActionMenu } from '@/components/ui/ActionMenu';
 import { Pagination } from '@/components/ui/Pagination';
+import { AvatarPlaceholder } from '@/components/ui/AvatarPlaceholder';
 import { ConfirmationDialog } from '@/components/ui/ConfirmationDialog';
 import { useHospital } from '@/features/super-admin/hospitals/hooks/useHospital';
 import { hospitalApi } from '@/api/hospital.api';
@@ -212,17 +213,12 @@ export default function HospitalsPage() {
                     {hospitals.map((hospital) => (
                       <tr key={hospital.hospital_id} className="border-b hover:bg-gray-50">
                         <td className="py-3 px-4">
-                          {hospital.logo?.file_url ? (
-                            <img
-                              src={hospital.logo.file_url}
-                              alt={hospital.name}
-                              className="h-10 w-10 object-cover rounded"
-                            />
-                          ) : (
-                            <div className="h-10 w-10 bg-gray-200 rounded flex items-center justify-center text-xs text-gray-600">
-                              N/A
-                            </div>
-                          )}
+                          <AvatarPlaceholder
+                            name={hospital.name}
+                            imageUrl={hospital.logo?.file_url}
+                            size="md"
+                            shape="rounded"
+                          />
                         </td>
                         <td className="py-3 px-4 font-medium ">{hospital.name}</td>
                         <td className="py-3 px-4 truncate">{hospital.location}</td>
