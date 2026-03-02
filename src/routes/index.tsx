@@ -1,6 +1,7 @@
-import { Routes, Route, Navigate } from 'react-router-dom'; // Add Navigate
+import { Routes, Route, Navigate } from 'react-router-dom';
 import ProtectedRoute from '@/components/layout/ProtectedRoute';
 import DashboardLayout from '@/components/layout/DashboardLayout';
+import { UserRole } from '@/types/auth.types';
 
 // Pages
 import LoginPage from '@/pages/Auth/LoginPage';
@@ -10,6 +11,8 @@ import HospitalsPage from '@/pages/SuperAdmin/HospitalsPage';
 import CreateHospitalPage from '@/pages/SuperAdmin/CreateHospitalPage';
 import EditHospitalPage from '@/pages/SuperAdmin/EditHospitalPage';
 import HospitalDetailPage from '@/pages/SuperAdmin/HospitalDetailPage';
+import UsersPage from '@/pages/SuperAdmin/UsersPage';
+import UserDetailPage from '@/pages/SuperAdmin/UserDetailPage';
 import HospitalAdminDashboard from '@/pages/HospitalAdmin/DashboardPage';
 import DoctorsPage from '@/pages/HospitalAdmin/DoctorsPage';
 import AppointmentsPage from '@/pages/HospitalAdmin/AppointmentsPage';
@@ -33,16 +36,18 @@ export default function AppRoutes() {
           <Route path="/settings" element={<SettingsPage />} />
           
           {/* Super Admin Routes */}
-          <Route element={<ProtectedRoute allowedRoles={['SUPER_ADMIN']} />}>
+          <Route element={<ProtectedRoute allowedRoles={[UserRole.SUPER_ADMIN]} />}>
             <Route path="/dashboard" element={<SuperAdminDashboard />} />
             <Route path="/hospitals" element={<HospitalsPage />} />
             <Route path="/hospitals/create" element={<CreateHospitalPage />} />
             <Route path="/hospitals/edit/:id" element={<EditHospitalPage />} />
             <Route path="/hospitals/:id" element={<HospitalDetailPage />} />
+            <Route path="/users" element={<UsersPage />} />
+            <Route path="/users/:userId" element={<UserDetailPage />} />
           </Route>
-          
+
           {/* Hospital Admin Routes */}
-          <Route element={<ProtectedRoute allowedRoles={['HOSPITAL_ADMIN']} />}>
+          <Route element={<ProtectedRoute allowedRoles={[UserRole.HOSPITAL_ADMIN]} />}>
             <Route path="/dashboard" element={<HospitalAdminDashboard />} />
             <Route path="/doctors" element={<DoctorsPage />} />
             <Route path="/doctors/create" element={<CreateDoctorPage />} />

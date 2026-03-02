@@ -10,19 +10,21 @@ import {
   Stethoscope,
   CalendarDays,
   UserPlus,
+  Users,
 } from 'lucide-react';
 import { useAuthStore } from '@/store/auth.store';
+import { UserRole } from '@/types/auth.types';
 
 interface NavItem {
   label: string;
   description: string;
   path: string;
   icon: React.ReactNode;
-  roles: string[]; // empty = all roles
+  roles: UserRole[]; // empty = all roles
   keywords: string[];
 }
 
-const ALL_ROLES = ['SUPER_ADMIN', 'HOSPITAL_ADMIN'];
+const ALL_ROLES = [UserRole.SUPER_ADMIN, UserRole.HOSPITAL_ADMIN];
 
 const NAV_ITEMS: NavItem[] = [
   {
@@ -38,15 +40,23 @@ const NAV_ITEMS: NavItem[] = [
     description: 'Manage all hospitals',
     path: '/hospitals',
     icon: <Hospital className="h-4 w-4" />,
-    roles: ['SUPER_ADMIN'],
+    roles: [UserRole.SUPER_ADMIN],
     keywords: ['hospitals', 'hospital', 'list', 'manage'],
+  },
+  {
+    label: 'Users',
+    description: 'View and manage all users',
+    path: '/users',
+    icon: <Users className="h-4 w-4" />,
+    roles: [UserRole.SUPER_ADMIN],
+    keywords: ['users', 'user', 'list', 'manage', 'people'],
   },
   {
     label: 'Add Hospital',
     description: 'Register a new hospital',
     path: '/hospitals/create',
     icon: <Plus className="h-4 w-4" />,
-    roles: ['SUPER_ADMIN'],
+    roles: [UserRole.SUPER_ADMIN],
     keywords: ['add hospital', 'create hospital', 'new hospital', 'register hospital'],
   },
   {
@@ -54,7 +64,7 @@ const NAV_ITEMS: NavItem[] = [
     description: 'Manage doctors in your hospital',
     path: '/doctors',
     icon: <Stethoscope className="h-4 w-4" />,
-    roles: ['HOSPITAL_ADMIN'],
+    roles: [UserRole.HOSPITAL_ADMIN],
     keywords: ['doctors', 'doctor', 'staff', 'physician'],
   },
   {
@@ -62,7 +72,7 @@ const NAV_ITEMS: NavItem[] = [
     description: 'Register a new doctor',
     path: '/doctors/create',
     icon: <UserPlus className="h-4 w-4" />,
-    roles: ['HOSPITAL_ADMIN'],
+    roles: [UserRole.HOSPITAL_ADMIN],
     keywords: ['add doctor', 'create doctor', 'new doctor', 'register doctor'],
   },
   {
@@ -70,7 +80,7 @@ const NAV_ITEMS: NavItem[] = [
     description: 'View and manage appointments',
     path: '/appointments',
     icon: <CalendarDays className="h-4 w-4" />,
-    roles: ['HOSPITAL_ADMIN'],
+    roles: [UserRole.HOSPITAL_ADMIN],
     keywords: ['appointments', 'appointment', 'schedule', 'booking', 'calendar'],
   },
   {

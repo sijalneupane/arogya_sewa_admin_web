@@ -1,5 +1,6 @@
 import { Link, useLocation } from 'react-router-dom';
 import { useAuthStore } from '@/store/auth.store';
+import { UserRole } from '@/types/auth.types';
 import {
   LayoutDashboard,
   Building,
@@ -24,6 +25,7 @@ const Sidebar = ({ isCollapsed, onToggle }: SidebarProps) => {
   const superAdminMenu = [
     { path: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
     { path: '/hospitals', label: 'Hospitals', icon: Building },
+    { path: '/users', label: 'Users', icon: Users },
   ];
 
   const hospitalAdminMenu = [
@@ -34,7 +36,7 @@ const Sidebar = ({ isCollapsed, onToggle }: SidebarProps) => {
     { path: '/settings', label: 'Settings', icon: Settings },
   ];
 
-  const menuItems = user?.role.role === 'SUPER_ADMIN' ? superAdminMenu : hospitalAdminMenu;
+  const menuItems = user?.role.role === UserRole.SUPER_ADMIN ? superAdminMenu : hospitalAdminMenu;
 
   return (
     <div className={`${isCollapsed ? 'w-20' : 'w-56'} bg-primary border-r min-h-screen flex flex-col transition-all duration-300 ease-in-out relative`}>

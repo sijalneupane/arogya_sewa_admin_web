@@ -5,13 +5,14 @@ import HospitalForm from '@/features/super-admin/hospitals/components/HospitalFo
 import { hospitalApi } from '@/api/hospital.api';
 import { useAuthStore } from '@/store/auth.store';
 import { useEffect } from 'react';
+import { UserRole } from '@/types/auth.types';
 
 export default function EditHospitalPage() {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const { user } = useAuthStore();
-  const isSuperAdmin = user?.role.role === 'SUPER_ADMIN';
-  const isHospitalAdmin = user?.role.role === 'HOSPITAL_ADMIN';
+  const isSuperAdmin = user?.role.role === UserRole.SUPER_ADMIN;
+  const isHospitalAdmin = user?.role.role === UserRole.HOSPITAL_ADMIN;
 
   // Check if hospital admin is trying to edit their own hospital
   useEffect(() => {
