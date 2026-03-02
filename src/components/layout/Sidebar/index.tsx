@@ -37,18 +37,20 @@ const Sidebar = ({ isCollapsed, onToggle }: SidebarProps) => {
   const menuItems = user?.role.role === 'SUPER_ADMIN' ? superAdminMenu : hospitalAdminMenu;
 
   return (
-    <div className={`${isCollapsed ? 'w-20' : 'w-56'} bg-white border-r min-h-screen flex flex-col transition-all duration-300 ease-in-out relative`}>
+    <div className={`${isCollapsed ? 'w-20' : 'w-56'} bg-primary border-r min-h-screen flex flex-col transition-all duration-300 ease-in-out relative`}>
       <div className="p-4">
         <div className={`flex items-center gap-2 ${isCollapsed ? 'justify-center' : ''}`}>
-          <img
-            src="/logo.png"
-            alt="ArogyaSewa Logo"
-            className="h-9 w-auto flex-shrink-0"
-          />
+          <div className="h-12 w-12 rounded-full bg-white/88 flex items-center justify-center shrink-0">
+            <img
+              src="/logo.png"
+              alt="ArogyaSewa Logo"
+              className="h-9 w-9 object-contain"
+            />
+          </div>
           {!isCollapsed && (
             <div className="overflow-hidden whitespace-nowrap">
-              <h1 className="text-base font-bold text-blue-600">ArogyaSewa</h1>
-              <p className="text-gray-500 text-xs">Hospital Management</p>
+              <h1 className="text-base font-bold text-white">ArogyaSewa</h1>
+              <p className=" text-xs text-gray-300">Hospital Management</p>
             </div>
           )}
         </div>
@@ -77,8 +79,8 @@ const Sidebar = ({ isCollapsed, onToggle }: SidebarProps) => {
               to={item.path}
               className={`flex items-center px-4 py-2 text-sm font-medium transition-colors ${
                 isActive
-                  ? 'bg-blue-50 text-blue-600 border-r-4 border-blue-600'
-                  : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                  ? 'bg-white/20 text-white border-r-4 border-white/60'
+                  : 'text-gray-200 hover:bg-white/10 hover:text-white'
               } ${isCollapsed ? 'justify-center' : ''}`}
               title={isCollapsed ? item.label : undefined}
             >
@@ -94,7 +96,7 @@ const Sidebar = ({ isCollapsed, onToggle }: SidebarProps) => {
 
         <button
           onClick={logout}
-          className={`flex items-center px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900 w-full transition-colors mt-3 ${
+          className={`flex items-center px-4 py-2 text-sm font-medium text-gray-200 hover:bg-white/10 hover:text-white w-full transition-colors mt-3 ${
             isCollapsed ? 'justify-center' : ''
           }`}
           title={isCollapsed ? 'Logout' : undefined}
@@ -108,17 +110,17 @@ const Sidebar = ({ isCollapsed, onToggle }: SidebarProps) => {
         </button>
       </nav>
 
-      <div className="p-4 border-t">
+      <div className="p-4 border-t border-white/10">
         <div className={`flex items-center ${isCollapsed ? 'justify-center' : ''}`}>
-          <div className="h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
-            <span className="font-semibold text-blue-600">
+          <div className="h-8 w-8 rounded-full bg-white/20 flex items-center justify-center flex-shrink-0">
+            <span className="font-semibold text-white">
               {user?.name?.charAt(0).toUpperCase()}
             </span>
           </div>
           {!isCollapsed && (
             <div className="ml-3 overflow-hidden">
-              <p className="text-sm font-medium truncate">{user?.name}</p>
-              <p className="text-xs text-gray-500 truncate">{user?.role.role?.replace('_', ' ')}</p>
+              <p className="text-sm font-medium truncate text-white">{user?.name}</p>
+              <p className="text-xs text-gray-300 truncate">{user?.role.role?.replace('_', ' ')}</p>
             </div>
           )}
         </div>
