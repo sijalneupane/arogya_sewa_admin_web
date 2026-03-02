@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { ImagePreview } from '@/components/ui/ImagePreview';
 import { AvatarPlaceholder } from '@/components/ui/AvatarPlaceholder';
 import { useUserById } from '@/features/super-admin/users/hooks/useUserById';
+import { UserRole } from '@/types/auth.types';
 
 export default function UserDetailPage() {
   const { userId } = useParams<{ userId: string }>();
@@ -13,13 +14,13 @@ export default function UserDetailPage() {
 
   const getRoleBadgeColor = (role: string) => {
     switch (role) {
-      case 'SUPER_ADMIN':
+      case UserRole.SUPER_ADMIN:
         return 'bg-purple-100 text-purple-700 border-purple-300';
-      case 'HOSPITAL_ADMIN':
+      case UserRole.HOSPITAL_ADMIN:
         return 'bg-blue-100 text-blue-700 border-blue-300';
-      case 'DOCTOR':
+      case UserRole.DOCTOR:
         return 'bg-green-100 text-green-700 border-green-300';
-      case 'PATIENT':
+      case UserRole.PATIENT:
         return 'bg-gray-100 text-gray-700 border-gray-300';
       default:
         return 'bg-gray-100 text-gray-700 border-gray-300';

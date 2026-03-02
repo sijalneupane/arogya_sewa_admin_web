@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { ActionMenu } from '@/components/ui/ActionMenu';
 import { Pagination } from '@/components/ui/Pagination';
 import { AvatarPlaceholder } from '@/components/ui/AvatarPlaceholder';
+import { UserRole } from '@/types/auth.types';
 import { useUser } from '@/features/super-admin/users/hooks/useUser';
 
 interface RoleTab {
@@ -16,10 +17,10 @@ interface RoleTab {
 
 const ROLE_TABS: RoleTab[] = [
   { label: 'All Users', value: '', icon: Users },
-  { label: 'Doctors', value: 'DOCTOR', icon: Stethoscope },
-  { label: 'Patients', value: 'PATIENT', icon: User },
-  { label: 'Admins', value: 'HOSPITAL_ADMIN', icon: Shield },
-  { label: 'Super Admin', value: 'SUPER_ADMIN', icon: Shield },
+  { label: 'Doctors', value: UserRole.DOCTOR, icon: Stethoscope },
+  { label: 'Patients', value: UserRole.PATIENT, icon: User },
+  { label: 'Admins', value: UserRole.HOSPITAL_ADMIN, icon: Shield },
+  { label: 'Super Admin', value: UserRole.SUPER_ADMIN, icon: Shield },
 ];
 
 export default function UsersPage() {
@@ -44,13 +45,13 @@ export default function UsersPage() {
 
   const getRoleBadgeColor = (role: string) => {
     switch (role) {
-      case 'SUPER_ADMIN':
+      case UserRole.SUPER_ADMIN:
         return 'bg-purple-100 text-purple-700 border-purple-300';
-      case 'HOSPITAL_ADMIN':
+      case UserRole.HOSPITAL_ADMIN:
         return 'bg-blue-100 text-blue-700 border-blue-300';
-      case 'DOCTOR':
+      case UserRole.DOCTOR:
         return 'bg-green-100 text-green-700 border-green-300';
-      case 'PATIENT':
+      case UserRole.PATIENT:
         return 'bg-gray-100 text-gray-700 border-gray-300';
       default:
         return 'bg-gray-100 text-gray-700 border-gray-300';

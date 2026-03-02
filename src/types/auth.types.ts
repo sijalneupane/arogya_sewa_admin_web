@@ -1,4 +1,9 @@
-export type UserRole = "SUPER_ADMIN" | "HOSPITAL_ADMIN" | "DOCTOR";
+export enum UserRole {
+  SUPER_ADMIN = 'SUPER_ADMIN',
+  HOSPITAL_ADMIN = 'HOSPITAL_ADMIN',
+  DOCTOR = 'DOCTOR',
+  PATIENT = 'PATIENT',
+}
 
 export interface Role {
   role: UserRole;

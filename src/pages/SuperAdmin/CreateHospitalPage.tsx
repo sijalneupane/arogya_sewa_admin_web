@@ -4,6 +4,7 @@ import { ArrowLeft } from 'lucide-react';
 import HospitalForm from '@/features/super-admin/hospitals/components/HospitalForm';
 import { useAuthStore } from '@/store/auth.store';
 import { useEffect } from 'react';
+import { UserRole } from '@/types/auth.types';
 
 export default function CreateHospitalPage() {
   const navigate = useNavigate();
@@ -11,7 +12,7 @@ export default function CreateHospitalPage() {
 
   // Only Super Admin can create hospitals
   useEffect(() => {
-    if (user?.role.role !== 'SUPER_ADMIN') {
+    if (user?.role.role !== UserRole.SUPER_ADMIN) {
       navigate('/unauthorized');
     }
   }, [user, navigate]);
@@ -20,7 +21,7 @@ export default function CreateHospitalPage() {
     navigate('/hospitals');
   };
 
-  if (user?.role.role !== 'SUPER_ADMIN') {
+  if (user?.role.role !== UserRole.SUPER_ADMIN) {
     return null;
   }
 

@@ -12,9 +12,10 @@ import ImageUpload from './ImageUpload';
 import MapSelector from './MapSelector';
 import { Plus, Trash2, Eye, EyeOff } from 'lucide-react';
 import { useAuthStore } from '@/store/auth.store';
+import { UserRole } from '@/types/auth.types';
 
 interface HospitalFormProps {
-  hospital?: Partial<CreateHospitalData> & { 
+  hospital?: Partial<CreateHospitalData> & {
     id?: string;
     logo?: FileObject;
     license?: FileObject;
@@ -27,8 +28,8 @@ export default function HospitalForm({ hospital, onSuccess }: HospitalFormProps)
   const queryClient = useQueryClient();
   const { user } = useAuthStore();
   const isEditMode = !!hospital?.id;
-  const isSuperAdmin = user?.role.role === 'SUPER_ADMIN';
-  const isHospitalAdmin = user?.role.role === 'HOSPITAL_ADMIN';
+  const isSuperAdmin = user?.role.role === UserRole.SUPER_ADMIN;
+  const isHospitalAdmin = user?.role.role === UserRole.HOSPITAL_ADMIN;
   const [showPassword, setShowPassword] = useState(false);
   
   // Use different schema based on mode

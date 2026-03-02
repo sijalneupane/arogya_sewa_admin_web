@@ -4,6 +4,7 @@ import { useAuthStore } from '@/store/auth.store';
 import { authApi } from '@/api/auth.api';
 import { LoginForm } from '@/features/auth/components/LoginForm';
 import { LoginData } from '@/features/auth/schemas/auth.schema';
+import { UserRole } from '@/types/auth.types';
 
 export default function LoginPage() {
   const [loading, setLoading] = useState(false);
@@ -33,12 +34,12 @@ export default function LoginPage() {
       }
       
       login(user, access_token, refresh_token);
-      
+
       // Redirect based on user role
       const userRole = user.role.role;
-      if (userRole === 'SUPER_ADMIN') {
+      if (userRole === UserRole.SUPER_ADMIN) {
         navigate('/super-admin/dashboard');
-      } else if (userRole === 'HOSPITAL_ADMIN') {
+      } else if (userRole === UserRole.HOSPITAL_ADMIN) {
         navigate('/hospital-admin/dashboard');
       } else {
         navigate('/dashboard');

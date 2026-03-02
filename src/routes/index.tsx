@@ -1,6 +1,7 @@
-import { Routes, Route, Navigate } from 'react-router-dom'; // Add Navigate
+import { Routes, Route, Navigate } from 'react-router-dom';
 import ProtectedRoute from '@/components/layout/ProtectedRoute';
 import DashboardLayout from '@/components/layout/DashboardLayout';
+import { UserRole } from '@/types/auth.types';
 
 // Pages
 import LoginPage from '@/pages/Auth/LoginPage';
@@ -35,7 +36,7 @@ export default function AppRoutes() {
           <Route path="/settings" element={<SettingsPage />} />
           
           {/* Super Admin Routes */}
-          <Route element={<ProtectedRoute allowedRoles={['SUPER_ADMIN']} />}>
+          <Route element={<ProtectedRoute allowedRoles={[UserRole.SUPER_ADMIN]} />}>
             <Route path="/dashboard" element={<SuperAdminDashboard />} />
             <Route path="/hospitals" element={<HospitalsPage />} />
             <Route path="/hospitals/create" element={<CreateHospitalPage />} />
@@ -44,9 +45,9 @@ export default function AppRoutes() {
             <Route path="/users" element={<UsersPage />} />
             <Route path="/users/:userId" element={<UserDetailPage />} />
           </Route>
-          
+
           {/* Hospital Admin Routes */}
-          <Route element={<ProtectedRoute allowedRoles={['HOSPITAL_ADMIN']} />}>
+          <Route element={<ProtectedRoute allowedRoles={[UserRole.HOSPITAL_ADMIN]} />}>
             <Route path="/dashboard" element={<HospitalAdminDashboard />} />
             <Route path="/doctors" element={<DoctorsPage />} />
             <Route path="/doctors/create" element={<CreateDoctorPage />} />
