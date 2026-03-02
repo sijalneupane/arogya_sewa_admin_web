@@ -6,7 +6,7 @@
 
 /* 2. Theme Configuration (The "New" tailwind.config.js) */
 @theme {
-  /* Branding Colors - Updated to use your primary color #161c4e with hex codes */
+  /* Branding Colors - Updated to use your primary color #282e69 with hex codes */
 
   --color-background: #ffffff;
   --color-foreground: #010816;
@@ -18,17 +18,19 @@
   --color-popover-foreground: #010816;
 
   /* Primary is your main brand color */
-  --color-primary: #161c4e;
+  --color-primary: #282e67;
+  --color-primary-2: #292f70;
+  --color-primary-3: #265094;
   --color-primary-foreground: #f7f9fb;
 
   --color-secondary: #f1f5f9;
-  --color-secondary-foreground: #161c4e;
+  --color-secondary-foreground: #282e69;
 
   --color-muted: #f1f5f9;
   --color-muted-foreground: #64748b;
 
   --color-accent: #f1f5f9;
-  --color-accent-foreground: #161c4e;
+  --color-accent-foreground: #282e69;
 
   --color-destructive: #ee4444;
   --color-destructive-foreground: #f7f9fb;
