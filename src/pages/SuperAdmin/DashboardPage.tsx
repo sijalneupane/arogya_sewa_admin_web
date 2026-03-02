@@ -10,21 +10,21 @@ export default function SuperAdminDashboard() {
   ];
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       <div>
-        <h1 className="text-3xl font-bold text-gray-900">Super Admin Dashboard</h1>
+        <h1 className="text-2xl font-bold text-gray-900">Super Admin Dashboard</h1>
         <p className="text-gray-600 mt-2">Overview of all hospitals in the system</p>
       </div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {stats.map((stat) => (
           <Card key={stat.label}>
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-gray-500">{stat.label}</p>
-                  <p className="text-2xl font-bold mt-1">{stat.value}</p>
+                  <p className="text-xl font-bold mt-1">{stat.value}</p>
                   <p className="text-sm text-green-600 mt-1 flex items-center">
                     <TrendingUp className="h-4 w-4 mr-1" />
                     {stat.change}
