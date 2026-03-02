@@ -68,9 +68,9 @@
     font-feature-settings: "rlig" 1, "calt" 1;
   }
 
-  /* Optional: Smooth scrolling for long admin tables */
+  /* Optional: S/* mooth90 scrolling for long admin tables */
   html {
-    scroll-behavior: smooth;
+    scroll-behavior: smooth; 
   }
 }
 
