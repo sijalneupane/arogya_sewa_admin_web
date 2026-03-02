@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Edit, Trash2 } from 'lucide-react';
+import { ArrowLeft, Edit, Trash2, RefreshCw } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -12,7 +12,7 @@ import { hospitalApi } from '@/api/hospital.api';
 export default function HospitalDetailPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { hospital, loading, error } = useHospitalById(id);
+  const { hospital, loading, error, refetch } = useHospitalById(id);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
 
@@ -34,7 +34,7 @@ export default function HospitalDetailPage() {
 
   if (loading) {
     return (
-      <div className="space-y-6">
+      <div className="space-y-4">
         <div className="flex items-center gap-4">
           <Button
             variant="outline"
@@ -61,7 +61,7 @@ export default function HospitalDetailPage() {
 
   if (error) {
     return (
-      <div className="space-y-6">
+      <div className="space-y-4">
         <div className="flex items-center gap-4">
           <Button
             variant="outline"
@@ -74,9 +74,17 @@ export default function HospitalDetailPage() {
         </div>
         <Card>
           <CardContent className="pt-6">
-            <div className="text-red-600 p-4 bg-red-50 rounded-lg">
-              <p className="font-semibold">Error loading hospital details</p>
-              <p className="text-sm mt-1">{error}</p>
+            <div className="p-4 bg-red-50 rounded-lg">
+              <p className="text-red-600 font-semibold">Error loading hospital details</p>
+              <p className="text-red-500 text-sm mt-1">{error}</p>
+              <Button
+                variant="outline"
+                className="mt-3 text-red-600 border-red-300 hover:bg-red-100"
+                onClick={refetch}
+              >
+                <RefreshCw className="h-4 w-4 mr-2" />
+                Retry
+              </Button>
             </div>
           </CardContent>
         </Card>
@@ -86,7 +94,7 @@ export default function HospitalDetailPage() {
 
   if (!hospital) {
     return (
-      <div className="space-y-6">
+      <div className="space-y-4">
         <div className="flex items-center gap-4">
           <Button
             variant="outline"
@@ -109,7 +117,7 @@ export default function HospitalDetailPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       {/* Header */}
       <div className="flex items-center justify-between">
         <Button

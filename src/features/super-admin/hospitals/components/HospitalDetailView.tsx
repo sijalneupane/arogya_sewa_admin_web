@@ -10,7 +10,7 @@ interface HospitalDetailViewProps {
 
 export default function HospitalDetailView({ hospital }: HospitalDetailViewProps) {
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       {/* Banner Section */}
       {hospital.banner?.file_url && (
         <ImagePreview src={hospital.banner.file_url} alt={`${hospital.name} banner`} title="Hospital Banner">
@@ -25,7 +25,7 @@ export default function HospitalDetailView({ hospital }: HospitalDetailViewProps
       )}
 
       {/* Hospital Header */}
-      <div className="flex items-start gap-6">
+      <div className="flex items-start gap-4">
         {hospital.logo?.file_url ? (
           <img
             src={hospital.logo.file_url}
@@ -38,7 +38,7 @@ export default function HospitalDetailView({ hospital }: HospitalDetailViewProps
           </div>
         )}
         <div className="flex-1">
-          <h1 className="text-3xl font-bold text-gray-900">{hospital.name}</h1>
+          <h1 className="text-2xl font-bold text-gray-900">{hospital.name}</h1>
           <p className="text-gray-600 mt-1 flex items-center gap-1">
             <MapPin className="h-4 w-4" />
             {hospital.location}
@@ -50,7 +50,7 @@ export default function HospitalDetailView({ hospital }: HospitalDetailViewProps
       </div>
 
       {/* Hospital Details Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {/* Basic Information */}
         <Card>
           <CardHeader>
@@ -190,7 +190,7 @@ export default function HospitalDetailView({ hospital }: HospitalDetailViewProps
       </Card>
 
       {/* Documents Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {/* License */}
         <Card>
           <CardHeader>

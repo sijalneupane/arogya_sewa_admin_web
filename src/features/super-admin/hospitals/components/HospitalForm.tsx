@@ -135,12 +135,12 @@ export default function HospitalForm({ hospital, onSuccess }: HospitalFormProps)
   };
   
   return (
-    <form onSubmit={handleSubmit(onSubmit, onError)} className="space-y-8">
-    {/* // <form onSubmit={handleSubmit(onSubmit, onError)} className="space-y-8" noValidate> */}
+    <form onSubmit={handleSubmit(onSubmit, onError)} className="space-y-4">
+    {/* // <form onSubmit={handleSubmit(onSubmit, onError)} className="space-y-4" noValidate> */}
       {/* Image Uploads Section */}
-      <div className="bg-white p-6 rounded-lg shadow">
+      <div className="bg-white p-4 rounded-lg shadow">
         <h3 className="text-lg font-semibold mb-4">Hospital Images</h3>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <Controller
             name="logo_img_id"
             control={control}
@@ -189,9 +189,9 @@ export default function HospitalForm({ hospital, onSuccess }: HospitalFormProps)
       </div>
 
       {/* Hospital Details Section */}
-      <div className="bg-white p-6 rounded-lg shadow">
+      <div className="bg-white p-4 rounded-lg shadow">
         <h3 className="text-lg font-semibold mb-4">Hospital Information</h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <label className="block text-sm font-medium mb-1">Hospital Name *</label>
             <input
@@ -277,7 +277,7 @@ export default function HospitalForm({ hospital, onSuccess }: HospitalFormProps)
       </div>
 
       {/* Map Section */}
-      <div className="bg-white p-6 rounded-lg shadow">
+      <div className="bg-white p-4 rounded-lg shadow">
         <Controller
           name="latitude"
           control={control}
@@ -307,9 +307,9 @@ export default function HospitalForm({ hospital, onSuccess }: HospitalFormProps)
 
       {/* Hospital Admin Details Section - Only for Super Admin creating new hospitals */}
       {!isEditMode && isSuperAdmin && (
-        <div className="bg-white p-6 rounded-lg shadow">
+        <div className="bg-white p-4 rounded-lg shadow">
           <h3 className="text-lg font-semibold mb-4">Hospital Admin Details</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium mb-1">Admin Name *</label>
               <input

@@ -52,7 +52,7 @@ export default function EditHospitalPage() {
   const hospital = response.data;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       <div className="flex items-center space-x-4">
         <button
           onClick={() => navigate('/hospitals')}
@@ -61,7 +61,7 @@ export default function EditHospitalPage() {
           <ArrowLeft className="h-5 w-5" />
         </button>
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Edit Hospital</h1>
+          <h1 className="text-2xl font-bold text-gray-900">Edit Hospital</h1>
           <p className="text-gray-600 mt-2">Update hospital information and settings</p>
         </div>
       </div>

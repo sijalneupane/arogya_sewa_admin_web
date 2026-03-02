@@ -25,7 +25,7 @@ export default function CreateHospitalPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       <div className="flex items-center space-x-4">
         <button
           onClick={() => navigate('/hospitals')}
@@ -34,7 +34,7 @@ export default function CreateHospitalPage() {
           <ArrowLeft className="h-5 w-5" />
         </button>
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Add New Hospital</h1>
+          <h1 className="text-2xl font-bold text-gray-900">Add New Hospital</h1>
           <p className="text-gray-600 mt-2">Register a new hospital with complete details and admin credentials</p>
         </div>
       </div>
