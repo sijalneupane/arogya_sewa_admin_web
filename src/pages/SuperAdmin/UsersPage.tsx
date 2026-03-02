@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Search, X, RefreshCw, Users, Stethoscope, User, Shield, Eye, Pencil } from 'lucide-react';
+import { Search, X, RefreshCw, Users, Stethoscope, User, Shield } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { ActionMenu } from '@/components/ui/ActionMenu';
+import { Pagination } from '@/components/ui/Pagination';
 import { useUser } from '@/features/super-admin/users/hooks/useUser';
 
 interface RoleTab {
@@ -221,22 +223,10 @@ export default function UsersPage() {
                           {new Date(user.created_at).toLocaleDateString()}
                         </td>
                         <td className="py-3 px-4">
-                          <div className="flex items-center justify-center gap-2">
-                            <Link
-                              to={`/users/${user.id}`}
-                              className="inline-flex items-center gap-1 px-3 py-1.5 bg-primary text-white text-sm font-medium rounded-lg hover:bg-primary/90 transition-colors"
-                            >
-                              <Eye className="h-4 w-4" />
-                              View
-                            </Link>
-                            <Link
-                              to={`/users/${user.id}/edit`}
-                              className="inline-flex items-center gap-1 px-3 py-1.5 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 transition-colors"
-                            >
-                              <Pencil className="h-4 w-4" />
-                              Edit
-                            </Link>
-                          </div>
+                          <ActionMenu
+                            viewUrl={`/users/${user.id}`}
+                            editUrl={`/users/${user.id}/edit`}
+                          />
                         </td>
                       </tr>
                     ))}
@@ -246,40 +236,12 @@ export default function UsersPage() {
 
               {/* Pagination */}
               {pagination && pagination.totalPage > 1 && (
-                <div className="mt-6 flex items-center justify-between">
-                  <div className="text-sm text-gray-600">
-                    Showing page {pagination.currentPage} of {pagination.totalPage} ({pagination.totalRecords} total records)
-                  </div>
-                  <div className="flex space-x-2">
-                    <button
-                      onClick={() => handlePageChange(pagination.currentPage - 1)}
-                      disabled={pagination.currentPage === 1}
-                      className="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
-                    >
-                      Previous
-                    </button>
-                    {Array.from({ length: pagination.totalPage }, (_, i) => i + 1).map((page) => (
-                      <button
-                        key={page}
-                        onClick={() => handlePageChange(page)}
-                        className={`px-3 py-2 rounded-lg text-sm font-medium ${
-                          pagination.currentPage === page
-                            ? 'bg-blue-600 text-white'
-                            : 'border border-gray-300 hover:bg-gray-50'
-                        }`}
-                      >
-                        {page}
-                      </button>
-                    ))}
-                    <button
-                      onClick={() => handlePageChange(pagination.currentPage + 1)}
-                      disabled={pagination.currentPage === pagination.totalPage}
-                      className="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
-                    >
-                      Next
-                    </button>
-                  </div>
-                </div>
+                <Pagination
+                  currentPage={pagination.currentPage}
+                  totalPage={pagination.totalPage}
+                  totalRecords={pagination.totalRecords}
+                  onPageChange={handlePageChange}
+                />
               )}
             </>
           )}

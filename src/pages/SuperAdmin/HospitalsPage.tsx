@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Plus, Search, Edit, Trash2, Eye, X, RefreshCw } from 'lucide-react';
+import { Plus, Search, X, RefreshCw } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { ActionMenu } from '@/components/ui/ActionMenu';
+import { Pagination } from '@/components/ui/Pagination';
 import { ConfirmationDialog } from '@/components/ui/ConfirmationDialog';
 import { useHospital } from '@/features/super-admin/hospitals/hooks/useHospital';
 import { hospitalApi } from '@/api/hospital.api';
@@ -233,29 +235,12 @@ export default function HospitalsPage() {
                           {new Date(hospital.opened_date).toLocaleDateString()}
                         </td>
                         <td className="py-3 px-4 text-center">
-                          <div className="flex space-x-2 align-items-center justify-center">
-                            <Link
-                              to={`/hospitals/${hospital.hospital_id}`}
-                              className="text-blue-600 hover:text-blue-800 text-sm inline-flex items-center gap-1"
-                            >
-                              <Eye className="h-4 w-4" />
-                              View
-                            </Link>
-                            <Link
-                              to={`/hospitals/edit/${hospital.hospital_id}`}
-                              className="text-green-600 hover:text-green-800 text-sm inline-flex items-center gap-1"
-                            >
-                              <Edit className="h-4 w-4" />
-                              Edit
-                            </Link>
-                            <button 
-                              onClick={() => handleDeleteClick(hospital)}
-                              className="text-red-600 hover:text-red-800 text-sm inline-flex items-center gap-1"
-                            >
-                              <Trash2 className="h-4 w-4" />
-                              Delete
-                            </button>
-                          </div>
+                          <ActionMenu
+                            viewUrl={`/hospitals/${hospital.hospital_id}`}
+                            editUrl={`/hospitals/edit/${hospital.hospital_id}`}
+                            showDelete
+                            onDelete={() => handleDeleteClick(hospital)}
+                          />
                         </td>
                       </tr>
                     ))}
@@ -265,40 +250,12 @@ export default function HospitalsPage() {
 
               {/* Pagination */}
               {pagination && pagination.totalPage > 1 && (
-                <div className="mt-6 flex items-center justify-between">
-                  <div className="text-sm text-gray-600">
-                    Showing page {pagination.currentPage} of {pagination.totalPage} ({pagination.totalRecords} total records)
-                  </div>
-                  <div className="flex space-x-2">
-                    <button
-                      onClick={() => handlePageChange(pagination.currentPage - 1)}
-                      disabled={pagination.currentPage === 1}
-                      className="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
-                    >
-                      Previous
-                    </button>
-                    {Array.from({ length: pagination.totalPage }, (_, i) => i + 1).map((page) => (
-                      <button
-                        key={page}
-                        onClick={() => handlePageChange(page)}
-                        className={`px-3 py-2 rounded-lg text-sm font-medium ${
-                          pagination.currentPage === page
-                            ? 'bg-blue-600 text-white'
-                            : 'border border-gray-300 hover:bg-gray-50'
-                        }`}
-                      >
-                        {page}
-                      </button>
-                    ))}
-                    <button
-                      onClick={() => handlePageChange(pagination.currentPage + 1)}
-                      disabled={pagination.currentPage === pagination.totalPage}
-                      className="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
-                    >
-                      Next
-                    </button>
-                  </div>
-                </div>
+                <Pagination
+                  currentPage={pagination.currentPage}
+                  totalPage={pagination.totalPage}
+                  totalRecords={pagination.totalRecords}
+                  onPageChange={handlePageChange}
+                />
               )}
             </>
           )}
