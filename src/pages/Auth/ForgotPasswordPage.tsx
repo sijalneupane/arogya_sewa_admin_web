@@ -26,7 +26,7 @@ export default function ForgotPasswordPage() {
     <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
       <Card className="w-full max-w-md">
         <CardHeader>
-          <CardTitle className="text-2xl">Reset Password</CardTitle>
+          <CardTitle className="text-xl">Reset Password</CardTitle>
           <CardDescription>
             Enter your email to receive password reset instructions
           </CardDescription>
