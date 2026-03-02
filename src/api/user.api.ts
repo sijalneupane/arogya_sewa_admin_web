@@ -1,12 +1,17 @@
 import api from './axios';
 import { API_ENDPOINTS } from './endpoints';
-import { UserListResponse } from '../types/user.type';
+import { User, UserListResponse } from '../types/user.type';
 
 export interface UserSearchParams {
   page?: number;
   size?: number;
   search?: string;
   role?: string;
+}
+
+export interface UserResponse {
+  message: string;
+  data: User;
 }
 
 export const userApi = {
@@ -19,4 +24,7 @@ export const userApi = {
     if (params.role) query.append('role', params.role);
     return api.get<UserListResponse>(`${API_ENDPOINTS.USERS}?${query.toString()}`);
   },
+
+  // Get user by ID
+  getById: (id: string) => api.get<UserResponse>(`${API_ENDPOINTS.USERS}/${id}`),
 };

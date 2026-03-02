@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { Search, X, RefreshCw, Users, Stethoscope, User, Shield } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { Search, X, RefreshCw, Users, Stethoscope, User, Shield, Eye, Pencil } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { useUser } from '@/features/super-admin/users/hooks/useUser';
@@ -110,9 +111,9 @@ export default function UsersPage() {
         <CardContent>
           {/* Filters */}
           <div className="mb-6">
-            <div className="flex gap-4 items-end">
-              {/* Search input - 35% width */}
-              <div className="flex flex-col gap-1 w-[35%]">
+            <div className="flex flex-col lg:flex-row gap-4 items-start lg:items-end">
+              {/* Search input - 35% width on desktop, full width on mobile */}
+              <div className="flex flex-col gap-1 w-full lg:w-[35%]">
                 <label className="text-xs text-gray-500">Search by Name or Email</label>
                 <div className="relative flex items-center">
                   <Search className="absolute left-3 h-4 w-4 text-gray-400 pointer-events-none" />
@@ -126,10 +127,10 @@ export default function UsersPage() {
                 </div>
               </div>
 
-              {/* iOS-style Segmented Control - 65% width */}
-              <div className="flex flex-col gap-1 w-[65%]">
+              {/* iOS-style Segmented Control - 65% width on desktop, full width on mobile */}
+              <div className="flex flex-col gap-1 w-full lg:w-[65%]">
                 <label className="text-xs text-gray-500">Filter by Role</label>
-                <div className="inline-flex bg-gray-100 rounded-xl p-1 w-fit">
+                <div className="inline-flex bg-gray-100 rounded-xl p-1 w-fit max-w-full flex-wrap">
                   {ROLE_TABS.map((tab) => {
                     const Icon = tab.icon;
                     const isActive = roleFilter === tab.value;
@@ -138,8 +139,8 @@ export default function UsersPage() {
                         key={tab.value || 'all'}
                         onClick={() => setRoleFilter(tab.value)}
                         className={`
-                          relative flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium
-                          transition-all duration-200 ease-out
+                          relative flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium
+                          transition-all duration-200 ease-out whitespace-nowrap
                           ${isActive
                             ? 'bg-white text-gray-900 shadow-sm'
                             : 'text-gray-500 hover:text-gray-700'
@@ -174,12 +175,13 @@ export default function UsersPage() {
                   <thead>
                     <tr className="border-b">
                       <th className="text-center py-3 px-4 font-medium w-16">Profile</th>
-                      <th className="text-center py-3 px-4 font-medium w-[20%]">Name</th>
-                      <th className="text-center py-3 px-4 font-medium w-[25%]">Email</th>
-                      <th className="text-center py-3 px-4 font-medium w-[15%]">Phone</th>
-                      <th className="text-center py-3 px-4 font-medium w-[12%]">Role</th>
+                      <th className="text-center py-3 px-4 font-medium w-[18%]">Name</th>
+                      <th className="text-center py-3 px-4 font-medium w-[22%]">Email</th>
+                      <th className="text-center py-3 px-4 font-medium w-[12%]">Phone</th>
+                      <th className="text-center py-3 px-4 font-medium w-[10%]">Role</th>
                       <th className="text-center py-3 px-4 font-medium w-[8%]">Status</th>
-                      <th className="text-center py-3 px-4 font-medium w-[15%]">Created At</th>
+                      <th className="text-center py-3 px-4 font-medium w-[12%]">Created At</th>
+                      <th className="text-center py-3 px-4 font-medium w-[18%]">Actions</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -208,8 +210,8 @@ export default function UsersPage() {
                         </td>
                         <td className="py-3 px-4 text-center">
                           <span className={`inline-block px-2 py-1 rounded text-xs font-medium ${
-                            user.is_active 
-                              ? 'bg-green-100 text-green-700' 
+                            user.is_active
+                              ? 'bg-green-100 text-green-700'
                               : 'bg-red-100 text-red-700'
                           }`}>
                             {user.is_active ? 'Active' : 'Inactive'}
@@ -217,6 +219,24 @@ export default function UsersPage() {
                         </td>
                         <td className="py-3 px-4 text-sm text-gray-600">
                           {new Date(user.created_at).toLocaleDateString()}
+                        </td>
+                        <td className="py-3 px-4">
+                          <div className="flex items-center justify-center gap-2">
+                            <Link
+                              to={`/users/${user.id}`}
+                              className="inline-flex items-center gap-1 px-3 py-1.5 bg-primary text-white text-sm font-medium rounded-lg hover:bg-primary/90 transition-colors"
+                            >
+                              <Eye className="h-4 w-4" />
+                              View
+                            </Link>
+                            <Link
+                              to={`/users/${user.id}/edit`}
+                              className="inline-flex items-center gap-1 px-3 py-1.5 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 transition-colors"
+                            >
+                              <Pencil className="h-4 w-4" />
+                              Edit
+                            </Link>
+                          </div>
                         </td>
                       </tr>
                     ))}
