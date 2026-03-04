@@ -1,3 +1,5 @@
+import { FileObject } from './file.types';
+
 export enum UserRole {
   SUPER_ADMIN = 'SUPER_ADMIN',
   HOSPITAL_ADMIN = 'HOSPITAL_ADMIN',
@@ -17,6 +19,7 @@ export interface User {
   role: Role;
   is_active: boolean;
   hospitalId?: string;
+  profile_img?: FileObject | null;
   created_at: string;
   updated_at: string;
 }

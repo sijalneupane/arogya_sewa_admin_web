@@ -11,9 +11,11 @@ export const API_ENDPOINTS = {
   // Super Admin
   HOSPITALS: '/hospital',
   HOSPITAL_STATS: '/hospitals/stats',
-  
+
   // Hospital Admin
   DOCTORS: '/doctors',
+  DEPARTMENTS: '/departments',
+  DEPARTMENTS_MY: '/departments/my',
   APPOINTMENTS: '/appointments',
   APPOINTMENT_STATS: '/appointments/stats',
   
