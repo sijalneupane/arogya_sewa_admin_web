@@ -15,6 +15,7 @@ import UsersPage from '@/pages/SuperAdmin/UsersPage';
 import UserDetailPage from '@/pages/SuperAdmin/UserDetailPage';
 import HospitalAdminDashboard from '@/pages/HospitalAdmin/DashboardPage';
 import DoctorsPage from '@/pages/HospitalAdmin/DoctorsPage';
+import DepartmentsPage from '@/features/hospital-admin/departments/DepartmentsPage';
 import AppointmentsPage from '@/pages/HospitalAdmin/AppointmentsPage';
 import CreateDoctorPage from '@/pages/HospitalAdmin/CreateDoctorPage';
 import ProfilePage from '@/pages/Shared/ProfilePage';
@@ -51,6 +52,7 @@ export default function AppRoutes() {
             <Route path="/dashboard" element={<HospitalAdminDashboard />} />
             <Route path="/doctors" element={<DoctorsPage />} />
             <Route path="/doctors/create" element={<CreateDoctorPage />} />
+            <Route path="/departments" element={<DepartmentsPage />} />
             <Route path="/appointments" element={<AppointmentsPage />} />
             <Route path="/hospitals/edit/:id" element={<EditHospitalPage />} />
           </Route>

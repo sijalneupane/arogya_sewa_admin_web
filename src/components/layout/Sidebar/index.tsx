@@ -12,6 +12,7 @@ import {
   LogOut,
   ChevronLeft,
   ChevronRight,
+  Building2,
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -32,6 +33,7 @@ const Sidebar = ({ isCollapsed, onToggle }: SidebarProps) => {
   const hospitalAdminMenu = [
     { path: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
     { path: '/doctors', label: 'Doctors', icon: Users },
+    { path: '/departments', label: 'Departments', icon: Building2 },
     { path: '/appointments', label: 'Appointments', icon: Calendar },
     { path: '/profile', label: 'Profile', icon: User },
     { path: '/settings', label: 'Settings', icon: Settings },
