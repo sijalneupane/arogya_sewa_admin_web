@@ -123,7 +123,7 @@ export function FileUpload({
     if (isImage(currentFile)) {
       return (
         <ImagePreview src={currentFile.file_url} alt="File preview" title="File Preview">
-          <Button type="button" variant="outline" size="sm" className="w-full">
+          <Button type="button" variant="outline" size="sm" className="w-60">
             <Eye className="h-4 w-4 mr-1" />
             View File
           </Button>
@@ -135,7 +135,7 @@ export function FileUpload({
         type="button"
         variant="outline"
         size="sm"
-        className="w-full"
+        className="w-60"
         onClick={() => window.open(currentFile.file_url, '_blank', 'noopener,noreferrer')}
       >
         <Eye className="h-4 w-4 mr-1" />
@@ -145,10 +145,10 @@ export function FileUpload({
   };
 
   return (
-    <div className="space-y-2 w-50">
-      {/* Upload area / preview — fixed 200×200 */}
+    <div className="space-y-2">
+      {/* Upload area / preview - fixed 240x240 (w-60 h-60) */}
       {currentFile ? (
-        <div className="relative group w-50 h-50 rounded-lg border border-gray-200 bg-gray-50 overflow-hidden">
+        <div className="relative group w-60 h-60 rounded-lg border border-gray-200 bg-gray-50 overflow-hidden">
           {isImage(currentFile) && currentFile.file_url ? (
             <img
               src={currentFile.file_url}
@@ -196,7 +196,7 @@ export function FileUpload({
         </div>
       ) : (
         <div
-          className="w-50 h-50 border-2 border-dashed border-gray-300 rounded-lg flex flex-col items-center justify-center cursor-pointer hover:border-blue-400 transition-colors"
+          className="w-60 h-60 border-2 border-dashed border-gray-300 rounded-lg flex flex-col items-center justify-center cursor-pointer hover:border-blue-400 transition-colors"
           onClick={() => fileInputRef.current?.click()}
         >
           {uploadMutation.isPending ? (
@@ -228,7 +228,7 @@ export function FileUpload({
         disabled={isLoading}
       />
 
-      {/* View button below the area */}
+      {/* View button below the area - same width as frame (w-60) */}
       {currentFile && renderViewButton()}
 
       {/* Error feedback */}

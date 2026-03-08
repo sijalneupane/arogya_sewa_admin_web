@@ -43,6 +43,7 @@ export interface CreateDoctorData {
     name: string;
     phone_number: string;
     password: string;
+    profile_image_id?: string | null;
   };
 }
 
