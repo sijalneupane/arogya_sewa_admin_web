@@ -96,6 +96,7 @@ export default function EditDoctorPage() {
               status: doctor.status,
               license_certificate_id: doctor.license_certificate?.file_id || null,
             }}
+            initialLicenseCertificate={doctor.license_certificate ?? null}
             onSubmit={handleUpdateDoctor}
             loading={updatingDoctor}
           />

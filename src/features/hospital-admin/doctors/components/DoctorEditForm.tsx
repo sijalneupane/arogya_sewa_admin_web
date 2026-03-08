@@ -4,7 +4,7 @@ import { DoctorStatus } from '@/types/doctor.type';
 import { Button } from '@/components/ui/button';
 import { DepartmentSelect } from '@/features/hospital-admin/doctors/components/DepartmentSelect';
 import { StatusSelect } from '@/features/hospital-admin/doctors/components/StatusSelect';
-import { FileUpload } from '@/features/hospital-admin/doctors/components/FileUpload';
+import { FileUpload, UploadedFile } from '@/components/ui/FileUpload';
 
 interface DoctorInfo {
   experience: string;
@@ -16,17 +16,19 @@ interface DoctorInfo {
 
 interface DoctorEditFormProps {
   initialValues: DoctorInfo;
+  initialLicenseCertificate?: UploadedFile | null;
   onSubmit: (data: DoctorInfo) => void | Promise<void>;
   loading?: boolean;
 }
 
 export function DoctorEditForm({
   initialValues,
+  initialLicenseCertificate,
   onSubmit,
   loading = false,
 }: DoctorEditFormProps) {
   const [licenseFile, setLicenseFile] = useState<{ file_id: string; file_type: string } | null>(
-    initialValues.license_certificate_id ? { file_id: initialValues.license_certificate_id, file_type: 'license' } : null
+    initialLicenseCertificate ?? (initialValues.license_certificate_id ? { file_id: initialValues.license_certificate_id, file_type: 'license' } : null)
   );
 
   const {
@@ -108,7 +110,7 @@ export function DoctorEditForm({
         <label className="block text-sm font-medium mb-1">License Certificate</label>
         <FileUpload
           onFileUploaded={handleLicenseUpload}
-          initialFile={initialValues.license_certificate_id ? { file_id: initialValues.license_certificate_id, file_type: 'license' } : null}
+          initialFile={initialLicenseCertificate ?? (initialValues.license_certificate_id ? { file_id: initialValues.license_certificate_id, file_type: 'license' } : null)}
         />
         <p className="text-xs text-gray-500 mt-1">
           Upload the doctor&apos;s medical license certificate (PDF or Image, max 5MB)

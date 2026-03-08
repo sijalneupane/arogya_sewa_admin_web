@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { CreateDoctorData } from '@/types/doctor.type';
 import { Button } from '@/components/ui/button';
 import { DepartmentSelect } from '@/features/hospital-admin/doctors/components/DepartmentSelect';
-import { FileUpload } from '@/features/hospital-admin/doctors/components/FileUpload';
+import { FileUpload } from '@/components/ui/FileUpload';
 
 interface DoctorCreateFormProps {
   onSubmit: (data: CreateDoctorData) => void | Promise<void>;

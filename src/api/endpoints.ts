@@ -26,7 +26,7 @@ export const API_ENDPOINTS = {
   // File Upload
   FILE_UPLOAD: '/file/upload',
   FILE_UPDATE: '/file/update',
-  FILE_DELETE: (id: string) => `/fileupload/${id}`,
+  FILE_DELETE: (id: string) => `/file/delete/${id}`,
 };
 
 // Base URL configuration
