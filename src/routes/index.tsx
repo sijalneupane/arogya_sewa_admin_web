@@ -15,9 +15,11 @@ import UsersPage from '@/pages/SuperAdmin/UsersPage';
 import UserDetailPage from '@/pages/SuperAdmin/UserDetailPage';
 import HospitalAdminDashboard from '@/pages/HospitalAdmin/DashboardPage';
 import DoctorsPage from '@/pages/HospitalAdmin/DoctorsPage';
+import CreateDoctorPage from '@/pages/HospitalAdmin/CreateDoctorPage';
+import DoctorViewPage from '@/pages/HospitalAdmin/DoctorViewPage';
+import EditDoctorPage from '@/pages/HospitalAdmin/EditDoctorPage';
 import DepartmentsPage from '@/features/hospital-admin/departments/DepartmentsPage';
 import AppointmentsPage from '@/pages/HospitalAdmin/AppointmentsPage';
-import CreateDoctorPage from '@/pages/HospitalAdmin/CreateDoctorPage';
 import ProfilePage from '@/pages/Shared/ProfilePage';
 import SettingsPage from '@/pages/Shared/SettingsPage';
 
@@ -27,15 +29,15 @@ export default function AppRoutes() {
       {/* Public Routes */}
       <Route path="/login" element={<LoginPage />} />
       <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-      
+
       {/* Protected Routes */}
       <Route element={<ProtectedRoute />}>
         <Route element={<DashboardLayout />}>
-          
+
           {/* Shared Routes */}
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/settings" element={<SettingsPage />} />
-          
+
           {/* Super Admin Routes */}
           <Route element={<ProtectedRoute allowedRoles={[UserRole.SUPER_ADMIN]} />}>
             <Route path="/dashboard" element={<SuperAdminDashboard />} />
@@ -52,15 +54,17 @@ export default function AppRoutes() {
             <Route path="/dashboard" element={<HospitalAdminDashboard />} />
             <Route path="/doctors" element={<DoctorsPage />} />
             <Route path="/doctors/create" element={<CreateDoctorPage />} />
+            <Route path="/doctors/:doctorId" element={<DoctorViewPage />} />
+            <Route path="/doctors/:doctorId/edit" element={<EditDoctorPage />} />
             <Route path="/departments" element={<DepartmentsPage />} />
             <Route path="/appointments" element={<AppointmentsPage />} />
             <Route path="/hospitals/edit/:id" element={<EditHospitalPage />} />
           </Route>
-          
-         
+
+
         </Route>
       </Route>
-      
+
       {/* Redirects */}
       <Route path="/" element={<Navigate to="/dashboard" replace />} />
       <Route path="*" element={<Navigate to="/dashboard" replace />} />

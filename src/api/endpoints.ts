@@ -14,6 +14,7 @@ export const API_ENDPOINTS = {
 
   // Hospital Admin
   DOCTORS: '/doctors',
+  DOCTORS_HOSPITAL_MY: '/doctors/hospital/my',
   DEPARTMENTS: '/departments',
   DEPARTMENTS_MY: '/departments/my',
   APPOINTMENTS: '/appointments',

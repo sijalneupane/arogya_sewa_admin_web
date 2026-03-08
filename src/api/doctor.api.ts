@@ -1,26 +1,49 @@
 import api from './axios';
 import { API_ENDPOINTS } from './endpoints';
-import { Doctor, CreateDoctorData } from '../types/doctor.types';
+import { Doctor, DoctorListResponse, CreateDoctorData, UpdateDoctorData, UpdateDoctorUserData } from '../types/doctor.type';
+
+export interface DoctorFilters {
+  name?: string;
+  status?: string;
+  department_id?: string;
+  page?: number;
+  size?: number;
+}
 
 export const doctorApi = {
+  // Get all doctors for the current hospital admin's hospital
+  getMyHospitalDoctors: (filters: DoctorFilters = {}) => {
+    const query = new URLSearchParams();
+    if (filters.name) query.append('name', filters.name);
+    if (filters.status) query.append('status', filters.status);
+    if (filters.department_id) query.append('department_id', filters.department_id);
+    if (filters.page != null) query.append('page', String(filters.page));
+    if (filters.size != null) query.append('size', String(filters.size));
+    return api.get<DoctorListResponse>(`${API_ENDPOINTS.DOCTORS_HOSPITAL_MY}?${query.toString()}`);
+  },
+
   // Get all doctors for a hospital
-  getAll: (hospitalId: string) => 
+  getAll: (hospitalId: string) =>
     api.get(`${API_ENDPOINTS.DOCTORS}?hospitalId=${hospitalId}`),
-  
+
   // Get doctor by ID
-  getById: (id: string) => api.get(`${API_ENDPOINTS.DOCTORS}/${id}`),
-  
-  // Create doctor
+  getById: (id: string) => api.get<Doctor>(`${API_ENDPOINTS.DOCTORS}/${id}`),
+
+  // Create doctor (includes user credentials)
   create: (data: CreateDoctorData) => api.post(API_ENDPOINTS.DOCTORS, data),
-  
-  // Update doctor
-  update: (id: string, data: Partial<CreateDoctorData>) => 
+
+  // Update doctor info (experience, department, status, bio, license)
+  update: (id: string, data: UpdateDoctorData) =>
     api.put(`${API_ENDPOINTS.DOCTORS}/${id}`, data),
-  
+
+  // Update doctor's user info (email, name, phone, password)
+  updateUserInfo: (id: string, data: UpdateDoctorUserData) =>
+    api.put(`${API_ENDPOINTS.DOCTORS}/${id}/user`, data),
+
   // Delete doctor
   delete: (id: string) => api.delete(`${API_ENDPOINTS.DOCTORS}/${id}`),
-  
+
   // Get available doctors for appointment
-  getAvailable: (hospitalId: string, date: string) => 
+  getAvailable: (hospitalId: string, date: string) =>
     api.get(`${API_ENDPOINTS.DOCTORS}/available?hospitalId=${hospitalId}&date=${date}`),
 };

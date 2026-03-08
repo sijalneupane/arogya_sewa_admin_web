@@ -1,0 +1,239 @@
+/* Custom styles for SearchableDropdown to match project theme */
+
+/* Main container */
+.searchable-dropdown-container {
+  width: 100%;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+/* Trigger button - matches project input style */
+.searchable-dropdown-trigger {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.5rem;
+  background-color: white;
+  transition: all 0.15s ease-in-out;
+  cursor: pointer;
+  min-height: 42px;
+  box-sizing: border-box;
+  gap: 0.5rem;
+}
+
+.searchable-dropdown-trigger:hover {
+  background-color: #f9fafb;
+}
+
+.searchable-dropdown-trigger:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+}
+
+.searchable-dropdown-trigger.disabled {
+  background-color: #f3f4f6;
+  cursor: not-allowed;
+}
+
+/* Trigger content wrapper */
+.searchable-dropdown-trigger-content {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex: 1;
+  min-width: 0;
+}
+
+/* Selected value text */
+.searchable-dropdown-trigger-value {
+  flex: 1;
+  text-align: left;
+  color: #111827;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.searchable-dropdown-trigger-value.placeholder {
+  color: #9ca3af;
+}
+
+/* Trigger icon wrapper */
+.searchable-dropdown-trigger-icon-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+}
+
+/* Trigger icon - absolutely positioned inside the container */
+.searchable-dropdown-trigger-icon {
+  position: absolute;
+  right: 0.75rem;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+  width: 16px;
+  height: 16px;
+  color: #9ca3af;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Search input wrapper in dropdown */
+.searchable-dropdown-search-input-wrapper {
+  padding: 0.5rem;
+  border-bottom: 1px solid #e5e7eb;
+  background-color: white;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+/* Search input in dropdown */
+.searchable-dropdown-search-input {
+  width: 100%;
+  padding-left: 0.75rem;
+  padding-right: 2rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.5rem;
+  background-color: white;
+  box-sizing: border-box;
+}
+
+.searchable-dropdown-search-input:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 2px rgb(59 130 246 / 0.5);
+}
+
+.searchable-dropdown-search-input::placeholder {
+  color: #9ca3af;
+}
+
+/* Dropdown options container */
+.searchable-dropdown-options {
+  margin-top: 0.25rem;
+  background-color: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  max-height: 16rem;
+  overflow-y: auto;
+  z-index: 50;
+}
+
+/* Individual option */
+.searchable-dropdown-option {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  color: #374151;
+  background-color: transparent;
+  transition: background-color 0.15s ease;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+.searchable-dropdown-option:hover {
+  background-color: #f3f4f6;
+}
+
+/* Focused option */
+.searchable-dropdown-option-focused {
+  background-color: #eff6ff;
+}
+
+/* Selected option */
+.searchable-dropdown-option-selected {
+  background-color: #eff6ff;
+  color: #1d4ed8;
+}
+
+/* Disabled option */
+.searchable-dropdown-option-disabled {
+  color: #9ca3af;
+  cursor: not-allowed;
+}
+
+/* Option label */
+.searchable-dropdown-option-label {
+  display: inline;
+}
+
+/* Highlighted matching characters */
+.searchable-dropdown-option-label-highlight {
+  font-weight: 600;
+  color: #1d4ed8;
+}
+
+/* Check icon for selected option */
+.searchable-dropdown-check-icon {
+  color: #1d4ed8;
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+}
+
+/* Clear button (X icon) */
+.searchable-dropdown-clear-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.125rem;
+  margin-right: 0.25rem;
+  color: #9ca3af;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: color 0.15s ease;
+}
+
+.searchable-dropdown-clear-button:hover {
+  color: #4b5563;
+}
+
+.searchable-dropdown-clear-button svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* No match message */
+.searchable-dropdown-no-match {
+  text-align: center;
+  padding: 2rem 0.75rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  color: #6b7280;
+}
+
+/* Scrollbar styling */
+.searchable-dropdown-options::-webkit-scrollbar {
+  width: 8px;
+}
+
+.searchable-dropdown-options::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 4px;
+}
+
+.searchable-dropdown-options::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+.searchable-dropdown-options::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
