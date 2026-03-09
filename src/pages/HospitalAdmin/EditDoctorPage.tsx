@@ -49,25 +49,32 @@ export default function EditDoctorPage() {
         { label: 'Edit Doctor' }
       ]} />
 
-      <DoctorForm
-        doctor={{
-          id: doctor.doctor_id,
-          experience: doctor.experience,
-          bio: doctor.bio,
-          department_id: doctor.department?.department_id || null,
-          status: doctor.status,
-          license_certificate_id: doctor.license_certificate?.file_id || null,
-          license_certificate: doctor.license_certificate || null,
-          user: {
-            name: doctor.user.name,
-            email: doctor.user.email,
-            phone_number: doctor.user.phone_number,
-            profile_image_id: doctor.user.profile_img?.file_id || null,
-            profile_image_url: doctor.user.profile_img?.file_url || null,
-          },
-        }}
-        onSuccess={handleSuccess}
-      />
+      <Card>
+        {/* <CardHeader>
+          <CardTitle>Doctor Information</CardTitle>
+        </CardHeader> */}
+        <CardContent>
+          <DoctorForm
+            doctor={{
+              id: doctor.doctor_id,
+              experience: doctor.experience,
+              bio: doctor.bio,
+              department_id: doctor.department?.department_id || null,
+              status: doctor.status,
+              license_certificate_id: doctor.license_certificate?.file_id || null,
+              license_certificate: doctor.license_certificate || null,
+              user: {
+                name: doctor.user.name,
+                email: doctor.user.email,
+                phone_number: doctor.user.phone_number,
+                profile_image_id: doctor.user.profile_img?.file_id || null,
+                profile_image_url: doctor.user.profile_img?.file_url || null,
+              },
+            }}
+            onSuccess={handleSuccess}
+          />
+        </CardContent>
+      </Card>
     </div>
   );
 }

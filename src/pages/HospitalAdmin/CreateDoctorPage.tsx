@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { Breadcrumb } from '@/components/ui/Breadcrumb';
 import { DoctorForm } from '@/features/hospital-admin/doctors/components/DoctorForm';
+import { Card, CardContent } from '@/components/ui/card';
 
 export default function CreateDoctorPage() {
   const navigate = useNavigate();
