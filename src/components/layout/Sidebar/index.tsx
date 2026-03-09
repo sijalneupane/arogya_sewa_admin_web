@@ -44,6 +44,8 @@ const Sidebar = ({ isCollapsed, onToggle }: SidebarProps) => {
   const isDoctorPage = location.pathname.startsWith('/doctors');
   // Check if current path is a hospital-related page (for super admin)
   const isHospitalPage = location.pathname.startsWith('/hospitals');
+  // Check if current path is a user-related page (for super admin)
+  const isUserPage = location.pathname.startsWith('/users');
 
   return (
     <div className={`${isCollapsed ? 'w-20' : 'w-56'} bg-primary border-r min-h-screen flex flex-col transition-all duration-300 ease-in-out relative`}>
@@ -82,10 +84,13 @@ const Sidebar = ({ isCollapsed, onToggle }: SidebarProps) => {
         {menuItems.map((item) => {
           // For Doctors menu item, check if any doctor page is active
           // For Hospitals menu item, check if any hospital page is active
+          // For Users menu item, check if any user page is active
           const isActive = item.path === '/doctors'
             ? isDoctorPage
             : item.path === '/hospitals'
             ? isHospitalPage
+            : item.path === '/users'
+            ? isUserPage
             : location.pathname === item.path;
 
           return (

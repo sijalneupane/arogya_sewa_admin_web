@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Search, X, RefreshCw, Users, Stethoscope, User, Shield } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { Breadcrumb } from '@/components/ui/Breadcrumb';
 import { ActionMenu } from '@/components/ui/ActionMenu';
 import { Pagination } from '@/components/ui/Pagination';
 import { AvatarPlaceholder } from '@/components/ui/AvatarPlaceholder';
@@ -62,10 +63,7 @@ export default function UsersPage() {
     return (
       <div className="space-y-4">
         <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-2xl font-bold text-gray-900">Users</h1>
-            <p className="text-gray-600 mt-2">Manage all users in the system</p>
-          </div>
+          <Breadcrumb items={[{ label: 'Users', href: '/users' }]} />
         </div>
         <Card>
           <CardContent className="pt-6">
@@ -89,12 +87,8 @@ export default function UsersPage() {
 
   return (
     <div className="space-y-3">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">Users</h1>
-          <p className="text-gray-600 mt-2">Manage all users in the system</p>
-        </div>
-      </div>
+      {/* Breadcrumb */}
+      <Breadcrumb items={[{ label: 'Users' }]} />
 
       <Card className='gap-1'>
         <CardHeader>

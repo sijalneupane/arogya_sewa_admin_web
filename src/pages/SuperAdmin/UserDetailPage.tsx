@@ -1,11 +1,12 @@
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Mail, Phone, Calendar, User as UserIcon, Shield, CheckCircle, XCircle, Edit } from 'lucide-react';
+import { Mail, Phone, Calendar, User as UserIcon, Shield, CheckCircle, XCircle } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
+import { Breadcrumb } from '@/components/ui/Breadcrumb';
 import { ImagePreview } from '@/components/ui/ImagePreview';
 import { AvatarPlaceholder } from '@/components/ui/AvatarPlaceholder';
 import { useUserById } from '@/features/super-admin/users/hooks/useUserById';
 import { UserRole } from '@/types/auth.types';
+import { Button } from '@/components/ui/button';
 
 export default function UserDetailPage() {
   const { userId } = useParams<{ userId: string }>();
@@ -30,16 +31,7 @@ export default function UserDetailPage() {
   if (loading) {
     return (
       <div className="space-y-4">
-        <div className="flex items-center gap-4">
-          <Button
-            variant="outline"
-            onClick={() => navigate('/users')}
-            className="flex items-center gap-2"
-          >
-            <ArrowLeft className="h-4 w-4" />
-            Back to Users
-          </Button>
-        </div>
+        <Breadcrumb items={[{ label: 'Users', href: '/users' }]} />
         <Card>
           <CardContent className="pt-6">
             <div className="text-center py-12">
@@ -57,16 +49,7 @@ export default function UserDetailPage() {
   if (error || !user) {
     return (
       <div className="space-y-4">
-        <div className="flex items-center gap-4">
-          <Button
-            variant="outline"
-            onClick={() => navigate('/users')}
-            className="flex items-center gap-2"
-          >
-            <ArrowLeft className="h-4 w-4" />
-            Back to Users
-          </Button>
-        </div>
+        <Breadcrumb items={[{ label: 'Users', href: '/users' }]} />
         <Card>
           <CardContent className="pt-6">
             <div className="p-4 bg-red-50 rounded-lg">
@@ -88,25 +71,11 @@ export default function UserDetailPage() {
 
   return (
     <div className="space-y-4">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <Button
-          variant="outline"
-          onClick={() => navigate('/users')}
-          className="flex items-center gap-2"
-        >
-          <ArrowLeft className="h-4 w-4" />
-          Back to Users
-        </Button>
-        {/* <div className="flex gap-3">
-          <Link to={`/users/${user.id}/edit`}>
-            <Button variant="outline" className="flex items-center gap-2">
-              <Edit className="h-4 w-4" />
-              Edit User
-            </Button>
-          </Link>
-        </div> */}
-      </div>
+      {/* Breadcrumb */}
+      <Breadcrumb items={[
+        { label: 'Users', href: '/users' },
+        { label: user.name }
+      ]} />
 
       {/* Profile Card */}
       <Card>
