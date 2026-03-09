@@ -200,13 +200,13 @@ export default function HospitalsPage() {
               <div className="overflow-x-auto">
                 <table className="w-full min-w-200 table-fixed">
                   <thead>
-                    <tr className="border-b">
-                      <th className="text-center py-3 px-4 font-medium w-16">Logo</th>
-                      <th className="text-center py-3 px-4 font-medium w-[28%]">Hospital Name</th>
-                      <th className="text-center py-3 px-4 font-medium w-[22%]">Location</th>
-                      <th className="text-center py-3 px-4 font-medium w-[18%]">Contact</th>
-                      <th className="text-center py-3 px-4 font-medium w-[14%]">Opened Date</th>
-                      <th className="text-center py-3 px-4 font-medium w-[28%] max-w-200">Actions</th>
+                    <tr className="border-b bg-gray-100">
+                      <th className="text-center py-3 px-2 font-medium w-16">Logo</th>
+                      <th className="text-center py-3 px-2 font-medium w-[28%]">Hospital Name</th>
+                      <th className="text-center py-3 px-2 font-medium w-[22%]">Location</th>
+                      <th className="text-center py-3 px-2 font-medium w-[18%]">Contact</th>
+                      <th className="text-center py-3 px-2 font-medium w-[14%]">Opened Date</th>
+                      <th className="text-center py-3 px-2 font-medium w-[28%] max-w-200">Actions</th>
                     </tr>
                   </thead>
                   <tbody>

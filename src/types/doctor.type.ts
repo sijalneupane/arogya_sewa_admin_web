@@ -38,6 +38,7 @@ export interface CreateDoctorData {
   license_certificate_id?: string | null;
   department_id?: string | null;
   bio?: string | null;
+  status: DoctorStatus| null;
   user: {
     email: string;
     name: string;

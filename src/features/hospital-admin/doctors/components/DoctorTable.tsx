@@ -63,14 +63,14 @@ export function DoctorTable({ doctors, loading, onDelete }: DoctorTableProps) {
       <div className="overflow-x-auto">
         <table className="w-full min-w-[900px]">
           <thead>
-            <tr className="border-b">
-              <th className="text-center py-1 px-2 font-medium w-14">Profile</th>
-              <th className="text-center py-1 px-2 font-medium">Doctor Name</th>
-              <th className="text-center py-1 px-2 font-medium">Email</th>
-              <th className="text-center py-1 px-2 font-medium w-36">Department</th>
-              <th className="text-center py-1 px-2 font-medium w-32">Status</th>
-              <th className="text-center py-1 px-2 font-medium w-28">Experience</th>
-              <th className="text-center py-1 px-2 font-medium w-32">Actions</th>
+            <tr className="border-b bg-gray-100">
+              <th className="text-center py-3 px-2 font-medium w-10">Profile</th>
+              <th className="text-center py-3 px-2 font-medium">Doctor Name</th>
+              <th className="text-center py-3 px-2 font-medium whitespace-nowrap">Phone Number</th>
+              <th className="text-center py-3 px-2 font-medium w-36">Department</th>
+              <th className="text-center py-3 px-2 font-medium w-32">Status</th>
+              <th className="text-center py-3 px-2 font-medium w-28">Experience</th>
+              <th className="text-center py-3 px-2 font-medium w-32">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -84,12 +84,15 @@ export function DoctorTable({ doctors, loading, onDelete }: DoctorTableProps) {
                     shape="circle"
                   />
                 </td>
-                <td className="py-3 px-4 font-medium truncate">{doctor.user.name}</td>
-                <td className="py-3 px-4 truncate">{doctor.user.email}</td>
-                <td className="py-3 px-4 truncate">
+                <td className="py-2 px-3">
+                  <div className="font-medium truncate">{doctor.user.name}</div>
+                  <div className="text-xs text-gray-500 truncate">{doctor.user.email}</div>
+                </td>
+                <td className="py-2 px-3 truncate">{doctor.user.phone_number}</td>
+                <td className="py-2 px-3 truncate">
                   {doctor.department?.name || <span className="text-gray-400">—</span>}
                 </td>
-                <td className="py-3 px-4 text-center">
+                <td className="py-2 px-3 text-center">
                   <span
                     className={`inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium ${
                       DOCTOR_STATUS_COLORS[doctor.status] || 'bg-gray-100 text-gray-600'
@@ -98,10 +101,10 @@ export function DoctorTable({ doctors, loading, onDelete }: DoctorTableProps) {
                     {doctor.status}
                   </span>
                 </td>
-                <td className="py-3 px-4 text-center">
+                <td className="py-2 px-3 text-center">
                   <span className="text-sm text-gray-700">{doctor.experience}</span>
                 </td>
-                <td className="py-3 px-4 text-center">
+                <td className="py-2 px-3 text-center">
                   <ActionMenu
                     viewUrl={`/doctors/${doctor.doctor_id}`}
                     editUrl={`/doctors/${doctor.doctor_id}/edit`}
