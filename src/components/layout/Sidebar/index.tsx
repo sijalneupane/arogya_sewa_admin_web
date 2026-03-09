@@ -9,7 +9,6 @@ import {
   Calendar,
   User,
   Settings,
-  LogOut,
   ChevronLeft,
   ChevronRight,
   Building2,
@@ -22,7 +21,7 @@ interface SidebarProps {
 
 const Sidebar = ({ isCollapsed, onToggle }: SidebarProps) => {
   const location = useLocation();
-  const { user, logout } = useAuthStore();
+  const { user } = useAuthStore();
 
   const superAdminMenu = [
     { path: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
@@ -98,21 +97,6 @@ const Sidebar = ({ isCollapsed, onToggle }: SidebarProps) => {
             </Link>
           );
         })}
-
-        <button
-          onClick={logout}
-          className={`flex items-center px-4 py-2 text-sm font-medium text-gray-200 hover:bg-white/10 hover:text-white w-full transition-colors mt-3 ${
-            isCollapsed ? 'justify-center' : ''
-          }`}
-          title={isCollapsed ? 'Logout' : undefined}
-        >
-          <LogOut className="h-4 w-4 flex-shrink-0" />
-          {!isCollapsed && (
-            <span className="ml-2.5 whitespace-nowrap">
-              Logout
-            </span>
-          )}
-        </button>
       </nav>
 
       <div className="p-4 border-t border-white/10">

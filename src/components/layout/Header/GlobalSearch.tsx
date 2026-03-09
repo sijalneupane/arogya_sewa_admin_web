@@ -11,6 +11,7 @@ import {
   CalendarDays,
   UserPlus,
   Users,
+  Building2,
 } from 'lucide-react';
 import { useAuthStore } from '@/store/auth.store';
 import { UserRole } from '@/types/auth.types';
@@ -82,6 +83,14 @@ const NAV_ITEMS: NavItem[] = [
     icon: <CalendarDays className="h-4 w-4" />,
     roles: [UserRole.HOSPITAL_ADMIN],
     keywords: ['appointments', 'appointment', 'schedule', 'booking', 'calendar'],
+  },
+  {
+    label: 'Departments',
+    description: 'Manage departments in your hospital',
+    path: '/departments',
+    icon: <Building2 className="h-4 w-4" />,
+    roles: [UserRole.HOSPITAL_ADMIN],
+    keywords: ['departments', 'department', 'dept', 'specialty', 'specialization'],
   },
   {
     label: 'Profile',
