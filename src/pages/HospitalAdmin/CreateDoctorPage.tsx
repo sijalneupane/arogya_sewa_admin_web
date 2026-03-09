@@ -1,6 +1,4 @@
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Breadcrumb } from '@/components/ui/Breadcrumb';
 import { DoctorForm } from '@/features/hospital-admin/doctors/components/DoctorForm';
 

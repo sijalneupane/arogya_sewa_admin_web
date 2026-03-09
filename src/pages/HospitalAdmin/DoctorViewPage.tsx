@@ -64,17 +64,12 @@ export default function DoctorViewPage() {
 
   return (
     <div className="space-y-4">
-      {/* Breadcrumb */}
-      <Breadcrumb items={[
-        { label: 'Doctors', href: '/doctors' },
-        { label: doctor.user.name }
-      ]} />
-      {/* Header */}
-      <div className="flex items-end justify-end">
-        {/* <div>
-          <h1 className="text-2xl font-bold text-gray-900">{doctor.user.name}</h1>
-          <p className="text-gray-600 mt-1">Doctor Profile</p>
-        </div> */}
+      {/* Breadcrumb and Actions */}
+      <div className="flex items-center justify-between">
+        <Breadcrumb items={[
+          { label: 'Doctors', href: '/doctors' },
+          { label: doctor.user.name }
+        ]} />
         <EditDeleteActions
           editHref={`/doctors/${doctor.doctor_id}/edit`}
           editLabel="Edit Doctor"

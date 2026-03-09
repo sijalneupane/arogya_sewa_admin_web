@@ -43,12 +43,8 @@ export default function DoctorsPage() {
   if (error && !loading) {
     return (
       <div className="space-y-4">
-        <Breadcrumb items={[{ label: 'Doctors', href: '/doctors' }]} />
         <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-2xl font-bold text-gray-900">Doctors</h1>
-            <p className="text-gray-600 mt-2">Manage doctors in your hospital</p>
-          </div>
+          <Breadcrumb items={[{ label: 'Doctors', href: '/doctors' }]} />
           <Link to="/doctors/create">
             <Button>
               <Plus className="h-4 w-4 mr-2" />
@@ -78,12 +74,9 @@ export default function DoctorsPage() {
 
   return (
     <div className="space-y-3">
-      <Breadcrumb items={[{ label: 'Doctors' }]} />
+      {/* Breadcrumb and Add Button */}
       <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">Doctors</h1>
-          <p className="text-gray-600 mt-2">Manage doctors in your hospital</p>
-        </div>
+        <Breadcrumb items={[{ label: 'Doctors' }]} />
         <Link to="/doctors/create">
           <Button>
             <Plus className="h-4 w-4 mr-2" />
