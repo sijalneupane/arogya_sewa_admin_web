@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Plus, Search, X, RefreshCw } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { Breadcrumb } from '@/components/ui/Breadcrumb';
 import { useDoctors } from '@/features/hospital-admin/doctors/hooks/useDoctors';
 import { DoctorTable } from '@/features/hospital-admin/doctors/components/DoctorTable';
 import { DepartmentSelect } from '@/features/hospital-admin/doctors/components/DepartmentSelect';
@@ -42,6 +43,7 @@ export default function DoctorsPage() {
   if (error && !loading) {
     return (
       <div className="space-y-4">
+        <Breadcrumb items={[{ label: 'Doctors', href: '/doctors' }]} />
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold text-gray-900">Doctors</h1>
@@ -76,6 +78,7 @@ export default function DoctorsPage() {
 
   return (
     <div className="space-y-3">
+      <Breadcrumb items={[{ label: 'Doctors' }]} />
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Doctors</h1>

@@ -40,6 +40,9 @@ const Sidebar = ({ isCollapsed, onToggle }: SidebarProps) => {
 
   const menuItems = user?.role.role === UserRole.SUPER_ADMIN ? superAdminMenu : hospitalAdminMenu;
 
+  // Check if current path is a doctor-related page
+  const isDoctorPage = location.pathname.startsWith('/doctors');
+
   return (
     <div className={`${isCollapsed ? 'w-20' : 'w-56'} bg-primary border-r min-h-screen flex flex-col transition-all duration-300 ease-in-out relative`}>
       <div className="p-4">
@@ -75,7 +78,10 @@ const Sidebar = ({ isCollapsed, onToggle }: SidebarProps) => {
 
       <nav className="mt-4 flex-1">
         {menuItems.map((item) => {
-          const isActive = location.pathname === item.path;
+          // For Doctors menu item, check if any doctor page is active
+          const isActive = item.path === '/doctors' 
+            ? isDoctorPage 
+            : location.pathname === item.path;
 
           return (
             <Link

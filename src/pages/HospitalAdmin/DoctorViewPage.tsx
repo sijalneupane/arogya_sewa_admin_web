@@ -2,6 +2,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { Mail, Phone, Calendar, Briefcase, FileText, User as UserIcon } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { Breadcrumb } from '@/components/ui/Breadcrumb';
 import { EditDeleteActions } from '@/components/ui/EditDeleteActions';
 import { ImagePreview } from '@/components/ui/ImagePreview';
 import { AvatarPlaceholder } from '@/components/ui/AvatarPlaceholder';
@@ -63,12 +64,17 @@ export default function DoctorViewPage() {
 
   return (
     <div className="space-y-4">
+      {/* Breadcrumb */}
+      <Breadcrumb items={[
+        { label: 'Doctors', href: '/doctors' },
+        { label: doctor.user.name }
+      ]} />
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
+      <div className="flex items-end justify-end">
+        {/* <div>
           <h1 className="text-2xl font-bold text-gray-900">{doctor.user.name}</h1>
           <p className="text-gray-600 mt-1">Doctor Profile</p>
-        </div>
+        </div> */}
         <EditDeleteActions
           editHref={`/doctors/${doctor.doctor_id}/edit`}
           editLabel="Edit Doctor"
