@@ -4,6 +4,7 @@ import { Plus, Search, X, RefreshCw } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { Breadcrumb } from '@/components/ui/Breadcrumb';
 import { ActionMenu } from '@/components/ui/ActionMenu';
 import { Pagination } from '@/components/ui/Pagination';
 import { AvatarPlaceholder } from '@/components/ui/AvatarPlaceholder';
@@ -67,10 +68,7 @@ export default function HospitalsPage() {
     return (
       <div className="space-y-4">
         <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-2xl font-bold text-gray-900">Hospitals</h1>
-            <p className="text-gray-600 mt-2">Manage all hospitals in the system</p>
-          </div>
+          <Breadcrumb items={[{ label: 'Hospitals', href: '/hospitals' }]} />
           <Link to="/hospitals/create">
             <Button>
               <Plus className="h-4 w-4 mr-2" />
@@ -100,11 +98,9 @@ export default function HospitalsPage() {
 
   return (
     <div className="space-y-3">
+      {/* Breadcrumb and Add Button */}
       <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">Hospitals</h1>
-          <p className="text-gray-600 mt-2">Manage all hospitals in the system</p>
-        </div>
+        <Breadcrumb items={[{ label: 'Hospitals' }]} />
         <Link to="/hospitals/create">
           <Button>
             <Plus className="h-4 w-4 mr-2" />

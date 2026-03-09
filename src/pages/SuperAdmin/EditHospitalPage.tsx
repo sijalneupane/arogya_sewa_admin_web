@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import { ArrowLeft } from 'lucide-react';
+import { Breadcrumb } from '@/components/ui/Breadcrumb';
 import HospitalForm from '@/features/super-admin/hospitals/components/HospitalForm';
 import { hospitalApi } from '@/api/hospital.api';
 import { useAuthStore } from '@/store/auth.store';
@@ -54,18 +54,10 @@ export default function EditHospitalPage() {
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center space-x-4">
-        <button
-          onClick={() => navigate('/hospitals')}
-          className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
-        >
-          <ArrowLeft className="h-5 w-5" />
-        </button>
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">Edit Hospital</h1>
-          <p className="text-gray-600 mt-2">Update hospital information and settings</p>
-        </div>
-      </div>
+      <Breadcrumb items={[
+        { label: 'Hospitals', href: '/hospitals' },
+        { label: 'Edit Hospital' }
+      ]} />
 
       <HospitalForm hospital={{ ...hospital, id }} onSuccess={handleSuccess} />
     </div>

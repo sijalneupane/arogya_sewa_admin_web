@@ -2,6 +2,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { RefreshCw } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { Button } from '@/components/ui/button';
+import { Breadcrumb } from '@/components/ui/Breadcrumb';
 import { Card, CardContent } from '@/components/ui/card';
 import { EditDeleteActions } from '@/components/ui/EditDeleteActions';
 import { useHospitalById } from '@/features/super-admin/hospitals/hooks/useHospitalById';
@@ -68,12 +69,12 @@ export default function HospitalDetailPage() {
 
   return (
     <div className="space-y-4">
-      {/* Header */}
+      {/* Breadcrumb and Actions */}
       <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">{hospital.name}</h1>
-          <p className="text-gray-600 mt-1">Hospital Details</p>
-        </div>
+        <Breadcrumb items={[
+          { label: 'Hospitals', href: '/hospitals' },
+          { label: hospital.name }
+        ]} />
         <EditDeleteActions
           editHref={`/hospitals/edit/${hospital.hospital_id}`}
           editLabel="Edit Hospital"
