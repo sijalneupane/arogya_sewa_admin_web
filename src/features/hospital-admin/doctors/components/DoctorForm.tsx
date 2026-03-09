@@ -259,7 +259,7 @@ export function DoctorForm({ doctor, onSuccess }: DoctorFormProps) {
                 <input
                   type={showPassword ? "text" : "password"}
                   {...register("user.password", {
-                    required: !isEditMode, // Password required only for create
+                    required: !isEditMode ? "Password is required" : false,
                     minLength: {
                       value: 6,
                       message: "Password must be at least 6 characters",
@@ -404,16 +404,14 @@ export function DoctorForm({ doctor, onSuccess }: DoctorFormProps) {
             control={control}
             rules={{
               required: "License certificate is required",
-              validate: (value) => !!licenseFile?.file_id || "License certificate is required",
+              validate: (value) => !!value || "License certificate is required",
             }}
             render={({ field }) => (
               <FileUpload
                 onFileUploaded={(fileData) => {
-                  field.onChange(fileData?.file_id || null);
+                  const fileId = fileData?.file_id || null;
+                  field.onChange(fileId);
                   handleLicenseUpload(fileData);
-                  if (fileData?.file_id) {
-                    clearErrors("license_certificate_id");
-                  }
                 }}
                 fileType={FileTypeEnum.LICENSE}
                 initialFile={licenseFile}

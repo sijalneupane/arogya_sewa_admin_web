@@ -94,7 +94,7 @@ export function DoctorTable({ doctors, loading, onDelete }: DoctorTableProps) {
                 </td>
                 <td className="py-2 px-3 text-center">
                   <span
-                    className={`inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium ${
+                    className={`inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium whitespace-nowrap ${
                       DOCTOR_STATUS_COLORS[doctor.status] || 'bg-gray-100 text-gray-600'
                     }`}
                   >
