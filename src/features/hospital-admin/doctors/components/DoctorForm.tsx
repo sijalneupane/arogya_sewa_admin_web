@@ -56,6 +56,7 @@ export function DoctorForm({ doctor, onSuccess }: DoctorFormProps) {
     control,
     formState: { errors },
   } = useForm<CreateDoctorData | UpdateDoctorData>({
+    mode: "onChange",
     defaultValues: {
       experience: doctor?.experience || "",
       bio: doctor?.bio || "",
