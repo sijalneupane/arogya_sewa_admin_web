@@ -1,41 +1,30 @@
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Card, CardContent } from '@/components/ui/card';
-import { DoctorCreateForm } from '@/features/hospital-admin/doctors/components/DoctorCreateForm';
-import { CreateDoctorData } from '@/types/doctor.type';
-import { doctorApi } from '@/api/doctor.api';
-import toast from 'react-hot-toast';
+import { ArrowLeft } from 'lucide-react';
+import { DoctorForm } from '@/features/hospital-admin/doctors/components/DoctorForm';
 
 export default function CreateDoctorPage() {
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async (data: CreateDoctorData) => {
-    setLoading(true);
-    try {
-      await doctorApi.create(data);
-      toast.success('Doctor created successfully');
-      navigate('/doctors');
-    } catch (err: any) {
-      const errorMessage = err?.response?.data?.message || 'Failed to create doctor';
-      toast.error(errorMessage);
-    } finally {
-      setLoading(false);
-    }
+  const handleSuccess = () => {
+    navigate('/doctors');
   };
 
   return (
     <div className="space-y-4">
-      <div>
-        <h1 className="text-2xl font-bold text-gray-900">Add New Doctor</h1>
-        <p className="text-gray-600 mt-2">Register a new doctor in your hospital</p>
+      <div className="flex items-center space-x-4">
+        {/* <button
+          onClick={() => navigate('/doctors')}
+          className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+        >
+          <ArrowLeft className="h-5 w-5" />
+        </button> */}
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900">Add New Doctor</h1>
+          <p className="text-gray-600 mt-2">Register a new doctor in your hospital</p>
+        </div>
       </div>
 
-      <Card>
-        <CardContent>
-          <DoctorCreateForm onSubmit={handleSubmit} loading={loading} />
-        </CardContent>
-      </Card>
+      <DoctorForm onSuccess={handleSuccess} />
     </div>
   );
 }

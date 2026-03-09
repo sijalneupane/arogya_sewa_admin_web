@@ -48,13 +48,21 @@ export interface CreateDoctorData {
 }
 
 export interface UpdateDoctorData {
-  experience?: string;
+  experience: string;
   license_certificate_id?: string | null;
   department_id?: string | null;
   status?: DoctorStatus;
   bio?: string | null;
+  user: {
+    name: string;
+    email: string;
+    phone_number: string;
+    password: string;
+    profile_image_id?: string | null;
+  };
 }
 
+// Deprecated: Use UpdateDoctorData instead
 export interface UpdateDoctorUserData {
   email?: string;
   name?: string;

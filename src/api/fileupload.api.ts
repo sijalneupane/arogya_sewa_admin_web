@@ -30,29 +30,27 @@ export const fileApi = {
     const formData = new FormData();
     formData.append('file', file);
     formData.append('file_type', fileType);
-    
+
     return api.post<FileUploadResponse>(API_ENDPOINTS.FILE_UPLOAD, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
     });
   },
-  
-  // Update existing file
-  update: (imageId: string, file: File, fileType: FileTypeEnum = FileTypeEnum.OTHER) => {
+
+  // Update existing file - PUT to /file/upload/{fileId}
+  update: (fileId: string, file: File, _fileType?: FileTypeEnum) => {
     const formData = new FormData();
     formData.append('file', file);
-    formData.append('imageId', imageId);
-    formData.append('file_type', fileType);
-    
-    return api.patch<FileUploadResponse>(API_ENDPOINTS.FILE_UPDATE, formData, {
+
+    return api.patch<FileUploadResponse>(`${API_ENDPOINTS.FILE_UPDATE}/${fileId}`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
     });
   },
-  
+
   // Delete file
-  delete: (imageId: string) => 
+  delete: (imageId: string) =>
     api.delete(API_ENDPOINTS.FILE_DELETE(imageId)),
 };

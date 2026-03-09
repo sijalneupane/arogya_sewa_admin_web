@@ -1,6 +1,6 @@
 import api from './axios';
 import { API_ENDPOINTS } from './endpoints';
-import { Doctor, DoctorListResponse, CreateDoctorData, UpdateDoctorData, UpdateDoctorUserData } from '../types/doctor.type';
+import { Doctor, DoctorListResponse, CreateDoctorData, UpdateDoctorData } from '../types/doctor.type';
 
 export interface DoctorFilters {
   name?: string;
@@ -32,13 +32,9 @@ export const doctorApi = {
   // Create doctor (includes user credentials)
   create: (data: CreateDoctorData) => api.post(API_ENDPOINTS.DOCTORS, data),
 
-  // Update doctor info (experience, department, status, bio, license)
+  // Update doctor (includes user credentials - same payload as create)
   update: (id: string, data: UpdateDoctorData) =>
-    api.put(`${API_ENDPOINTS.DOCTORS}/${id}`, data),
-
-  // Update doctor's user info (email, name, phone, password)
-  updateUserInfo: (id: string, data: UpdateDoctorUserData) =>
-    api.put(`${API_ENDPOINTS.DOCTORS}/${id}/user`, data),
+    api.patch(`${API_ENDPOINTS.DOCTORS}/${id}`, data),
 
   // Delete doctor
   delete: (id: string) => api.delete(`${API_ENDPOINTS.DOCTORS}/${id}`),

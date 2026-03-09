@@ -27,4 +27,7 @@ export const userApi = {
 
   // Get user by ID
   getById: (id: string) => api.get<UserResponse>(`${API_ENDPOINTS.USERS}/${id}`),
+
+  // update user by ID
+  update: (id: string, data: Partial<User>) => api.put<UserResponse>(`${API_ENDPOINTS.USERS}/${id}`, data),
 };
