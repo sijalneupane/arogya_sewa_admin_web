@@ -8,6 +8,20 @@
   align-items: center;
 }
 
+/* Main container with error state */
+/* .searchable-dropdown-container.has-error .searchable-dropdown-trigger {
+  border-color: #ef4444 !important;
+}
+
+.searchable-dropdown-container.has-error .searchable-dropdown-trigger:hover {
+  background-color: #f9fafb;
+}
+
+.searchable-dropdown-container.has-error .searchable-dropdown-trigger:focus {
+  border-color: #ef4444 !important;
+  box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.1) !important;
+} */
+
 /* Trigger button - matches project input style */
 .searchable-dropdown-trigger {
   width: 100%;
@@ -120,6 +134,9 @@
 
 .searchable-dropdown-search-input::placeholder {
   color: #9ca3af;
+}
+.searchable-dropdown-search-input.has-error {
+  border-color: #ef4444 !important;
 }
 
 /* Dropdown options container */

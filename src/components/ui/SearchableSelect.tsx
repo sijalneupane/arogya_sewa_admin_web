@@ -15,6 +15,7 @@ interface SearchableSelectProps {
   placeholder?: string;
   disabled?: boolean;
   loading?: boolean;
+  hasError?: boolean;
 }
 
 export function SearchableSelect({
@@ -24,6 +25,7 @@ export function SearchableSelect({
   placeholder = 'Select...',
   disabled = false,
   loading = false,
+  hasError = false,
 }: SearchableSelectProps) {
   const selectedOption = value ? options.find((opt) => opt.value === value) : undefined;
 
@@ -58,8 +60,8 @@ export function SearchableSelect({
         dropdownOptionNoMatchLabel="No options found"
         searchQuery={searchQuery}
         onSearchQueryChange={(q) => setSearchQuery(q ?? '')}
-        classNameSearchableDropdownContainer="searchable-dropdown-container"
-        classNameSearchQueryInput="searchable-dropdown-search-input"
+        classNameSearchableDropdownContainer={`searchable-dropdown-container`}
+        classNameSearchQueryInput={`searchable-dropdown-search-input ${hasError ? 'has-error' : ''}`}
         classNameDropdownOptions="searchable-dropdown-options"
         classNameDropdownOption="searchable-dropdown-option"
         classNameDropdownOptionFocused="searchable-dropdown-option-focused"

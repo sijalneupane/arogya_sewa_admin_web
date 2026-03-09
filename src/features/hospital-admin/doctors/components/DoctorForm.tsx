@@ -54,6 +54,7 @@ export function DoctorForm({ doctor, onSuccess }: DoctorFormProps) {
     setValue,
     watch,
     control,
+    clearErrors,
     formState: { errors },
   } = useForm<CreateDoctorData | UpdateDoctorData>({
     mode: "onChange",
@@ -144,23 +145,38 @@ export function DoctorForm({ doctor, onSuccess }: DoctorFormProps) {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
           {/* Profile Image Upload */}
           <div className="md:justify-self-center justify-self-start">
+            <label className="block text-sm font-medium mb-1 md:text-center md:mb-2">
+              Profile Image <span className="text-red-500">*</span>
+            </label>
             <Controller
               name="user.profile_image_id"
               control={control}
+              rules={{
+                required: "Profile image is required",
+                validate: (value) => !!value || "Profile image is required",
+              }}
               render={({ field }) => (
                 <ImageUpload
-                  label="Profile Image"
+                  label=""
                   value={profileImageId}
                   fileType={FileTypeEnum.OTHER}
                   onChange={(id) => {
                     field.onChange(id);
                     handleProfileImageChange(id);
+                    if (id) {
+                      clearErrors("user.profile_image_id");
+                    }
                   }}
                   className="mb-3"
                   initialImageUrl={profileImageUrl || undefined}
                 />
               )}
             />
+            {errors.user && "profile_image_id" in errors.user && (
+              <p className="text-red-500 text-xs mt-1">
+                {errors.user.profile_image_id?.message}
+              </p>
+            )}
           </div>
 
           <div className="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-x-3 gap-y-10 md:place-content-center-safe">
@@ -305,22 +321,68 @@ export function DoctorForm({ doctor, onSuccess }: DoctorFormProps) {
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-1">Status</label>
-            <StatusSelect
-              value={watch("status") || null}
-              onChange={(value) => setValue("status", value || undefined)}
-              placeholder="Select status"
+            <label className="block text-sm font-medium mb-1">
+              Status <span className="text-red-500">*</span>
+            </label>
+            <Controller
+              name="status"
+              control={control}
+              rules={{
+                required: "Status is required",
+                validate: (value) => !!value || "Status is required",
+              }}
+              render={({ field }) => (
+                <StatusSelect
+                  value={field.value || null}
+                  onChange={(value) => {
+                    field.onChange(value || undefined);
+                    if (value) {
+                      clearErrors("status");
+                    }
+                  }}
+                  placeholder="Select status"
+                  hasError={!!errors.status}
+                />
+              )}
             />
+            {errors.status && (
+              <p className="text-red-500 text-xs mt-1">
+                {errors.status.message}
+              </p>
+            )}
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-1">Department</label>
-            <DepartmentSelect
-              value={watch("department_id") || null}
-              onChange={(value) => setValue("department_id", value)}
-              placeholder="Select department (optional)"
-              clearable
+            <label className="block text-sm font-medium mb-1">
+              Department <span className="text-red-500">*</span>
+            </label>
+            <Controller
+              name="department_id"
+              control={control}
+              rules={{
+                required: "Department is required",
+                validate: (value) => !!value || "Department is required",
+              }}
+              render={({ field }) => (
+                <DepartmentSelect
+                  value={field.value || null}
+                  onChange={(value) => {
+                    field.onChange(value);
+                    if (value) {
+                      clearErrors("department_id");
+                    }
+                  }}
+                  placeholder="Select department"
+                  clearable
+                  hasError={!!errors.department_id}
+                />
+              )}
             />
+            {errors.department_id && (
+              <p className="text-red-500 text-xs mt-1">
+                {errors.department_id.message}
+              </p>
+            )}
           </div>
         </div>
         <div>
@@ -335,13 +397,34 @@ export function DoctorForm({ doctor, onSuccess }: DoctorFormProps) {
 
         <div>
           <label className="block text-sm font-medium mb-1">
-            License Certificate
+            License Certificate <span className="text-red-500">*</span>
           </label>
-          <FileUpload
-            onFileUploaded={handleLicenseUpload}
-            fileType={FileTypeEnum.LICENSE}
-            initialFile={licenseFile}
+          <Controller
+            name="license_certificate_id"
+            control={control}
+            rules={{
+              required: "License certificate is required",
+              validate: (value) => !!licenseFile?.file_id || "License certificate is required",
+            }}
+            render={({ field }) => (
+              <FileUpload
+                onFileUploaded={(fileData) => {
+                  field.onChange(fileData?.file_id || null);
+                  handleLicenseUpload(fileData);
+                  if (fileData?.file_id) {
+                    clearErrors("license_certificate_id");
+                  }
+                }}
+                fileType={FileTypeEnum.LICENSE}
+                initialFile={licenseFile}
+              />
+            )}
           />
+          {errors.license_certificate_id && (
+            <p className="text-red-500 text-xs mt-1">
+              {errors.license_certificate_id.message}
+            </p>
+          )}
           <p className="text-xs text-gray-500 mt-1">
             Upload the doctor&apos;s medical license certificate (PDF or Image,
             max 5MB)

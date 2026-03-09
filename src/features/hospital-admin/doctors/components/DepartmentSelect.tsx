@@ -7,6 +7,7 @@ interface DepartmentSelectProps {
   placeholder?: string;
   clearable?: boolean;
   disabled?: boolean;
+  hasError?: boolean;
 }
 
 export function DepartmentSelect({
@@ -15,6 +16,7 @@ export function DepartmentSelect({
   placeholder = 'Select department',
   clearable = true,
   disabled = false,
+  hasError = false,
 }: DepartmentSelectProps) {
   const { departments, loading } = useDepartments();
 
@@ -31,6 +33,7 @@ export function DepartmentSelect({
       placeholder={placeholder}
       disabled={disabled}
       loading={loading}
+      hasError={hasError}
     />
   );
 }

@@ -14,6 +14,7 @@ interface StatusSelectProps {
   placeholder?: string;
   clearable?: boolean;
   disabled?: boolean;
+  hasError?: boolean;
 }
 
 export function StatusSelect({
@@ -21,6 +22,7 @@ export function StatusSelect({
   onChange,
   placeholder = 'Select status',
   disabled = false,
+  hasError = false,
 }: StatusSelectProps) {
   return (
     <SearchableSelect
@@ -29,6 +31,7 @@ export function StatusSelect({
       onChange={(v) => onChange((v as DoctorStatus) || null)}
       placeholder={placeholder}
       disabled={disabled}
+      hasError={hasError}
     />
   );
 }
