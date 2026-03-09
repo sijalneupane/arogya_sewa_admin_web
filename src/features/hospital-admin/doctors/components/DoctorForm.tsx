@@ -82,10 +82,7 @@ export function DoctorForm({ doctor, onSuccess }: DoctorFormProps) {
       return doctorApi.create(data as CreateDoctorData);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["doctors"] });
-      if (isEditMode && doctor?.id) {
-        queryClient.invalidateQueries({ queryKey: ["doctor", doctor.id] });
-      }
+      queryClient.invalidateQueries({ queryKey: ["doctors-hospital-my"] });
       toast.success(
         isEditMode
           ? "Doctor updated successfully!"
