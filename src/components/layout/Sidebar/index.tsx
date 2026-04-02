@@ -7,7 +7,6 @@ import {
   Building,
   Users,
   Calendar,
-  User,
   Settings,
   ChevronLeft,
   ChevronRight,
@@ -34,7 +33,6 @@ const Sidebar = ({ isCollapsed, onToggle }: SidebarProps) => {
     { path: '/doctors', label: 'Doctors', icon: Users },
     { path: '/departments', label: 'Departments', icon: Building2 },
     { path: '/appointments', label: 'Appointments', icon: Calendar },
-    { path: '/profile', label: 'Profile', icon: User },
     { path: '/settings', label: 'Settings', icon: Settings },
   ];
 

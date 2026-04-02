@@ -13,7 +13,6 @@ interface DoctorTableProps {
 const DOCTOR_STATUS_COLORS: Record<string, string> = {
   Active: 'bg-green-100 text-green-700',
   'On Leave': 'bg-yellow-100 text-yellow-700',
-  'On Appointment': 'bg-blue-100 text-blue-700',
   Inactive: 'bg-gray-100 text-gray-600',
 };
 

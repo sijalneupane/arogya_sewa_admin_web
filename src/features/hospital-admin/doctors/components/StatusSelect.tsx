@@ -4,7 +4,6 @@ import { DoctorStatus } from '@/types/doctor.type';
 export const DOCTOR_STATUS_OPTIONS: SelectOption[] = [
   { value: DoctorStatus.ACTIVE, label: DoctorStatus.ACTIVE },
   { value: DoctorStatus.ON_LEAVE, label: DoctorStatus.ON_LEAVE },
-  { value: DoctorStatus.ON_APPOINTMENT, label: DoctorStatus.ON_APPOINTMENT },
   { value: DoctorStatus.INACTIVE, label: DoctorStatus.INACTIVE },
 ];
 

@@ -21,7 +21,6 @@ import EditDoctorPage from '@/pages/HospitalAdmin/EditDoctorPage';
 import DepartmentsPage from '@/features/hospital-admin/departments/DepartmentsPage';
 import AppointmentsPage from '@/pages/HospitalAdmin/AppointmentsPage';
 import AppointmentViewPage from '@/pages/HospitalAdmin/AppointmentViewPage';
-import ProfilePage from '@/pages/Shared/ProfilePage';
 import SettingsPage from '@/pages/Shared/SettingsPage';
 
 export default function AppRoutes() {
@@ -36,7 +35,6 @@ export default function AppRoutes() {
         <Route element={<DashboardLayout />}>
 
           {/* Shared Routes */}
-          <Route path="/profile" element={<ProfilePage />} />
           <Route path="/settings" element={<SettingsPage />} />
 
           {/* Super Admin Routes */}

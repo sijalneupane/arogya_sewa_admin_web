@@ -5,7 +5,6 @@ import { User } from './user.type';
 export enum DoctorStatus {
   ACTIVE = 'Active',
   ON_LEAVE = 'On Leave',
-  ON_APPOINTMENT = 'On Appointment',
   INACTIVE = 'Inactive',
 }
 

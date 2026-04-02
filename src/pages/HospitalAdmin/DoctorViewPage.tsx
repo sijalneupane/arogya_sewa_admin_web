@@ -28,7 +28,6 @@ import toast from 'react-hot-toast';
 const DOCTOR_STATUS_COLORS: Record<string, string> = {
   Active: 'bg-green-100 text-green-700 border-green-200',
   'On Leave': 'bg-amber-100 text-amber-800 border-amber-200',
-  'On Appointment': 'bg-blue-100 text-blue-800 border-blue-200',
   Inactive: 'bg-gray-100 text-gray-600 border-gray-200',
 };
 

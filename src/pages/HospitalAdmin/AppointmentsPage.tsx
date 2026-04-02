@@ -7,6 +7,7 @@ import { Pagination } from '@/components/ui/Pagination';
 import { useHospitalAdminAppointments } from '@/features/hospital-admin/appointments/hooks/useHospitalAdminAppointments';
 import { AvatarPlaceholder } from '@/components/ui/AvatarPlaceholder';
 import { ActionMenu } from '@/components/ui/ActionMenu';
+import { SearchableSelect, SelectOption } from '@/components/ui/SearchableSelect';
 
 function formatAmount(value: number) {
   return new Intl.NumberFormat(undefined, {
@@ -43,6 +44,13 @@ function paymentBadgeClass(payment: string) {
   if (p.includes('paid') || p.includes('complete')) return 'bg-green-100 text-green-800';
   return 'bg-gray-100 text-gray-800';
 }
+
+const STATUS_OPTIONS: SelectOption[] = [
+  { label: 'Pending Payment', value: 'Pending Payment' },
+  { label: 'Confirmed', value: 'Confirmed' },
+  { label: 'Completed', value: 'Completed' },
+  { label: 'Cancelled', value: 'Cancelled' },
+];
 
 export default function AppointmentsPage() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -164,20 +172,15 @@ export default function AppointmentsPage() {
             </div>
             <div className="flex w-full flex-col gap-0.5 sm:min-w-[7.5rem] sm:flex-1 sm:max-w-[11rem] lg:max-w-none lg:min-w-0">
               <label className="text-[11px] font-medium text-gray-500">Status</label>
-              <select
-                value={status}
-                onChange={(e) => {
-                  setStatus(e.target.value);
+              <SearchableSelect
+                options={STATUS_OPTIONS}
+                value={status || null}
+                onChange={(value) => {
+                  setStatus(value || '');
                   setCurrentPage(1);
                 }}
-                className="w-full rounded-md border border-gray-300 bg-white py-1.5 px-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
-              >
-                <option value="">All</option>
-                <option value="Pending Payment">Pending Payment</option>
-                <option value="Confirmed">Confirmed</option>
-                <option value="Completed">Completed</option>
-                <option value="Cancelled">Cancelled</option>
-              </select>
+                placeholder="All"
+              />
             </div>
             <div className="flex w-full flex-col gap-0.5 sm:min-w-[9rem] sm:flex-1 sm:max-w-[10.5rem] lg:max-w-none lg:min-w-0">
               <label className="text-[11px] font-medium text-gray-500">Appt. date</label>
