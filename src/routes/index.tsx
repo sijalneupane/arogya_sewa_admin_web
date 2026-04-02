@@ -20,6 +20,7 @@ import DoctorViewPage from '@/pages/HospitalAdmin/DoctorViewPage';
 import EditDoctorPage from '@/pages/HospitalAdmin/EditDoctorPage';
 import DepartmentsPage from '@/features/hospital-admin/departments/DepartmentsPage';
 import AppointmentsPage from '@/pages/HospitalAdmin/AppointmentsPage';
+import AppointmentViewPage from '@/pages/HospitalAdmin/AppointmentViewPage';
 import ProfilePage from '@/pages/Shared/ProfilePage';
 import SettingsPage from '@/pages/Shared/SettingsPage';
 
@@ -58,6 +59,7 @@ export default function AppRoutes() {
             <Route path="/doctors/:doctorId/edit" element={<EditDoctorPage />} />
             <Route path="/departments" element={<DepartmentsPage />} />
             <Route path="/appointments" element={<AppointmentsPage />} />
+            <Route path="/appointments/:appointmentId" element={<AppointmentViewPage />} />
             <Route path="/hospitals/edit/:id" element={<EditHospitalPage />} />
           </Route>
 

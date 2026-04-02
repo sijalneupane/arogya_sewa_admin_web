@@ -2,6 +2,7 @@ import api from './axios';
 import { API_ENDPOINTS } from './endpoints';
 import { CreateAppointmentData } from '../types/appointment.types';
 import {
+  HospitalAdminAppointmentDetailResponse,
   HospitalAdminAppointmentFilters,
   HospitalAdminAppointmentListResponse,
 } from '../types/hospitalAdminAppointment.type';
@@ -32,8 +33,8 @@ export const appointmentApi = {
   getToday: (hospitalId: string) => 
     api.get(`${API_ENDPOINTS.APPOINTMENTS}/today?hospitalId=${hospitalId}`),
   
-  // Get appointment by ID
-  getById: (id: string) => api.get(`${API_ENDPOINTS.APPOINTMENTS}/${id}`),
+  getById: (id: string) =>
+    api.get<HospitalAdminAppointmentDetailResponse>(`${API_ENDPOINTS.APPOINTMENTS}/${id}`),
   
   // Create appointment
   create: (data: CreateAppointmentData) => api.post(API_ENDPOINTS.APPOINTMENTS, data),

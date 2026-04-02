@@ -6,6 +6,7 @@ import { Breadcrumb } from '@/components/ui/Breadcrumb';
 import { Pagination } from '@/components/ui/Pagination';
 import { useHospitalAdminAppointments } from '@/features/hospital-admin/appointments/hooks/useHospitalAdminAppointments';
 import { AvatarPlaceholder } from '@/components/ui/AvatarPlaceholder';
+import { ActionMenu } from '@/components/ui/ActionMenu';
 
 function formatAmount(value: number) {
   return new Intl.NumberFormat(undefined, {
@@ -239,6 +240,9 @@ export default function AppointmentsPage() {
                     <th className="text-left py-3 px-4 font-medium text-gray-700">Status</th>
                     <th className="text-left py-3 px-4 font-medium text-gray-700">Payment</th>
                     <th className="text-right py-3 px-4 font-medium text-gray-700">Total</th>
+                    <th className="text-center py-3 px-4 font-medium text-gray-700 w-[1%] whitespace-nowrap">
+                      Actions
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
@@ -291,6 +295,12 @@ export default function AppointmentsPage() {
                       </td>
                       <td className="py-3 px-4 text-right tabular-nums text-gray-900">
                         {formatAmount(row.total_amount)}
+                      </td>
+                      <td className="py-3 px-4 text-center">
+                        <ActionMenu
+                          viewUrl={`/appointments/${row.appointment_id}`}
+                          showEdit={false}
+                        />
                       </td>
                     </tr>
                   ))}

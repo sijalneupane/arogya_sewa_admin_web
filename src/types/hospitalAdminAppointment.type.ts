@@ -77,6 +77,11 @@ export interface HospitalAdminAppointmentListResponse {
   paginationMeta: PaginationMeta;
 }
 
+export interface HospitalAdminAppointmentDetailResponse {
+  message: string;
+  data: HospitalAdminAppointment;
+}
+
 export interface HospitalAdminAppointmentFilters {
   doctor_name?: string;
   patient_name?: string;
