@@ -19,6 +19,7 @@ export const API_ENDPOINTS = {
   DEPARTMENTS_MY: '/departments/my',
   APPOINTMENTS: '/appointments',
   APPOINTMENT_STATS: '/appointments/stats',
+  AVAILABILITIES_DOCTOR: (doctorId: string) => `/availabilities/doctor/${doctorId}`,
   
   // Shared
   USERS: '/users',
