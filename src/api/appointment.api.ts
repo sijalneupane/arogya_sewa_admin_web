@@ -1,10 +1,31 @@
 import api from './axios';
 import { API_ENDPOINTS } from './endpoints';
-import { Appointment, CreateAppointmentData } from '../types/appointment.types';
+import { CreateAppointmentData } from '../types/appointment.types';
+import {
+  HospitalAdminAppointmentFilters,
+  HospitalAdminAppointmentListResponse,
+} from '../types/hospitalAdminAppointment.type';
 
 export const appointmentApi = {
+  getHospitalAdminAppointments: (filters: HospitalAdminAppointmentFilters = {}) => {
+    const query = new URLSearchParams();
+    if (filters.doctor_name) query.append('doctor_name', filters.doctor_name);
+    if (filters.patient_name) query.append('patient_name', filters.patient_name);
+    if (filters.status) query.append('status', filters.status);
+    if (filters.date_from) query.append('date_from', filters.date_from);
+    if (filters.date_to) query.append('date_to', filters.date_to);
+    if (filters.appointment_date) query.append('appointment_date', filters.appointment_date);
+    if (filters.page != null) query.append('page', String(filters.page));
+    if (filters.size != null) query.append('size', String(filters.size));
+    const qs = query.toString();
+    const path = qs
+      ? `${API_ENDPOINTS.APPOINTMENTS_HOSPITAL_ADMIN}?${qs}`
+      : API_ENDPOINTS.APPOINTMENTS_HOSPITAL_ADMIN;
+    return api.get<HospitalAdminAppointmentListResponse>(path);
+  },
+
   // Get all appointments for a hospital
-  getAll: (hospitalId: string, filters?: any) => 
+  getAll: (hospitalId: string, filters?: any) =>
     api.get(`${API_ENDPOINTS.APPOINTMENTS}?hospitalId=${hospitalId}`, { params: filters }),
   
   // Get today's appointments
