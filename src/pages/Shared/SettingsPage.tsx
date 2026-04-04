@@ -6,8 +6,8 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Breadcrumb } from '@/components/ui/Breadcrumb';
-import ImageUpload from '@/components/ui/ImageUpload';
-import { FileTypeEnum } from '@/api/fileupload.api';
+import ProfileImagePicker from '@/components/ui/ProfileImagePicker';
+import { FileUploadResponse } from '@/api/fileupload.api';
 import { authApi } from '@/api/auth.api';
 import { userApi } from '@/api/user.api';
 import { useAuthStore } from '@/store/auth.store';
@@ -87,9 +87,18 @@ export default function SettingsPage() {
     });
   }, [currentPassword, newPassword, confirmPassword, changePasswordMutation]);
 
-  const handleImageChange = useCallback((imageId: string) => {
+  const handleImageChange = useCallback((imageId: string, response?: FileUploadResponse) => {
     setProfileImageId(imageId);
-  }, []);
+    if (user && response) {
+      setUser({
+        ...user,
+        profile_img: {
+          file_id: response.file_id,
+          file_url: response.file_url,
+        },
+      });
+    }
+  }, [user, setUser]);
 
   return (
     <div className="max-w-5xl mx-2 space-y-5 pb-8">
@@ -114,16 +123,13 @@ export default function SettingsPage() {
           <CardDescription>Update your personal details and profile photo.</CardDescription>
         </CardHeader>
         <CardContent className="pt-6 space-y-8">
-          {/* Profile Image using global ImageUpload */}
-          <div className="flex flex-col sm:flex-row items-center gap-6 pb-6 border-b border-gray-100">
-            <ImageUpload
-              label="Profile Photo"
-              value={profileImageId}
-              onChange={handleImageChange}
-              fileType={FileTypeEnum.PROFILE}
-              initialImageUrl={user?.profile_img?.file_url}
-            />
-          </div>
+          {/* Profile Image using ProfileImagePicker */}
+          <ProfileImagePicker
+            imageId={profileImageId}
+            imageUrl={user?.profile_img?.file_url}
+            name={user?.name || 'User'}
+            onChange={handleImageChange}
+          />
 
           {/* Form Grid */}
           <div className="grid gap-6 sm:grid-cols-2">
