@@ -5,13 +5,12 @@ import {
   LayoutDashboard,
   Hospital,
   Plus,
-  UserCircle,
-  Settings,
   Stethoscope,
   CalendarDays,
   UserPlus,
   Users,
   Building2,
+  Settings,
 } from 'lucide-react';
 import { useAuthStore } from '@/store/auth.store';
 import { UserRole } from '@/types/auth.types';
@@ -93,20 +92,12 @@ const NAV_ITEMS: NavItem[] = [
     keywords: ['departments', 'department', 'dept', 'specialty', 'specialization'],
   },
   {
-    label: 'Profile',
-    description: 'View and edit your profile',
-    path: '/profile',
-    icon: <UserCircle className="h-4 w-4" />,
-    roles: ALL_ROLES,
-    keywords: ['profile', 'account', 'me', 'user', 'personal'],
-  },
-  {
     label: 'Settings',
     description: 'Application settings',
     path: '/settings',
     icon: <Settings className="h-4 w-4" />,
     roles: ALL_ROLES,
-    keywords: ['settings', 'preferences', 'config', 'configuration'],
+    keywords: ['settings', 'preferences', 'config', 'configuration', 'account', 'profile'],
   },
 ];
 

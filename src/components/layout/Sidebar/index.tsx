@@ -26,6 +26,7 @@ const Sidebar = ({ isCollapsed, onToggle }: SidebarProps) => {
     { path: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
     { path: '/hospitals', label: 'Hospitals', icon: Building },
     { path: '/users', label: 'Users', icon: Users },
+    { path: '/settings', label: 'Settings', icon: Settings },
   ];
 
   const hospitalAdminMenu = [

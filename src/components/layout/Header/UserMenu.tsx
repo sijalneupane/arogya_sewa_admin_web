@@ -1,13 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
-import {
-  User,
-  Settings,
-  HelpCircle,
-  LogOut,
-  ChevronDown
-} from 'lucide-react';
+import { LogOut, ChevronDown } from 'lucide-react';
 import { useAuthStore } from '@/store/auth.store';
 import { AvatarPlaceholder } from '@/components/ui/AvatarPlaceholder';
 import { ConfirmationDialog } from '@/components/ui/ConfirmationDialog';
@@ -44,46 +37,16 @@ export default function UserMenu({ user }: UserMenuProps) {
 
       {/* Dropdown Menu */}
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-48 bg-white border rounded-lg shadow-lg py-2 z-50">
-          <div className="px-4 py-2 border-b">
+        <div className="absolute right-0 mt-2 w-fit min-w-48 bg-white border rounded-lg shadow-lg z-50">
+          <div className="px-4 py-2">
             <p className="text-sm font-medium">{user?.name}</p>
             <p className="text-xs text-gray-500">{user?.email}</p>
-          </div>
-          
-          <Link
-            to="/profile"
-            className="flex items-center px-4 py-2 text-sm hover:bg-gray-50"
-            onClick={() => setIsOpen(false)}
-          >
-            <User className="h-4 w-4 mr-3" />
-            Profile
-          </Link>
-          
-          <Link
-            to="/settings"
-            className="flex items-center px-4 py-2 text-sm hover:bg-gray-50"
-            onClick={() => setIsOpen(false)}
-          >
-            <Settings className="h-4 w-4 mr-3" />
-            Settings
-          </Link>
-          
-          <a
-            href="#"
-            className="flex items-center px-4 py-2 text-sm hover:bg-gray-50"
-            onClick={() => setIsOpen(false)}
-          >
-            <HelpCircle className="h-4 w-4 mr-3" />
-            Help & Support
-          </a>
-          
-          <div className="border-t mt-2 pt-2">
             <button
               onClick={() => {
                 setIsOpen(false);
                 setShowLogoutConfirm(true);
               }}
-              className="flex items-center w-full px-4 py-2 text-sm text-red-600 hover:bg-red-50"
+              className="flex items-center w-full px-2 py-1.5 mt-1 text-sm text-red-600 rounded hover:bg-red-50"
             >
               <LogOut className="h-4 w-4 mr-3" />
               Logout

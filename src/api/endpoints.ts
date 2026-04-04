@@ -7,6 +7,7 @@ export const API_ENDPOINTS = {
   REFRESH_TOKEN: '/auth/refresh-token',
   FORGOT_PASSWORD: '/auth/forgot-password',
   RESET_PASSWORD: '/auth/reset-password',
+  CHANGE_PASSWORD: '/auth/password/change',
   
   // Super Admin
   HOSPITALS: '/hospital',

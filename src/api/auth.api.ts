@@ -174,6 +174,9 @@ export const authApi = {
   forgotPassword: (email: string) => 
     api.post<{ message: string }>(API_ENDPOINTS.FORGOT_PASSWORD, { email }),
   
-  resetPassword: (token: string, newPassword: string) => 
+  resetPassword: (token: string, newPassword: string) =>
     api.post<{ message: string }>(API_ENDPOINTS.RESET_PASSWORD, { token, newPassword }),
+
+  changePassword: (data: { old_password: string; new_password: string; confirm_password: string }) =>
+    api.post<{ message: string }>(API_ENDPOINTS.CHANGE_PASSWORD, data),
 };
