@@ -13,6 +13,37 @@ import { userApi } from '@/api/user.api';
 import { useAuthStore } from '@/store/auth.store';
 import toast from 'react-hot-toast';
 
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const NAME_REGEX = /^[A-Za-z ]+$/;
+const PHONE_REGEX = /^\d{10}$/;
+
+const validateName = (value: string): string | undefined => {
+  const trimmedName = value.trim();
+  if (!trimmedName) return 'Name is required';
+  if (!NAME_REGEX.test(trimmedName)) return 'Name must contain only letters and spaces';
+  return undefined;
+};
+
+const validateEmail = (value: string): string | undefined => {
+  const trimmedEmail = value.trim();
+  if (!trimmedEmail) return 'Email is required';
+  if (!EMAIL_REGEX.test(trimmedEmail)) return 'Please enter a valid email address';
+  return undefined;
+};
+
+const validatePhone = (value: string): string | undefined => {
+  const trimmedPhone = value.trim();
+  if (!trimmedPhone) return 'Phone number is required';
+  if (!PHONE_REGEX.test(trimmedPhone)) return 'Phone number must be 10 digits';
+  return undefined;
+};
+
+const validateNewPassword = (value: string): string | undefined => {
+  if (!value) return 'New password is required';
+  if (value.length < 6) return 'New password must be at least 6 characters';
+  return undefined;
+};
+
 export default function SettingsPage() {
   const { user, setUser } = useAuthStore();
 
@@ -27,6 +58,16 @@ export default function SettingsPage() {
   const [showCurrentPassword, setShowCurrentPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [profileErrors, setProfileErrors] = useState<{
+    name?: string;
+    email?: string;
+    phoneNumber?: string;
+  }>({});
+  const [passwordErrors, setPasswordErrors] = useState<{
+    currentPassword?: string;
+    newPassword?: string;
+    confirmPassword?: string;
+  }>({});
 
   const updateProfileMutation = useMutation({
     mutationFn: (data: { email: string; name: string; phone_number: string }) =>
@@ -60,26 +101,48 @@ export default function SettingsPage() {
 
   const handleSaveProfile = useCallback(() => {
     if (!user) return;
+
+    const trimmedName = name.trim();
+    const trimmedEmail = email.trim();
+    const trimmedPhone = phoneNumber.trim();
+    const errors: { name?: string; email?: string; phoneNumber?: string } = {
+      name: validateName(trimmedName),
+      email: validateEmail(trimmedEmail),
+      phoneNumber: validatePhone(trimmedPhone),
+    };
+
+    if (Object.keys(errors).length > 0) {
+      setProfileErrors(errors);
+      toast.error('Please fix validation errors');
+      return;
+    }
+
+    setProfileErrors({});
     updateProfileMutation.mutate({
-      name,
-      email,
-      phone_number: phoneNumber,
+      name: trimmedName,
+      email: trimmedEmail,
+      phone_number: trimmedPhone,
     });
   }, [user, name, email, phoneNumber, updateProfileMutation]);
 
   const handleChangePassword = useCallback(() => {
-    if (!newPassword || !confirmPassword || !currentPassword) {
-      toast.error('Please fill in all password fields');
+    const errors = {
+      currentPassword: currentPassword ? undefined : 'Current password is required',
+      newPassword: validateNewPassword(newPassword),
+      confirmPassword: !confirmPassword
+        ? 'Please confirm new password'
+        : newPassword !== confirmPassword
+          ? 'New passwords do not match'
+          : undefined,
+    };
+
+    if (Object.values(errors).some(Boolean)) {
+      setPasswordErrors(errors);
+      toast.error('Please fix password errors');
       return;
     }
-    if (newPassword !== confirmPassword) {
-      toast.error('New passwords do not match');
-      return;
-    }
-    if (newPassword.length < 6) {
-      toast.error('Password must be at least 6 characters');
-      return;
-    }
+
+    setPasswordErrors({});
     changePasswordMutation.mutate({
       old_password: currentPassword,
       new_password: newPassword,
@@ -95,6 +158,8 @@ export default function SettingsPage() {
         profile_img: {
           file_id: response.file_id,
           file_url: response.file_url,
+          meta_type: response.meta_type,
+          file_type: response.file_type,
         },
       });
     }
@@ -140,9 +205,14 @@ export default function SettingsPage() {
                 <Input
                   id="name"
                   value={name}
-                  onChange={(e) => setName(e.target.value)}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    setName(value);
+                    setProfileErrors((prev) => ({ ...prev, name: validateName(value) }));
+                  }}
                   className="bg-white"
                 />
+                {profileErrors.name && <p className="text-sm text-red-600">{profileErrors.name}</p>}
               </div>
             </div>
 
@@ -154,11 +224,16 @@ export default function SettingsPage() {
                   <Input
                     id="email"
                     value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      setEmail(value);
+                      setProfileErrors((prev) => ({ ...prev, email: validateEmail(value) }));
+                    }}
                     className="bg-white pr-10"
                   />
                   <Mail className="absolute right-3 top-2.5 h-4 w-4 text-gray-400" />
                 </div>
+                {profileErrors.email && <p className="text-sm text-red-600">{profileErrors.email}</p>}
               </div>
               <div className="space-y-2">
                 <Label htmlFor="phone">Phone Number</Label>
@@ -166,11 +241,16 @@ export default function SettingsPage() {
                   <Input
                     id="phone"
                     value={phoneNumber}
-                    onChange={(e) => setPhoneNumber(e.target.value)}
+                    onChange={(e) => {
+                      const digitsOnly = e.target.value.replace(/\D/g, '');
+                      setPhoneNumber(digitsOnly);
+                      setProfileErrors((prev) => ({ ...prev, phoneNumber: validatePhone(digitsOnly) }));
+                    }}
                     className="bg-white pr-10"
                   />
                   <Phone className="absolute right-3 top-2.5 h-4 w-4 text-gray-400" />
                 </div>
+                {profileErrors.phoneNumber && <p className="text-sm text-red-600">{profileErrors.phoneNumber}</p>}
               </div>
             </div>
           </div>
@@ -205,7 +285,14 @@ export default function SettingsPage() {
                   id="current-pass"
                   type={showCurrentPassword ? 'text' : 'password'}
                   value={currentPassword}
-                  onChange={(e) => setCurrentPassword(e.target.value)}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    setCurrentPassword(value);
+                    setPasswordErrors((prev) => ({
+                      ...prev,
+                      currentPassword: value ? undefined : 'Current password is required',
+                    }));
+                  }}
                   placeholder="Enter current password"
                   className="pr-10"
                 />
@@ -217,6 +304,7 @@ export default function SettingsPage() {
                   {showCurrentPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                 </button>
               </div>
+              {passwordErrors.currentPassword && <p className="text-sm text-red-600">{passwordErrors.currentPassword}</p>}
             </div>
             <div className="space-y-2">
               <Label htmlFor="new-pass">New Password</Label>
@@ -225,7 +313,19 @@ export default function SettingsPage() {
                   id="new-pass"
                   type={showNewPassword ? 'text' : 'password'}
                   value={newPassword}
-                  onChange={(e) => setNewPassword(e.target.value)}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    setNewPassword(value);
+                    setPasswordErrors((prev) => ({
+                      ...prev,
+                      newPassword: validateNewPassword(value),
+                      confirmPassword: confirmPassword
+                        ? value !== confirmPassword
+                          ? 'New passwords do not match'
+                          : undefined
+                        : prev.confirmPassword,
+                    }));
+                  }}
                   placeholder="Enter new password"
                   className="pr-10"
                 />
@@ -237,6 +337,8 @@ export default function SettingsPage() {
                   {showNewPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                 </button>
               </div>
+              {passwordErrors.newPassword && <p className="text-sm text-red-600">{passwordErrors.newPassword}</p>}
+              <p className="text-xs text-gray-500">Minimum 6 characters</p>
             </div>
             <div className="space-y-2">
               <Label htmlFor="confirm-pass">Confirm New Password</Label>
@@ -245,7 +347,18 @@ export default function SettingsPage() {
                   id="confirm-pass"
                   type={showConfirmPassword ? 'text' : 'password'}
                   value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    setConfirmPassword(value);
+                    setPasswordErrors((prev) => ({
+                      ...prev,
+                      confirmPassword: !value
+                        ? 'Please confirm new password'
+                        : newPassword !== value
+                          ? 'New passwords do not match'
+                          : undefined,
+                    }));
+                  }}
                   placeholder="Confirm new password"
                   className="pr-10"
                 />
@@ -257,6 +370,7 @@ export default function SettingsPage() {
                   {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                 </button>
               </div>
+              {passwordErrors.confirmPassword && <p className="text-sm text-red-600">{passwordErrors.confirmPassword}</p>}
             </div>
           </div>
           <div className="flex justify-end pt-2 border-t border-gray-100">

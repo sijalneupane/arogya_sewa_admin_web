@@ -8,7 +8,11 @@ export const API_ENDPOINTS = {
   FORGOT_PASSWORD: '/auth/forgot-password',
   RESET_PASSWORD: '/auth/reset-password',
   CHANGE_PASSWORD: '/auth/password/change',
-  
+
+  // Dashboard
+  SUPER_ADMIN_DASHBOARD_SUMMARY: '/dashboard/summary',
+  HOSPITAL_ADMIN_DASHBOARD_SUMMARY: '/dashboard/hospital-admin/summary',
+
   // Super Admin
   HOSPITALS: '/hospital',
   HOSPITAL_STATS: '/hospitals/stats',

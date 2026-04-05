@@ -22,6 +22,21 @@ import DepartmentsPage from '@/features/hospital-admin/departments/DepartmentsPa
 import AppointmentsPage from '@/pages/HospitalAdmin/AppointmentsPage';
 import AppointmentViewPage from '@/pages/HospitalAdmin/AppointmentViewPage';
 import SettingsPage from '@/pages/Shared/SettingsPage';
+import { useAuthStore } from '@/store/auth.store';
+
+function RoleBasedDashboard() {
+  const { user } = useAuthStore();
+
+  if (user?.role?.role === UserRole.SUPER_ADMIN) {
+    return <SuperAdminDashboard />;
+  }
+
+  if (user?.role?.role === UserRole.HOSPITAL_ADMIN) {
+    return <HospitalAdminDashboard />;
+  }
+
+  return <Navigate to="/login" replace />;
+}
 
 export default function AppRoutes() {
   return (
@@ -36,10 +51,14 @@ export default function AppRoutes() {
 
           {/* Shared Routes */}
           <Route path="/settings" element={<SettingsPage />} />
+          <Route
+            element={<ProtectedRoute allowedRoles={[UserRole.SUPER_ADMIN, UserRole.HOSPITAL_ADMIN]} />}
+          >
+            <Route path="/dashboard" element={<RoleBasedDashboard />} />
+          </Route>
 
           {/* Super Admin Routes */}
           <Route element={<ProtectedRoute allowedRoles={[UserRole.SUPER_ADMIN]} />}>
-            <Route path="/dashboard" element={<SuperAdminDashboard />} />
             <Route path="/hospitals" element={<HospitalsPage />} />
             <Route path="/hospitals/create" element={<CreateHospitalPage />} />
             <Route path="/hospitals/edit/:id" element={<EditHospitalPage />} />
@@ -50,7 +69,6 @@ export default function AppRoutes() {
 
           {/* Hospital Admin Routes */}
           <Route element={<ProtectedRoute allowedRoles={[UserRole.HOSPITAL_ADMIN]} />}>
-            <Route path="/dashboard" element={<HospitalAdminDashboard />} />
             <Route path="/doctors" element={<DoctorsPage />} />
             <Route path="/doctors/create" element={<CreateDoctorPage />} />
             <Route path="/doctors/:doctorId" element={<DoctorViewPage />} />
