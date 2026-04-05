@@ -29,5 +29,5 @@ export const userApi = {
   getById: (id: string) => api.get<UserResponse>(`${API_ENDPOINTS.USERS}/${id}`),
 
   // update user by ID
-  update: (id: string, data: Partial<User>) => api.put<UserResponse>(`${API_ENDPOINTS.USERS}/${id}`, data),
+  update: (id: string, data: Partial<User>) => api.patch<UserResponse>(`${API_ENDPOINTS.USERS}/${id}`, data),
 };

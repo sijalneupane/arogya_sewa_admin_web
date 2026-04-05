@@ -111,7 +111,7 @@ export default function SettingsPage() {
       phoneNumber: validatePhone(trimmedPhone),
     };
 
-    if (Object.keys(errors).length > 0) {
+    if (Object.values(errors).some(Boolean)) {
       setProfileErrors(errors);
       toast.error('Please fix validation errors');
       return;
