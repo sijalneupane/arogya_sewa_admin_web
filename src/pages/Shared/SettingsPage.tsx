@@ -72,10 +72,15 @@ export default function SettingsPage() {
   const updateProfileMutation = useMutation({
     mutationFn: (data: { email: string; name: string; phone_number: string }) =>
       userApi.update(user!.id, data),
-    onSuccess: async () => {
-      // Refresh user data from profile endpoint
-      const profileRes = await authApi.getProfile();
-      setUser(profileRes.data);
+    onSuccess: () => {
+      if (user) {
+        setUser({
+          ...user,
+          name: name.trim(),
+          email: email.trim(),
+          phone_number: phoneNumber.trim(),
+        });
+      }
       toast.success('Profile updated successfully');
     },
     onError: (err: any) => {
