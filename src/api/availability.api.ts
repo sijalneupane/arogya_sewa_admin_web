@@ -1,6 +1,10 @@
 import api from './axios';
 import { API_ENDPOINTS } from './endpoints';
-import { DoctorAvailabilityListResponse } from '@/types/availability.type';
+import {
+  CreateDoctorAvailabilityData,
+  DoctorAvailabilityListResponse,
+  UpdateDoctorAvailabilityData,
+} from '@/types/availability.type';
 
 export interface DoctorAvailabilityFilters {
   is_booked?: boolean;
@@ -20,4 +24,12 @@ export const availabilityApi = {
     const path = `${API_ENDPOINTS.AVAILABILITIES_DOCTOR(doctorId)}${qs ? `?${qs}` : ''}`;
     return api.get<DoctorAvailabilityListResponse>(path);
   },
+
+  create: (data: CreateDoctorAvailabilityData) => api.post(API_ENDPOINTS.AVAILABILITIES, data),
+
+  update: (availabilityId: string, data: UpdateDoctorAvailabilityData) =>
+    api.patch(`${API_ENDPOINTS.AVAILABILITIES}/${availabilityId}`, data),
+
+  delete: (availabilityId: string) =>
+    api.delete(`${API_ENDPOINTS.AVAILABILITIES}/${availabilityId}`),
 };

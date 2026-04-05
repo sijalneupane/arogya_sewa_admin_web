@@ -10,16 +10,21 @@ import {
   CalendarClock,
   Clock,
   Stethoscope,
+  Pencil,
+  Trash2,
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Breadcrumb } from '@/components/ui/Breadcrumb';
 import { EditDeleteActions } from '@/components/ui/EditDeleteActions';
+import { ConfirmationDialog } from '@/components/ui/ConfirmationDialog';
 import { ImagePreview } from '@/components/ui/ImagePreview';
 import { AvatarPlaceholder } from '@/components/ui/AvatarPlaceholder';
 import { Pagination } from '@/components/ui/Pagination';
 import { useDoctorById } from '@/features/hospital-admin/doctors/hooks/useDoctorById';
 import { useDoctorAvailabilities } from '@/features/hospital-admin/doctors/hooks/useDoctorAvailabilities';
+import { DoctorAvailabilityDialog } from '@/features/hospital-admin/doctors/components/DoctorAvailabilityDialog';
+import { useDeleteDoctorAvailability } from '@/features/hospital-admin/doctors/hooks/useDeleteDoctorAvailability';
 import { doctorApi } from '@/api/doctor.api';
 import { DoctorAvailability } from '@/types/availability.type';
 import { cn } from '@/lib/utils';
@@ -46,7 +51,15 @@ function formatDateTime(iso: string) {
   });
 }
 
-const AvailabilityRow = memo(function AvailabilityRow({ row }: { row: DoctorAvailability }) {
+const AvailabilityRow = memo(function AvailabilityRow({
+  row,
+  onEdit,
+  onDelete,
+}: {
+  row: DoctorAvailability;
+  onEdit: (row: DoctorAvailability) => void;
+  onDelete: (row: DoctorAvailability) => void;
+}) {
   return (
     <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 rounded-lg border border-gray-100 bg-gray-50/80 px-4 py-3">
       <div className="space-y-3 min-w-0 flex-1">
@@ -81,6 +94,22 @@ const AvailabilityRow = memo(function AvailabilityRow({ row }: { row: DoctorAvai
           <p className="text-sm text-gray-600 pt-2 border-t border-gray-200/80">{row.note}</p>
         ) : null}
       </div>
+      <div className="flex shrink-0 flex-wrap gap-2 sm:justify-end">
+        <Button type="button" variant="outline" size="sm" className="gap-2" onClick={() => onEdit(row)}>
+          <Pencil className="h-3.5 w-3.5" />
+          Edit
+        </Button>
+        <Button
+          type="button"
+          variant="outline"
+          size="sm"
+          className="gap-2 text-red-600 border-red-200 hover:bg-red-50 hover:text-red-700"
+          onClick={() => onDelete(row)}
+        >
+          <Trash2 className="h-3.5 w-3.5" />
+          Delete
+        </Button>
+      </div>
     </div>
   );
 });
@@ -93,6 +122,11 @@ export default function DoctorViewPage() {
   const [availPage, setAvailPage] = useState(1);
   const [bookingFilter, setBookingFilter] = useState<BookingFilter>('all');
   const [futureOnly, setFutureOnly] = useState(true);
+  const [availabilityDialogOpen, setAvailabilityDialogOpen] = useState(false);
+  const [selectedAvailability, setSelectedAvailability] = useState<DoctorAvailability | null>(null);
+  const [availabilityToDelete, setAvailabilityToDelete] = useState<DoctorAvailability | null>(null);
+
+  const deleteAvailabilityMutation = useDeleteDoctorAvailability(doctor?.doctor_id);
 
   const is_booked =
     bookingFilter === 'all' ? undefined : bookingFilter === 'booked';
@@ -120,6 +154,26 @@ export default function DoctorViewPage() {
     setFutureOnly(checked);
     setAvailPage(1);
   }, []);
+
+  const openCreateAvailabilityDialog = useCallback(() => {
+    setSelectedAvailability(null);
+    setAvailabilityDialogOpen(true);
+  }, []);
+
+  const openEditAvailabilityDialog = useCallback((row: DoctorAvailability) => {
+    setSelectedAvailability(row);
+    setAvailabilityDialogOpen(true);
+  }, []);
+
+  const requestDeleteAvailability = useCallback((row: DoctorAvailability) => {
+    setAvailabilityToDelete(row);
+  }, []);
+
+  const confirmDeleteAvailability = useCallback(async () => {
+    if (!availabilityToDelete) return;
+    await deleteAvailabilityMutation.mutateAsync(availabilityToDelete.availability_id);
+    setAvailabilityToDelete(null);
+  }, [availabilityToDelete, deleteAvailabilityMutation]);
 
   const handleDelete = useCallback(async () => {
     if (!doctorId) return;
@@ -266,22 +320,27 @@ export default function DoctorViewPage() {
         <div className="lg:col-span-2 space-y-6">
           <Card className="gap-0 py-0 overflow-hidden">
             <CardHeader className="border-b bg-gray-50/50 py-4">
-              <div className="flex items-start gap-3">
-                <div className="rounded-lg bg-blue-100 p-2 text-blue-700">
-                  <CalendarClock className="h-5 w-5" />
+              <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+                <div className="flex items-start gap-3">
+                  <div className="rounded-lg bg-blue-100 p-2 text-blue-700">
+                    <CalendarClock className="h-5 w-5" />
+                  </div>
+                  <div>
+                    <CardTitle className="text-lg">Availability schedule</CardTitle>
+                    <CardDescription>
+                      Time slots for this doctor. Filter by booking status and whether the slot is still in
+                      the future.
+                    </CardDescription>
+                  </div>
                 </div>
-                <div>
-                  <CardTitle className="text-lg">Availability schedule</CardTitle>
-                  <CardDescription>
-                    Time slots for this doctor. Filter by booking status and whether the slot is still in
-                    the future.
-                  </CardDescription>
-                </div>
+                <Button type="button" onClick={openCreateAvailabilityDialog}>
+                  Add availability
+                </Button>
               </div>
             </CardHeader>
             <CardContent className="py-5 space-y-5">
               <div className="flex flex-col sm:flex-row flex-wrap gap-4 sm:items-end">
-                <div className="flex flex-col gap-1 min-w-[180px]">
+                <div className="flex flex-col gap-1 min-w-45">
                   <label className="text-xs font-medium text-gray-600" htmlFor="booking-filter">
                     Booking status
                   </label>
@@ -343,7 +402,7 @@ export default function DoctorViewPage() {
                 >
                   {availabilities.map((row) => (
                     <li key={row.availability_id}>
-                      <AvailabilityRow row={row} />
+                      <AvailabilityRow row={row} onEdit={openEditAvailabilityDialog} onDelete={requestDeleteAvailability} />
                     </li>
                   ))}
                 </ul>
@@ -458,6 +517,41 @@ export default function DoctorViewPage() {
           </Card>
         </div>
       </div>
+
+      <DoctorAvailabilityDialog
+        doctorId={doctor.doctor_id}
+        doctorName={doctor.user.name}
+        open={availabilityDialogOpen}
+        onOpenChange={(open) => {
+          setAvailabilityDialogOpen(open);
+          if (!open) setSelectedAvailability(null);
+        }}
+        availability={selectedAvailability}
+      />
+
+      <ConfirmationDialog
+        open={Boolean(availabilityToDelete)}
+        onOpenChange={(open) => {
+          if (!open) setAvailabilityToDelete(null);
+        }}
+        title="Delete Availability"
+        description={
+          availabilityToDelete ? (
+            <>
+              Are you sure you want to delete this availability slot from{' '}
+              <strong>{formatDateTime(availabilityToDelete.start_date_time)}</strong> to{' '}
+              <strong> {formatDateTime(availabilityToDelete.end_date_time)}</strong>?
+              This action cannot be undone.
+            </>
+          ) : (
+            'Are you sure you want to delete this availability slot?'
+          )
+        }
+        confirmText="Delete"
+        variant="danger"
+        isLoading={deleteAvailabilityMutation.isPending}
+        onConfirm={confirmDeleteAvailability}
+      />
     </div>
   );
 }

@@ -25,6 +25,7 @@ export const API_ENDPOINTS = {
   APPOINTMENTS: '/appointments',
   APPOINTMENTS_HOSPITAL_ADMIN: '/appointments/hospital-admin/appointments',
   APPOINTMENT_STATS: '/appointments/stats',
+  AVAILABILITIES: '/availabilities',
   AVAILABILITIES_DOCTOR: (doctorId: string) => `/availabilities/doctor/${doctorId}`,
   PAYMENTS_BY_APPOINTMENT: (appointmentId: string) => `/payments/appointment/${appointmentId}`,
 

@@ -44,9 +44,16 @@ api.interceptors.response.use(
     // Skip token refresh for login and refresh endpoints
     const isLoginEndpoint = originalRequest.url?.includes('/auth/login');
     const isRefreshEndpoint = originalRequest.url?.includes('/auth/refresh');
+    const isChangePasswordEndpoint = originalRequest.url?.includes('/auth/password/change');
     
     // Handle 401 Unauthorized - Token expired
-    if (error.response?.status === 401 && !originalRequest._retry && !isLoginEndpoint && !isRefreshEndpoint) {
+    if (
+      error.response?.status === 401 &&
+      !originalRequest._retry &&
+      !isLoginEndpoint &&
+      !isRefreshEndpoint &&
+      !isChangePasswordEndpoint
+    ) {
       if (isRefreshing) {
         // Queue requests while refreshing
         return new Promise((resolve, reject) => {
