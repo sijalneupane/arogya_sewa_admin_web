@@ -36,6 +36,8 @@ export default function HospitalForm({ hospital, onSuccess }: HospitalFormProps)
   // Use different schema based on mode
   const { register, handleSubmit, control, formState: { errors } } = useForm<CreateHospitalData | UpdateHospitalData>({
     resolver: zodResolver(isEditMode ? updateHospitalSchema : createHospitalSchema),
+    mode: 'onChange',
+    reValidateMode: 'onChange',
     shouldUnregister: false,
     defaultValues: hospital ? {
       ...hospital,
@@ -251,9 +253,13 @@ export default function HospitalForm({ hospital, onSuccess }: HospitalFormProps)
                 <label className="text-xs text-gray-500">Contact Number {index + 1}</label>
                 <div className="flex gap-2">
                   <input
-                    {...register(`contact_number.${index}` as const)}
+                    {...register(`contact_number.${index}` as const, {
+                      setValueAs: (value: string) => value.replace(/\D/g, '').trim(),
+                    })}
                     className="flex-1 px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                    placeholder="e.g. +977-9800000000"
+                    placeholder="Enter 10-digit contact number"
+                    inputMode="numeric"
+                    maxLength={10}
                   />
                   {fields.length > 1 && (
                     <Button
@@ -342,7 +348,13 @@ export default function HospitalForm({ hospital, onSuccess }: HospitalFormProps)
               <input
                 {...register('admin_details.phone_number')}
                 className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                placeholder="Enter phone number"
+                placeholder="Enter 10-digit phone number"
+                inputMode="numeric"
+                maxLength={10}
+                onInput={(e) => {
+                  const input = e.currentTarget as HTMLInputElement;
+                  input.value = input.value.replace(/\D/g, '').slice(0, 10);
+                }}
               />
               {(errors as any).admin_details?.phone_number && (
                 <p className="text-red-500 text-sm mt-1">{(errors as any).admin_details.phone_number.message}</p>

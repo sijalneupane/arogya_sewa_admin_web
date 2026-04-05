@@ -1,24 +1,44 @@
 import { z } from 'zod';
 
+const NAME_REGEX = /^[A-Za-z ]+$/;
+const PHONE_REGEX = /^\d{10}$/;
+
+const trimmedRequired = (fieldLabel: string) =>
+  z.string().trim().min(1, `${fieldLabel} is required`);
+
+const phoneSchema = z
+  .string()
+  .trim()
+  .regex(PHONE_REGEX, 'Phone number must be exactly 10 digits');
+
 const baseHospitalSchema = z.object({
-  name: z.string().min(1, 'Hospital name is required'),
-  location: z.string().min(1, 'Location is required'),
+  name: trimmedRequired('Hospital name').refine(
+    (value) => NAME_REGEX.test(value),
+    'Hospital name must contain only letters and spaces'
+  ),
+  location: trimmedRequired('Location'),
   latitude: z.number().min(-90).max(90),
   longitude: z.number().min(-180).max(180),
-  contact_number: z.array(z.string().min(10, 'Invalid phone number')).min(1, 'At least one contact number is required'),
-  opened_date: z.string().min(1, 'Opening date is required'),
-  hospital_license_id: z.string().min(1, 'License image is required'),
-  logo_img_id: z.string().min(1, 'Logo image is required'),
-  banner_img_id: z.string().min(1, 'Banner image is required'),
+  contact_number: z.array(phoneSchema).min(1, 'At least one contact number is required'),
+  opened_date: trimmedRequired('Opening date').refine(
+    (value) => !Number.isNaN(new Date(value).getTime()),
+    'Invalid opening date'
+  ),
+  hospital_license_id: trimmedRequired('License image'),
+  logo_img_id: trimmedRequired('Logo image'),
+  banner_img_id: trimmedRequired('Banner image'),
 });
 
 // For creating new hospitals (Super Admin only) - requires admin_details
 export const createHospitalSchema = baseHospitalSchema.extend({
   admin_details: z.object({
-    email: z.string().email('Invalid email address'),
-    name: z.string().min(1, 'Admin name is required'),
-    phone_number: z.string().min(10, 'Invalid phone number').max(15),
-    password: z.string().min(8, 'Password must be at least 8 characters'),
+    email: z.string().trim().email('Invalid email address'),
+    name: trimmedRequired('Admin name').refine(
+      (value) => NAME_REGEX.test(value),
+      'Admin name must contain only letters and spaces'
+    ),
+    phone_number: phoneSchema,
+    password: z.string().min(6, 'Password must be at least 6 characters'),
   }),
 });
 
