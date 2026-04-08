@@ -26,6 +26,7 @@ interface DoctorFormProps {
     license_certificate_id?: string | null;
     license_certificate?: UploadedFile | null;
     user: {
+      id?: string; // Add user ID
       name: string;
       email: string;
       phone_number: string;
@@ -46,6 +47,7 @@ export function DoctorForm({ doctor, onSuccess }: DoctorFormProps) {
     doctor?.user?.profile_image_id || "",
   );
   const profileImageUrl = doctor?.user?.profile_image_url || "";
+  const doctorUserId = doctor?.user?.id;
   const [showPassword, setShowPassword] = useState(false);
 
   const {
@@ -166,6 +168,7 @@ export function DoctorForm({ doctor, onSuccess }: DoctorFormProps) {
                   }}
                   className="mb-3"
                   initialImageUrl={profileImageUrl || undefined}
+                  targetUserId={doctorUserId}
                 />
               )}
             />

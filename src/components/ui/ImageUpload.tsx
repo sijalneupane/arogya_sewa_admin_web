@@ -16,6 +16,7 @@ export interface ImageUploadProps {
   className?: string;
   initialImageUrl?: string; // URL to display for existing image
   maxSizeMB?: number;
+  targetUserId?: string; // Target user ID for file update API
 }
 
 export default function ImageUpload({
@@ -28,6 +29,7 @@ export default function ImageUpload({
   className = '',
   initialImageUrl,
   maxSizeMB = 2,
+  targetUserId,
 }: ImageUploadProps) {
   const [preview, setPreview] = useState<string>('');
   const [fileName, setFileName] = useState<string>('');
@@ -53,7 +55,7 @@ export default function ImageUpload({
     mutationFn: async (file: File) => {
       // If there's an existing image ID, update it, otherwise upload new
       if (value) {
-        const result = await fileApi.update(value, file, fileType);
+        const result = await fileApi.update(value, file, fileType, targetUserId);
         return result as unknown as FileUploadResponse;
       }
       const result = await fileApi.upload(file, fileType);

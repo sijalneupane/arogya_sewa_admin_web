@@ -64,6 +64,7 @@ export default function EditDoctorPage() {
               license_certificate_id: doctor.license_certificate?.file_id || null,
               license_certificate: doctor.license_certificate || null,
               user: {
+                id: doctor.user.id,
                 name: doctor.user.name,
                 email: doctor.user.email,
                 phone_number: doctor.user.phone_number,

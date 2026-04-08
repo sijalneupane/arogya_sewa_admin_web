@@ -39,11 +39,15 @@ export const fileApi = {
   },
 
   // Update existing file - PUT to /file/upload/{fileId}
-  update: (fileId: string, file: File, _fileType?: FileTypeEnum) => {
+  update: (fileId: string, file: File, _fileType?: FileTypeEnum, targetUserId?: string) => {
     const formData = new FormData();
     formData.append('file', file);
 
-    return api.patch<FileUploadResponse>(`${API_ENDPOINTS.FILE_UPDATE}/${fileId}`, formData, {
+    const url = targetUserId 
+      ? `${API_ENDPOINTS.FILE_UPDATE}/${fileId}?target_user_id=${targetUserId}`
+      : `${API_ENDPOINTS.FILE_UPDATE}/${fileId}`;
+
+    return api.patch<FileUploadResponse>(url, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
