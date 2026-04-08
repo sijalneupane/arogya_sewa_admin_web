@@ -199,6 +199,7 @@ export default function SettingsPage() {
             imageUrl={user?.profile_img?.file_url}
             name={user?.name || 'User'}
             onChange={handleImageChange}
+            targetUserId={user?.id}
           />
 
           {/* Form Grid */}

@@ -14,6 +14,7 @@ export interface ProfileImagePickerProps {
   imageUrl?: string;
   name: string;
   onChange: (imageId: string, response?: FileUploadResponse) => void;
+  targetUserId?: string; // Target user ID for file update API
 }
 
 export default function ProfileImagePicker({
@@ -21,6 +22,7 @@ export default function ProfileImagePicker({
   imageUrl,
   name,
   onChange,
+  targetUserId,
 }: ProfileImagePickerProps) {
   const { user, setUser } = useAuthStore();
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -32,7 +34,7 @@ export default function ProfileImagePicker({
   const uploadMutation = useMutation<FileUploadResponse, unknown, File>({
     mutationFn: async (file: File) => {
       if (imageId) {
-        const result = await fileApi.update(imageId, file, FileTypeEnum.PROFILE);
+        const result = await fileApi.update(imageId, file, FileTypeEnum.PROFILE, targetUserId);
         return result as unknown as FileUploadResponse;
       }
       const result = await fileApi.upload(file, FileTypeEnum.PROFILE);
@@ -94,7 +96,7 @@ export default function ProfileImagePicker({
         <AvatarPlaceholder
           name={name}
           imageUrl={displayUrl}
-          size="xl"
+          size="md"
           shape="circle"
           className="ring-4 ring-white shadow-xl border border-gray-100 h-28 w-28"
         />
