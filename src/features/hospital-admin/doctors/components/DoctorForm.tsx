@@ -20,6 +20,7 @@ interface DoctorFormProps {
   doctor?: {
     id?: string;
     experience: string;
+    fee?: number | null;
     bio?: string | null;
     department_id?: string | null;
     status?: DoctorStatus;
@@ -53,8 +54,6 @@ export function DoctorForm({ doctor, onSuccess }: DoctorFormProps) {
   const {
     register,
     handleSubmit,
-    setValue,
-    watch,
     control,
     clearErrors,
     formState: { errors },
@@ -62,6 +61,7 @@ export function DoctorForm({ doctor, onSuccess }: DoctorFormProps) {
     mode: "onChange",
     defaultValues: {
       experience: doctor?.experience || "",
+      fee: doctor?.fee ?? null,
       bio: doctor?.bio || "",
       department_id: doctor?.department_id || null,
       status: doctor?.status || undefined,
@@ -316,6 +316,32 @@ export function DoctorForm({ doctor, onSuccess }: DoctorFormProps) {
             {errors.experience && (
               <p className="text-red-500 text-xs mt-1">
                 {errors.experience.message}
+              </p>
+            )}
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium mb-1">
+              Fee (NPR) <span className="text-red-500">*</span>
+            </label>
+            <input
+              type="number"
+              min="0"
+              step="1"
+              {...register("fee", {
+                required: "Fee is required",
+                valueAsNumber: true,
+                min: {
+                  value: 0,
+                  message: "Fee must be 0 or more",
+                },
+              })}
+              className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${errors.fee ? "border-red-500" : "border-gray-300"}`}
+              placeholder="e.g. 500"
+            />
+            {errors.fee && (
+              <p className="text-red-500 text-xs mt-1">
+                {errors.fee.message}
               </p>
             )}
           </div>

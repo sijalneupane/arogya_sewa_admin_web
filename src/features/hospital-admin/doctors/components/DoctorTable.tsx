@@ -69,6 +69,7 @@ export function DoctorTable({ doctors, loading, onDelete }: DoctorTableProps) {
               <th className="text-center py-3 px-2 font-medium w-36">Department</th>
               <th className="text-center py-3 px-2 font-medium w-32">Status</th>
               <th className="text-center py-3 px-2 font-medium w-28">Experience</th>
+              <th className="text-center py-3 px-2 font-medium w-28">Fee</th>
               <th className="text-center py-3 px-2 font-medium w-32">Actions</th>
             </tr>
           </thead>
@@ -102,6 +103,13 @@ export function DoctorTable({ doctors, loading, onDelete }: DoctorTableProps) {
                 </td>
                 <td className="py-2 px-3 text-center">
                   <span className="text-sm text-gray-700">{doctor.experience}</span>
+                </td>
+                <td className="py-2 px-3 text-center">
+                  {doctor.booking_fee != null || doctor.fee != null ? (
+                    <span className="text-sm text-gray-700">NPR {(doctor.booking_fee ?? doctor.fee ?? 0).toLocaleString()}</span>
+                  ) : (
+                    <span className="text-gray-400">—</span>
+                  )}
                 </td>
                 <td className="py-2 px-3 text-center">
                   <ActionMenu

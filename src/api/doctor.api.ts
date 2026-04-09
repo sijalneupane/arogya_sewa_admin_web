@@ -29,12 +29,24 @@ export const doctorApi = {
   // Get doctor by ID
   getById: (id: string) => api.get<Doctor>(`${API_ENDPOINTS.DOCTORS}/${id}`),
 
+  // Backend expects booking_fee instead of fee
+  mapPayloadForApi: (data: CreateDoctorData | UpdateDoctorData) => {
+    if (!('fee' in data)) return data;
+
+    const { fee, ...rest } = data;
+    return {
+      ...rest,
+      booking_fee: fee,
+    };
+  },
+
   // Create doctor (includes user credentials)
-  create: (data: CreateDoctorData) => api.post(API_ENDPOINTS.DOCTORS, data),
+  create: (data: CreateDoctorData) =>
+    api.post(API_ENDPOINTS.DOCTORS, doctorApi.mapPayloadForApi(data)),
 
   // Update doctor (includes user credentials - same payload as create)
   update: (id: string, data: UpdateDoctorData) =>
-    api.patch(`${API_ENDPOINTS.DOCTORS}/${id}`, data),
+    api.patch(`${API_ENDPOINTS.DOCTORS}/${id}`, doctorApi.mapPayloadForApi(data)),
 
   // Delete doctor
   delete: (id: string) => api.delete(`${API_ENDPOINTS.DOCTORS}/${id}`),

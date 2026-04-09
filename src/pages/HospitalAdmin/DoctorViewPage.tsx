@@ -307,6 +307,15 @@ export default function DoctorViewPage() {
                   <span className="font-medium text-gray-900">{doctor.experience}</span>
                 </div>
                 <div className="inline-flex items-center gap-2 rounded-lg bg-white border border-gray-200/80 px-3 py-2 text-sm">
+                  <Calendar className="h-4 w-4 text-blue-600" />
+                  <span className="text-gray-500">Fee</span>
+                  <span className="font-medium text-gray-900">
+                    {doctor.booking_fee != null || doctor.fee != null
+                      ? `NPR ${(doctor.booking_fee ?? doctor.fee ?? 0).toLocaleString()}`
+                      : '—'}
+                  </span>
+                </div>
+                <div className="inline-flex items-center gap-2 rounded-lg bg-white border border-gray-200/80 px-3 py-2 text-sm">
                   <Phone className="h-4 w-4 text-blue-600" />
                   <span className="font-medium text-gray-900">{doctor.user.phone_number}</span>
                 </div>

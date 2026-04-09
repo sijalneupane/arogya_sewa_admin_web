@@ -58,6 +58,7 @@ export default function EditDoctorPage() {
             doctor={{
               id: doctor.doctor_id,
               experience: doctor.experience,
+              fee: doctor.booking_fee ?? doctor.fee ?? null,
               bio: doctor.bio,
               department_id: doctor.department?.department_id || null,
               status: doctor.status,

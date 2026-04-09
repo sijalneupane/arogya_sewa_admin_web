@@ -11,6 +11,8 @@ export enum DoctorStatus {
 export interface Doctor {
   doctor_id: string;
   experience: string;
+  booking_fee?: number | null;
+  fee?: number | null;
   status: DoctorStatus;
   bio: string | null;
   license_certificate: FileObject | null;
@@ -34,6 +36,7 @@ export interface DoctorListResponse {
 
 export interface CreateDoctorData {
   experience: string;
+  fee?: number | null;
   license_certificate_id?: string | null;
   department_id?: string | null;
   bio?: string | null;
@@ -49,6 +52,7 @@ export interface CreateDoctorData {
 
 export interface UpdateDoctorData {
   experience: string;
+  fee?: number | null;
   license_certificate_id?: string | null;
   department_id?: string | null;
   status?: DoctorStatus;
