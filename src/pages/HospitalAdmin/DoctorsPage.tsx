@@ -21,7 +21,7 @@ export default function DoctorsPage() {
   const { doctors, loading, error, fetchDoctors, deleteDoctor, pagination } = useDoctors({
     name: searchFilter,
     status: statusFilter || undefined,
-    department_id: departmentFilter || undefined,
+    department: departmentFilter || undefined,
     page: currentPage,
     pageSize: PAGE_SIZE,
   });

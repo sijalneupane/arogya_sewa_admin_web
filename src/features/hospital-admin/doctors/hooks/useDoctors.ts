@@ -42,13 +42,13 @@ export const useDoctors = (options: UseDoctorsOptions = {}): UseDoctorsReturn =>
       if (timerRef.current) clearTimeout(timerRef.current);
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filters.name, filters.status, filters.department_id]);
+  }, [filters.name, filters.status, filters.department]);
 
   const queryKey = [
     'doctors-hospital-my',
     debouncedFilters.name ?? '',
     debouncedFilters.status ?? '',
-    debouncedFilters.department_id ?? '',
+    debouncedFilters.department ?? '',
     page,
     pageSize,
   ] as const;

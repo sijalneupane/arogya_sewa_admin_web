@@ -5,7 +5,7 @@ import { Doctor, DoctorListResponse, CreateDoctorData, UpdateDoctorData } from '
 export interface DoctorFilters {
   name?: string;
   status?: string;
-  department_id?: string;
+  department?: string;
   page?: number;
   size?: number;
 }
@@ -16,7 +16,7 @@ export const doctorApi = {
     const query = new URLSearchParams();
     if (filters.name) query.append('name', filters.name);
     if (filters.status) query.append('status', filters.status);
-    if (filters.department_id) query.append('department_id', filters.department_id);
+    if (filters.department) query.append('department', filters.department);
     if (filters.page != null) query.append('page', String(filters.page));
     if (filters.size != null) query.append('size', String(filters.size));
     return api.get<DoctorListResponse>(`${API_ENDPOINTS.DOCTORS_HOSPITAL_MY}?${query.toString()}`);
