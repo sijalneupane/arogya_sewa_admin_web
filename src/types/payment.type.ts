@@ -1,5 +1,17 @@
 import { User } from './user.type';
 
+export interface RecordCashPaymentRequest {
+  appointment_id: string;
+  amount: number;
+  user_id: string;
+  remarks: string;
+}
+
+export interface RecordCashPaymentResponse {
+  message: string;
+  data: AppointmentPayment;
+}
+
 export interface AppointmentPayment {
   payment_id: string;
   appointment_id: string;

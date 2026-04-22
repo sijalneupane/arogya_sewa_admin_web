@@ -1,4 +1,5 @@
 import { useParams, Link } from 'react-router-dom';
+import { useState } from 'react';
 import {
   ArrowLeft,
   RefreshCw,
@@ -22,6 +23,8 @@ import { useAppointmentPayments } from '@/features/hospital-admin/appointments/h
 import { AvatarPlaceholder } from '@/components/ui/AvatarPlaceholder';
 import { cn } from '@/lib/utils';
 import { AppointmentPayment } from '@/types/payment.type';
+import { isEligibleForCashPayment } from '@/features/hospital-admin/appointments/utils/cashPaymentEligibility';
+import { RecordCashPaymentDialog } from '@/features/hospital-admin/appointments/components/RecordCashPaymentDialog';
 
 function formatDateTime(iso: string) {
   return new Date(iso).toLocaleString(undefined, {
@@ -254,6 +257,14 @@ export default function AppointmentViewPage() {
     refetch: refetchPayments,
   } = useAppointmentPayments(appointmentId);
 
+  // Task 6.1 — cash payment eligibility and dialog state
+  const [cashPaymentOpen, setCashPaymentOpen] = useState(false);
+  const eligible =
+    !loading &&
+    !paymentsLoading &&
+    appointment !== null &&
+    isEligibleForCashPayment(appointment, payments.length);
+
   if (error && !loading) {
     return (
       <div className="mx-auto max-w-5xl space-y-4">
@@ -343,6 +354,16 @@ export default function AppointmentViewPage() {
             </div>
           </div>
         </div>
+
+        {/* Task 6.1 — Record Cash Payment button */}
+        {eligible && (
+          <div className="shrink-0">
+            <Button onClick={() => setCashPaymentOpen(true)}>
+              <Banknote className="h-4 w-4" />
+              Record Cash Payment
+            </Button>
+          </div>
+        )}
       </div>
 
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
@@ -593,6 +614,19 @@ export default function AppointmentViewPage() {
           onRetry={() => refetchPayments()}
         />
       </section>
+
+      {/* Task 6.3 — Record Cash Payment dialog */}
+      {appointment && (
+        <RecordCashPaymentDialog
+          open={cashPaymentOpen}
+          onOpenChange={setCashPaymentOpen}
+          appointment={appointment}
+          onSuccess={() => {
+            refetch();
+            refetchPayments();
+          }}
+        />
+      )}
     </div>
   );
 }

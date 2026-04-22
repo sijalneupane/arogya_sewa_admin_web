@@ -28,6 +28,7 @@ export const API_ENDPOINTS = {
   AVAILABILITIES: '/availabilities',
   AVAILABILITIES_DOCTOR: (doctorId: string) => `/availabilities/doctor/${doctorId}`,
   PAYMENTS_BY_APPOINTMENT: (appointmentId: string) => `/payments/appointment/${appointmentId}`,
+  CASH_PAYMENT_RECORD: '/payments/cash/record',
 
   // Shared
   USERS: '/users',
