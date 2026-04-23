@@ -1,7 +1,7 @@
-import { useParams, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { useState } from 'react';
+import { useMutation } from '@tanstack/react-query';
 import {
-  ArrowLeft,
   RefreshCw,
   CalendarClock,
   User,
@@ -17,6 +17,8 @@ import {
 } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { Breadcrumb } from '@/components/ui/Breadcrumb';
 import { useHospitalAdminAppointmentById } from '@/features/hospital-admin/appointments/hooks/useHospitalAdminAppointmentById';
 import { useAppointmentPayments } from '@/features/hospital-admin/appointments/hooks/useAppointmentPayments';
@@ -25,6 +27,9 @@ import { cn } from '@/lib/utils';
 import { AppointmentPayment } from '@/types/payment.type';
 import { isEligibleForCashPayment } from '@/features/hospital-admin/appointments/utils/cashPaymentEligibility';
 import { RecordCashPaymentDialog } from '@/features/hospital-admin/appointments/components/RecordCashPaymentDialog';
+import { ConfirmationDialog } from '@/components/ui/ConfirmationDialog';
+import { appointmentApi } from '@/api/appointment.api';
+import toast from 'react-hot-toast';
 
 function formatDateTime(iso: string) {
   return new Date(iso).toLocaleString(undefined, {
@@ -42,6 +47,12 @@ function formatAmount(value: number) {
     minimumFractionDigits: 0,
     maximumFractionDigits: 2,
   }).format(value);
+}
+
+function toDatetimeLocalValue(date: Date) {
+  const offsetMinutes = date.getTimezoneOffset();
+  const localDate = new Date(date.getTime() - offsetMinutes * 60_000);
+  return localDate.toISOString().slice(0, 16);
 }
 
 function appointmentStatusClass(status: string) {
@@ -259,11 +270,36 @@ export default function AppointmentViewPage() {
 
   // Task 6.1 — cash payment eligibility and dialog state
   const [cashPaymentOpen, setCashPaymentOpen] = useState(false);
+  const [completeConfirmOpen, setCompleteConfirmOpen] = useState(false);
+  const [completedAtInput, setCompletedAtInput] = useState(() => toDatetimeLocalValue(new Date()));
   const eligible =
     !loading &&
     !paymentsLoading &&
     appointment !== null &&
     isEligibleForCashPayment(appointment, payments.length);
+  const canMarkComplete =
+    appointment !== null &&
+    appointment.status.toLowerCase().includes('progress') &&
+    appointment.due_amount === 0 &&
+    appointment.payment_status.toLowerCase().includes('paid');
+
+  const completeMutation = useMutation({
+    mutationFn: (completedAt: string) => appointmentApi.complete(appointmentId!, completedAt),
+    onSuccess: async () => {
+      toast.success('Appointment marked as complete');
+      setCompleteConfirmOpen(false);
+      await refetch();
+    },
+    onError: (err: unknown) => {
+      const message =
+        err && typeof err === 'object' && 'message' in err && typeof (err as { message: unknown }).message === 'string'
+          ? (err as { message: string }).message
+          : err instanceof Error
+            ? err.message
+            : 'Failed to complete appointment';
+      toast.error(message);
+    },
+  });
 
   if (error && !loading) {
     return (
@@ -361,6 +397,20 @@ export default function AppointmentViewPage() {
             <Button onClick={() => setCashPaymentOpen(true)}>
               <Banknote className="h-4 w-4" />
               Record Cash Payment
+            </Button>
+          </div>
+        )}
+        {canMarkComplete && (
+          <div className="shrink-0">
+            <Button
+              variant="outline"
+              onClick={() => {
+                setCompletedAtInput(toDatetimeLocalValue(new Date()));
+                setCompleteConfirmOpen(true);
+              }}
+            >
+              <CheckCircle2 className="h-4 w-4" />
+              Mark Complete
             </Button>
           </div>
         )}
@@ -627,6 +677,41 @@ export default function AppointmentViewPage() {
           }}
         />
       )}
+
+      <ConfirmationDialog
+        open={completeConfirmOpen}
+        onOpenChange={setCompleteConfirmOpen}
+        title="Mark appointment as complete?"
+        description={
+          <div className="space-y-4 text-sm">
+            <p>This will update the appointment status to completed.</p>
+            <div className="rounded-lg border border-border bg-muted/30 p-3">
+              <div className="flex items-center justify-between gap-4">
+                <span className="text-muted-foreground">Appointment</span>
+                <span className="font-mono text-xs font-medium">{appointment.appointment_id}</span>
+              </div>
+              <div className="mt-2 flex items-center justify-between gap-4">
+                <span className="text-muted-foreground">Current status</span>
+                <span className="font-medium capitalize">{appointment.status}</span>
+              </div>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="completed-at">Completed at</Label>
+              <Input
+                id="completed-at"
+                type="datetime-local"
+                value={completedAtInput}
+                onChange={(event) => setCompletedAtInput(event.target.value)}
+                step={60}
+              />
+            </div>
+          </div>
+        }
+        confirmText="Complete Appointment"
+        variant="default"
+        isLoading={completeMutation.isPending}
+        onConfirm={() => completeMutation.mutate(completedAtInput)}
+      />
     </div>
   );
 }

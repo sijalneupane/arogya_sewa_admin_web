@@ -42,6 +42,12 @@ export const appointmentApi = {
   // Update appointment
   update: (id: string, data: Partial<CreateAppointmentData>) => 
     api.put(`${API_ENDPOINTS.APPOINTMENTS}/${id}`, data),
+
+  // Mark appointment as complete
+  complete: (id: string, completedAt: string) =>
+    api.patch<HospitalAdminAppointmentDetailResponse>(`${API_ENDPOINTS.APPOINTMENTS}/${id}/complete`, {
+      completed_at: completedAt,
+    }),
   
   // Cancel appointment
   cancel: (id: string) => api.delete(`${API_ENDPOINTS.APPOINTMENTS}/${id}`),
